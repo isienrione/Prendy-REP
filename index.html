@@ -294,8 +294,24 @@
            AI & FALLBACK GENERATORS
            ========================================= */
         async function generateBlueprint(formData) {
-            const prompt = `You are Prendy, a logistics AI for social gatherings in Santiago, Chile. Generate a detailed event logistics blueprint.\n\nEvent: ${formData.type}, ${formData.guestCount} guests, ${formData.budget} CLP budget, Setting: ${formData.setting}, Vibe: ${formData.vibe}, Dietary: ${formData.dietary||"None"}, Notes: ${formData.notes||"None"}\n\nRespond ONLY with JSON (no markdown):\n{"summary":"one sentence","timeline":[{"time":"HH:MM","task":"desc","owner":"who"}],"supplies":{"food":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],"drinks":[...],"equipment":[...]},"budget":{"venue":{"amount":0,"pct":0},"food":{"amount":0,"pct":0},"drinks":{"amount":0,"pct":0},"entertainment":{"amount":0,"pct":0},"staff":{"amount":0,"pct":0},"misc":{"amount":0,"pct":0}},"staffing":{"servers":0,"bartenders":0,"setup_crew":0},"tips":["tip1","tip2","tip3"],"risks":["risk1","risk2"]}`;
-            try{const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});const d=await r.json();return JSON.parse(d.content.map(b=>b.text||"").join("").replace(/```json|```/g,"").trim());}catch(e){return null;}
+            const url = "/.netlify/functions/blueprint";
+            console.log("Calling function", url);
+            try {
+                const r = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
+                if (!r.ok) {
+                    const txt = await r.text();
+                    console.log("Function error", r.status, txt);
+                    return null;
+                }
+                return r.json();
+            } catch (e) {
+                console.log("Function fetch failed", e);
+                return null;
+            }
         }
 
         function generateFallback(formData) {
@@ -1277,11 +1293,11 @@
             return(<div style={{maxWidth:560,margin:"40px auto",padding:"0 24px"}}><ProgressBar step={step} total={4}/>{steps[step]}<div style={{display:"flex",justifyContent:"space-between",marginTop:40,gap:12}}>{step>0?<button onClick={back} style={{padding:"14px 28px",borderRadius:100,border:"1.5px solid var(--border)",background:"transparent",fontWeight:600,fontSize:15}}>← Back</button>:<div/>}{step<3&&step>0?(<button onClick={next} disabled={!canProceed[step]()} style={{padding:"14px 36px",borderRadius:100,border:"none",background:canProceed[step]()?"var(--ink)":"var(--border)",color:canProceed[step]()?"#fff":"var(--stone)",fontWeight:600,fontSize:15}}>Continue →</button>):step===3?(<button onClick={()=>onFinish(form)} style={{padding:"14px 36px",borderRadius:100,border:"none",background:"linear-gradient(135deg,var(--rose),var(--violet))",color:"#fff",fontWeight:600,fontSize:15,boxShadow:"0 8px 24px rgba(124,92,224,0.2)"}}>Generate Blueprint 🚀</button>):null}</div></div>);
         };
 
-        const Loading = () => {
+        const Loading = ({ error }) => {
             const [msg,setMsg]=useState(0);
             const msgs=["Analyzing event parameters...","Calculating supply logistics...","Matching vendors to your vibe...","Building timeline...","Routing items to stores...","Estimating prices...","Finalizing Blueprint..."];
             useEffect(()=>{const iv=setInterval(()=>setMsg(m=>(m+1)%msgs.length),1800);return()=>clearInterval(iv);},[]);
-            return(<div style={{textAlign:"center",padding:"120px 24px",maxWidth:480,margin:"0 auto"}}><div style={{width:48,height:48,border:"3px solid var(--border)",borderTopColor:"var(--violet)",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto 32px"}}/><h2 style={{fontFamily:"var(--serif)",fontSize:28,marginBottom:12}}>Building Your Blueprint</h2><p key={msg} style={{color:"var(--stone)",animation:"fadeIn .3s ease"}}>{msgs[msg]}</p></div>);
+            return(<div style={{textAlign:"center",padding:"120px 24px",maxWidth:480,margin:"0 auto"}}><div style={{width:48,height:48,border:"3px solid var(--border)",borderTopColor:"var(--violet)",borderRadius:"50%",animation:"spin .8s linear infinite",margin:"0 auto 32px"}}/><h2 style={{fontFamily:"var(--serif)",fontSize:28,marginBottom:12}}>Building Your Blueprint</h2><p key={msg} style={{color:"var(--stone)",animation:"fadeIn .3s ease"}}>{msgs[msg]}</p>{error && <p style={{color:"#c0392b",fontSize:13,marginTop:16}}>{error}</p>}</div>);
         };
 
         /* =========================================
@@ -1478,12 +1494,19 @@
             const [formData, setFormData] = useState(null);
             const [blueprint, setBlueprint] = useState(null);
             const [vendors, setVendors] = useState(null);
+            const [genError, setGenError] = useState('');
 
             const handleGenerate = useCallback(async (data) => {
-                setFormData(data); setView('loading');
+                setFormData(data); setView('loading'); setGenError('');
                 const matched = matchVendors(data); setVendors(matched);
                 let bp;
-                try { bp = await generateBlueprint(data); if (!bp || !bp.timeline) throw new Error(); } catch(e) { bp = generateFallback(data); }
+                try {
+                    bp = await generateBlueprint(data);
+                    if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
+                } catch(e) {
+                    setGenError(e.message || 'Blueprint generation failed — using fallback');
+                    bp = generateFallback(data);
+                }
                 setBlueprint(bp); setView('blueprint');
             }, []);
 
@@ -1492,7 +1515,7 @@
                     <Nav view={view} setView={setView}/>
                     {view === 'landing' && <Landing onStart={() => setView('onboarding')}/>}
                     {view === 'onboarding' && <Onboarding onFinish={handleGenerate}/>}
-                    {view === 'loading' && <Loading/>}
+                    {view === 'loading' && <Loading error={genError}/>}
                     {view === 'blueprint' && blueprint && <Blueprint data={formData} blueprint={blueprint} vendors={vendors}/>}
                 </div>
             );
