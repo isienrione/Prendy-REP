@@ -1,3 +1,25 @@
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+  [functions."*"]
+
 [build]
-  functions = "netlify/functions"
-  publish = "."
+publish = "."
+functions = "netlify/functions"
+
+  [build.environment]
+
+  [build.processing]
+
+    [build.processing.css]
+
+    [build.processing.html]
+
+    [build.processing.images]
+
+    [build.processing.js]
+
+  [build.services]
