@@ -1,31 +1,35 @@
-export default async (req, context) => {
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: { "Content-Type": "application/json" },
-    });
+export async function handler(event) {
+  const cors = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "content-type",
+    "Access-Control-Allow-Methods": "POST,OPTIONS",
+  };
+
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers: cors, body: "" };
   }
 
-  const apiKey = Netlify.env.get("ANTHROPIC_API_KEY");
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, headers: cors, body: JSON.stringify({ error: "Method not allowed" }) };
+  }
+
+  const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    return new Response(
-      JSON.stringify({ error: "ANTHROPIC_API_KEY is not configured" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return { statusCode: 500, headers: cors, body: JSON.stringify({ error: "ANTHROPIC_API_KEY is not configured" }) };
   }
 
   try {
-    const body = await req.json();
-    const { prompt } = body;
+    const formData = JSON.parse(event.body || "{}");
 
-    if (!prompt) {
-      return new Response(JSON.stringify({ error: "Missing prompt" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+    // Build prompt here (match your index.html blueprint prompt)
+    const prompt = `You are Prendy, a logistics AI for social gatherings in Santiago, Chile. Generate a detailed event logistics blueprint.
 
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
+Event: ${formData.type}, ${formData.guestCount} guests, ${formData.budget} CLP budget, Setting: ${formData.setting}, Vibe: ${formData.vibe}, Dietary: ${formData.dietary || "None"}, Notes: ${formData.notes || "None"}
+
+Respond ONLY with JSON (no markdown):
+{"summary":"one sentence","timeline":[{"time":"HH:MM","task":"desc","owner":"who"}],"supplies":{"food":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],"drinks":[...],"equipment":[...]},"budget":{"venue":{"amount":0,"pct":0},"food":{"amount":0,"pct":0},"drinks":{"amount":0,"pct":0},"entertainment":{"amount":0,"pct":0},"staff":{"amount":0,"pct":0},"misc":{"amount":0,"pct":0}},"staffing":{"servers":0,"bartenders":0,"setup_crew":0},"tips":["tip1","tip2","tip3"],"risks":["risk1","risk2"]}`;
+
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,33 +37,26 @@ export default async (req, context) => {
         "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-20250514",
-        max_tokens: 1000,
+        model: "claude-3-5-sonnet-20241022",
+        max_tokens: 1200,
         messages: [{ role: "user", content: prompt }],
       }),
     });
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      return new Response(JSON.stringify({ error: data.error || "API error" }), {
-        status: response.status,
-        headers: { "Content-Type": "application/json" },
-      });
+    const data = await resp.json();
+    if (!resp.ok) {
+      return { statusCode: resp.status, headers: cors, body: JSON.stringify({ error: "Anthropic error", details: data }) };
     }
 
-    return new Response(JSON.stringify(data), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
-  }
-};
+    const text = (data.content || []).map(b => b.text || "").join("").trim();
+    const cleaned = text.replace(/```json|```/g, "").trim();
+    const start = cleaned.indexOf("{");
+    const end = cleaned.lastIndexOf("}");
+    if (start === -1 || end === -1) throw new Error("No JSON found in model output");
+    const parsed = JSON.parse(cleaned.slice(start, end + 1));
 
-export const config = {
-  path: "/api/blueprint",
-};
+    return { statusCode: 200, headers: cors, body: JSON.stringify(parsed) };
+  } catch (err) {
+    return { statusCode: 500, headers: cors, body: JSON.stringify({ error: "Server error", message: String(err?.message || err) }) };
+  }
+}
