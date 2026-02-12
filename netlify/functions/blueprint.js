@@ -41,27 +41,35 @@ Store routing rules (Chile / Santiago):
 REQUIREMENT: Use at least 3 different preferred_store values across the supplies when guestCount >= 12.
 preferred_store must be one of: lider, jumbo, pedidosya, ubereats, rappi, mercadolibre.
 
+
 Respond ONLY with valid JSON (no markdown, no commentary) exactly matching this schema:
 {
-  "summary":"one sentence",
-  "timeline":[{"time":"HH:MM","task":"desc","owner":"who"}],
-  "supplies":{
-   "food":[{"item":"name","quantity":0,"unit":"u","note":"tip","preferred_store":"lider","suggestedStores":["lider","jumbo"]}],
-"drinks":[{"item":"name","quantity":0,"unit":"u","note":"tip","preferred_store":"rappi","suggestedStores":["rappi","lider"]}],
-"equipment":[{"item":"name","quantity":0,"unit":"u","note":"tip","preferred_store":"mercadolibre","suggestedStores":["mercadolibre","lider"]}]
+  "summary": "one sentence",
+  "timeline": [{"time": "HH:MM", "task": "desc", "owner": "who"}],
+  "supplies": {
+    "food": [
+      {"item": "name", "quantity": 0, "unit": "u", "note": "tip", "preferred_store": "lider", "suggestedStores": ["lider","jumbo"]}
+    ],
+    "drinks": [
+      {"item": "name", "quantity": 0, "unit": "u", "note": "tip", "preferred_store": "rappi", "suggestedStores": ["rappi","lider"]}
+    ],
+    "equipment": [
+      {"item": "name", "quantity": 0, "unit": "u", "note": "tip", "preferred_store": "mercadolibre", "suggestedStores": ["mercadolibre","lider"]}
+    ]
+  },
+  "budget": {
+    "venue": {"amount": 0, "pct": 0},
+    "food": {"amount": 0, "pct": 0},
+    "drinks": {"amount": 0, "pct": 0},
+    "entertainment": {"amount": 0, "pct": 0},
+    "staff": {"amount": 0, "pct": 0},
+    "misc": {"amount": 0, "pct": 0}
+  },
+  "staffing": {"servers": 0, "bartenders": 0, "setup_crew": 0},
+  "tips": ["tip1","tip2","tip3"],
+  "risks": ["risk1","risk2"]
+}
 
-  },
-  "budget":{
-    "venue":{"amount":0,"pct":0},
-    "food":{"amount":0,"pct":0},
-    "drinks":{"amount":0,"pct":0},
-    "entertainment":{"amount":0,"pct":0},
-    "staff":{"amount":0,"pct":0},
-    "misc":{"amount":0,"pct":0}
-  },
-  "staffing":{"servers":0,"bartenders":0,"setup_crew":0},
-  "tips":["tip1","tip2","tip3"],
-  "risks":["risk1","risk2"]
 }`;
 
     const resp = await fetch("https://api.openai.com/v1/chat/completions", {
