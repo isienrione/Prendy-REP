@@ -109,9 +109,21 @@ Respond ONLY with valid JSON (no markdown, no commentary) exactly matching this 
     if (start === -1 || end === -1) throw new Error("No JSON found in model output");
 
     const parsed = JSON.parse(cleaned.slice(start, end + 1));
+
+const ALLOWED_STORES = new Set(["lider","jumbo","pedidosya","ubereats","rappi","mercadolibre"]);
+const normStore = (s) => String(s || "").trim().toLowerCase();
+
+
+    
 function ensureStores(list, cat){
   return (Array.isArray(list) ? list : []).map(x => {
-    if (x.preferred_store && Array.isArray(x.suggestedStores) && x.suggestedStores.length) return x;
+   const ps = normStore(x.preferred_store);
+const ss = Array.isArray(x.suggestedStores) ? x.suggestedStores.map(normStore).filter(s => ALLOWED_STORES.has(s)) : [];
+
+if (ALLOWED_STORES.has(ps) && ss.length) {
+  return { ...x, preferred_store: ps, suggestedStores: ss };
+}
+
 
     const name = String(x.item||"").toLowerCase();
     let preferred = "lider";
