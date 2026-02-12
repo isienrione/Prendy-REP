@@ -379,22 +379,15 @@ function buildShoppingList(supplies){
            AI & FALLBACK GENERATORS
            ========================================= */
         async function generateBlueprint(formData) {
-            const url = "/.netlify/functions/blueprint";
-            console.log("Calling function", url);
             try {
-                const r = await fetch(url, {
+                const r = await fetch("/.netlify/functions/blueprint", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(formData)
                 });
-                if (!r.ok) {
-                    const txt = await r.text();
-                    console.log("Function error", r.status, txt);
-                    return null;
-                }
-                return r.json();
+                if (r.ok) return r.json();
+                return null;
             } catch (e) {
-                console.log("Function fetch failed", e);
                 return null;
             }
         }
@@ -1429,7 +1422,7 @@ Everything in one place. Just a few clicks. No stress.
             const [step,setStep]=useState(0);
             const isDemo = window.location.search.includes("demo=1");
 
-const [formData, setFormData] = useState(
+const [form, setForm] = useState(
   isDemo
     ? {
         type: "Taco Tuesday",
