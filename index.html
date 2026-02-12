@@ -70,6 +70,21 @@
         .about-section{position:relative;overflow:hidden}
         .about-section::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,224,0.06) 0%,transparent 70%)}
         .about-section::after{content:'';position:absolute;bottom:-200px;left:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(212,83,106,0.06) 0%,transparent 70%)}
+        /* Dashboard Styles */
+        .dash-grid{display:grid;gridTemplateColumns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+        .dash-metric{text-align:center;padding:24px 16px}
+        .dash-metric .value{font-family:var(--serif);font-size:32px;font-weight:700}
+        .dash-metric .label{font-size:13px;color:var(--stone);margin-top:4px}
+        .rsvp-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;transition:all .15s}
+        .rsvp-row:hover{background:var(--warm)}
+        .status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+        .split-input{width:80px;text-align:center;padding:8px;font-size:14px;border-radius:10px}
+        .role-menu{position:absolute;top:100%;right:0;margin-top:8px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.1);padding:8px;min-width:220px;z-index:150;animation:popIn .2s ease}
+        .role-option{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;border:none;background:transparent;width:100%;font-size:14px;font-weight:500;color:var(--ink);text-align:left;transition:all .15s}
+        .role-option:hover{background:var(--warm)}
+        .calendar-day{width:100%;aspect-ratio:1;border-radius:10px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:500;transition:all .15s;cursor:default}
+        .calendar-day.has-booking{background:rgba(124,92,224,.06);border-color:rgba(124,92,224,.2);color:var(--violet)}
+        .calendar-day.today{border-color:var(--rose);font-weight:700}
     </style>
 </head>
 <body>
@@ -427,15 +442,55 @@ function buildShoppingList(supplies){
         /* =========================================
            SMALL UI COMPONENTS
            ========================================= */
-        const Nav=({view,setView})=>(
-            <nav style={{padding:"16px 32px",display:"flex",justifyContent:"space-between",alignItems:"center",background:"rgba(250,249,247,0.85)",backdropFilter:"blur(16px)",borderBottom:"1px solid var(--border)",position:"sticky",top:0,zIndex:100}}>
-                <div onClick={()=>setView('landing')} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:10}}>
-                    <div style={{width:32,height:32,borderRadius:10,background:"linear-gradient(135deg,var(--rose),var(--violet))",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:14,fontWeight:700}}>P</div>
-                    <span style={{fontFamily:"var(--serif)",fontSize:22}}>Prendy</span>
-                </div>
-                {view!=='onboarding'&&<button onClick={()=>setView('onboarding')} style={{padding:"10px 24px",borderRadius:100,border:"none",background:"var(--ink)",color:"#fff",fontWeight:600,fontSize:14}}>New Blueprint</button>}
-            </nav>
-        );
+        const Nav=({view,setView})=>{
+            const [showRoleMenu,setShowRoleMenu]=useState(false);
+            const roleMenuRef=useRef(null);
+            useEffect(()=>{
+                const handleClick=(e)=>{if(roleMenuRef.current&&!roleMenuRef.current.contains(e.target))setShowRoleMenu(false);};
+                document.addEventListener('click',handleClick);return()=>document.removeEventListener('click',handleClick);
+            },[]);
+            const dashboards=[
+                {id:'host-dashboard',icon:'🎉',label:'Host Dashboard',desc:'RSVP tracking & cost splitting'},
+                {id:'vendor-dashboard',icon:'🏪',label:'Vendor Dashboard',desc:'Bookings & revenue'},
+                {id:'venue-dashboard',icon:'🏛️',label:'Venue Dashboard',desc:'Calendar & availability'},
+            ];
+            const activeDash=dashboards.find(d=>d.id===view);
+            return (
+                <nav style={{padding:"16px 32px",display:"flex",justifyContent:"space-between",alignItems:"center",background:"rgba(250,249,247,0.85)",backdropFilter:"blur(16px)",borderBottom:"1px solid var(--border)",position:"sticky",top:0,zIndex:100}}>
+                    <div onClick={()=>setView('landing')} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:10}}>
+                        <div style={{width:32,height:32,borderRadius:10,background:"linear-gradient(135deg,var(--rose),var(--violet))",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:14,fontWeight:700}}>P</div>
+                        <span style={{fontFamily:"var(--serif)",fontSize:22}}>Prendy</span>
+                    </div>
+                    <div style={{display:"flex",gap:10,alignItems:"center"}}>
+                        {view!=='onboarding'&&<button onClick={()=>setView('onboarding')} style={{padding:"10px 24px",borderRadius:100,border:"none",background:"var(--ink)",color:"#fff",fontWeight:600,fontSize:14}}>New Blueprint</button>}
+                        <div ref={roleMenuRef} style={{position:"relative"}}>
+                            <button onClick={(e)=>{e.stopPropagation();setShowRoleMenu(!showRoleMenu);}} style={{padding:"10px 18px",borderRadius:100,border:"1.5px solid var(--border)",background:activeDash?"rgba(124,92,224,.06)":"var(--card)",fontWeight:600,fontSize:13,display:"flex",alignItems:"center",gap:6,color:activeDash?"var(--violet)":"var(--ink)"}}>
+                                {activeDash?activeDash.icon:'👤'} {activeDash?activeDash.label:'Dashboards'}
+                            </button>
+                            {showRoleMenu && (
+                                <div className="role-menu">
+                                    <div style={{padding:"8px 16px 4px",fontSize:11,fontWeight:600,color:"var(--stone)",textTransform:"uppercase",letterSpacing:".05em"}}>Switch Dashboard</div>
+                                    {dashboards.map(d=>(
+                                        <button key={d.id} className="role-option" onClick={()=>{setView(d.id);setShowRoleMenu(false);}} style={{background:view===d.id?"var(--warm)":"transparent"}}>
+                                            <span style={{fontSize:20}}>{d.icon}</span>
+                                            <div>
+                                                <div style={{fontWeight:600,fontSize:14}}>{d.label}</div>
+                                                <div style={{fontSize:11,color:"var(--stone)"}}>{d.desc}</div>
+                                            </div>
+                                        </button>
+                                    ))}
+                                    <div style={{borderTop:"1px solid var(--border)",margin:"4px 0"}}/>
+                                    <button className="role-option" onClick={()=>{setView('landing');setShowRoleMenu(false);}}>
+                                        <span style={{fontSize:20}}>🏠</span>
+                                        <div><div style={{fontWeight:600,fontSize:14}}>Back to Home</div></div>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </nav>
+            );
+        };
         const ProgressBar=({step,total})=>(<div style={{display:"flex",gap:6,marginBottom:40}}>{Array.from({length:total},(_,i)=>(<div key={i} style={{flex:1,height:4,borderRadius:2,background:i<=step?"var(--violet)":"var(--border)",transition:"background .3s"}}/>))}</div>);
         const OptionCard=({selected,onClick,emoji,title,desc})=>(<div onClick={onClick} className="card" style={{cursor:"pointer",borderColor:selected?"var(--violet)":"var(--border)",background:selected?"rgba(124,92,224,0.04)":"var(--card)",display:"flex",gap:14,alignItems:"center"}}><span style={{fontSize:28}}>{emoji}</span><div><div style={{fontWeight:600,fontSize:15}}>{title}</div>{desc&&<div style={{fontSize:13,color:"var(--stone)",marginTop:2}}>{desc}</div>}</div>{selected&&<div style={{marginLeft:"auto",color:"var(--violet)",fontSize:18}}>✓</div>}</div>);
         const Chip=({selected,onClick,children})=>(<button onClick={onClick} style={{padding:"10px 20px",borderRadius:100,border:selected?"2px solid var(--violet)":"1.5px solid var(--border)",background:selected?"rgba(124,92,224,0.06)":"var(--card)",color:selected?"var(--violet)":"var(--ink)",fontWeight:selected?600:500,fontSize:14}}>{children}</button>);
@@ -1556,6 +1611,680 @@ function buildShoppingList(supplies){
         };
 
         /* =========================================
+           VENDOR DASHBOARD
+           ========================================= */
+        const VendorDashboard = () => {
+            const [tab, setTab] = useState('overview');
+            const [selectedCategory, setSelectedCategory] = useState('all');
+
+            // Simulated vendor-side data
+            const myProfile = VENDORS.catering[0]; // Demo: logged in as Mestiza Banquetes
+            const [bookingRequests] = useState([
+                { id:1, client:"Camila R.", event:"Birthday Party", date:"2025-03-15", time:"19:00", guests:45, pkg:"Full Dinner", status:"confirmed", amount:1575000, notes:"3 vegetarians" },
+                { id:2, client:"Diego M.", event:"Corporate Meetup", date:"2025-03-22", time:"18:00", guests:80, pkg:"Cocktail Standing", status:"pending", amount:2000000, notes:"AV setup needed" },
+                { id:3, client:"Valentina L.", event:"Dinner Party", date:"2025-04-05", time:"20:00", guests:25, pkg:"Aperitivo", status:"confirmed", amount:450000, notes:"Pisco sour station" },
+                { id:4, client:"Andrés K.", event:"Wedding Reception", date:"2025-04-12", time:"17:00", guests:120, pkg:"Full Dinner", status:"pending", amount:4200000, notes:"Outdoor, backup plan needed" },
+                { id:5, client:"Sofía T.", event:"House Party", date:"2025-03-08", time:"21:00", guests:35, pkg:"Cocktail Standing", status:"completed", amount:875000, notes:"" },
+            ]);
+
+            const totalRevenue = bookingRequests.filter(b=>b.status==='confirmed'||b.status==='completed').reduce((s,b)=>s+b.amount,0);
+            const pendingRevenue = bookingRequests.filter(b=>b.status==='pending').reduce((s,b)=>s+b.amount,0);
+            const confirmedCount = bookingRequests.filter(b=>b.status==='confirmed').length;
+            const pendingCount = bookingRequests.filter(b=>b.status==='pending').length;
+
+            const statusColors = { confirmed:"var(--sage)", pending:"var(--amber)", completed:"var(--stone)" };
+            const statusBg = { confirmed:"rgba(61,139,110,.08)", pending:"rgba(212,147,10,.08)", completed:"rgba(138,133,120,.08)" };
+
+            const tabs = [
+                { id:'overview', label:'Overview', icon:'📊' },
+                { id:'bookings', label:'Bookings', icon:'📋' },
+                { id:'packages', label:'My Packages', icon:'📦' },
+                { id:'reviews', label:'Reviews', icon:'⭐' },
+            ];
+
+            return (
+                <div style={{maxWidth:900,margin:"0 auto",padding:"32px 24px 80px"}}>
+                    <div className="fade-up" style={{marginBottom:12}}>
+                        <div className="pill" style={{background:"rgba(212,83,106,.08)",color:"var(--rose)",marginBottom:16}}>🏪 Vendor Dashboard</div>
+                        <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:8}}>
+                            <div style={{fontSize:40,width:64,height:64,borderRadius:18,background:"var(--warm)",display:"flex",alignItems:"center",justifyContent:"center"}}>{myProfile.img}</div>
+                            <div>
+                                <h1 style={{fontFamily:"var(--serif)",fontSize:"clamp(28px,5vw,40px)"}}>{myProfile.name}</h1>
+                                <p style={{color:"var(--stone)",fontSize:15}}>{myProfile.specialty} · {myProfile.area}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="fade-up-d1" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:12,margin:"28px 0 36px"}}>
+                        <StatCard label="Total Revenue" value={fmtCLP(totalRevenue)} color="var(--sage)"/>
+                        <StatCard label="Pending" value={fmtCLP(pendingRevenue)} sub="awaiting" color="var(--amber)"/>
+                        <StatCard label="Confirmed" value={confirmedCount} sub="bookings"/>
+                        <StatCard label="Rating" value={"★ "+myProfile.rating} color="var(--amber)"/>
+                    </div>
+
+                    <div className="fade-up-d2" style={{display:"flex",gap:4,background:"var(--warm)",borderRadius:14,padding:4,marginBottom:32,overflowX:"auto"}}>
+                        {tabs.map(t=>(<button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,padding:"12px 6px",borderRadius:10,border:"none",background:tab===t.id?"var(--card)":"transparent",fontWeight:tab===t.id?600:500,fontSize:13,color:tab===t.id?"var(--ink)":"var(--stone)",boxShadow:tab===t.id?"0 2px 8px rgba(0,0,0,.04)":"none",whiteSpace:"nowrap"}}>{t.icon} {t.label}</button>))}
+                    </div>
+
+                    {tab==='overview' && (
+                        <div className="fade-up">
+                            <div className="card" style={{marginBottom:20,background:"linear-gradient(135deg,rgba(61,139,110,.04),rgba(124,92,224,.04))"}}>
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:20}}>Revenue Overview</h3>
+                                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16}}>
+                                    <div style={{padding:20,background:"rgba(61,139,110,.06)",borderRadius:16,textAlign:"center"}}>
+                                        <div style={{fontSize:13,color:"var(--stone)",marginBottom:6}}>This Month</div>
+                                        <div style={{fontFamily:"var(--serif)",fontSize:28,color:"var(--sage)"}}>{fmtCLP(totalRevenue)}</div>
+                                    </div>
+                                    <div style={{padding:20,background:"rgba(212,147,10,.06)",borderRadius:16,textAlign:"center"}}>
+                                        <div style={{fontSize:13,color:"var(--stone)",marginBottom:6}}>Pipeline</div>
+                                        <div style={{fontFamily:"var(--serif)",fontSize:28,color:"var(--amber)"}}>{fmtCLP(pendingRevenue)}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card" style={{marginBottom:20}}>
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:16}}>Upcoming Bookings</h3>
+                                {bookingRequests.filter(b=>b.status!=='completed').sort((a,b)=>a.date.localeCompare(b.date)).map((b,i)=>(
+                                    <div key={b.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 16px",background:i%2===0?"var(--warm)":"transparent",borderRadius:12,marginBottom:4}}>
+                                        <div>
+                                            <div style={{fontWeight:600,fontSize:14}}>{b.client} — {b.event}</div>
+                                            <div style={{fontSize:12,color:"var(--stone)",marginTop:2}}>{b.date} at {b.time} · {b.guests} guests · {b.pkg}</div>
+                                        </div>
+                                        <div style={{display:"flex",alignItems:"center",gap:8}}>
+                                            <span style={{fontWeight:600,fontSize:14}}>{fmtCLP(b.amount)}</span>
+                                            <span className="pill" style={{background:statusBg[b.status],color:statusColors[b.status],fontSize:11}}>{b.status}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="card">
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:16}}>Quick Stats</h3>
+                                <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
+                                    <div style={{padding:16,background:"var(--warm)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:24,fontWeight:700}}>{bookingRequests.length}</div><div style={{fontSize:13,color:"var(--stone)"}}>Total Bookings</div></div>
+                                    <div style={{padding:16,background:"var(--warm)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:24,fontWeight:700}}>{Math.round(bookingRequests.reduce((s,b)=>s+b.guests,0)/bookingRequests.length)}</div><div style={{fontSize:13,color:"var(--stone)"}}>Avg Guests</div></div>
+                                    <div style={{padding:16,background:"var(--warm)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:24,fontWeight:700}}>{myProfile.packages.length}</div><div style={{fontSize:13,color:"var(--stone)"}}>Packages</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {tab==='bookings' && (
+                        <div className="fade-up">
+                            <div style={{display:"flex",gap:8,marginBottom:20}}>
+                                {['all','pending','confirmed','completed'].map(f=>(
+                                    <Chip key={f} selected={selectedCategory===f} onClick={()=>setSelectedCategory(f)}>{f==='all'?'All':f.charAt(0).toUpperCase()+f.slice(1)}</Chip>
+                                ))}
+                            </div>
+                            {bookingRequests.filter(b=>selectedCategory==='all'||b.status===selectedCategory).map(b=>(
+                                <div key={b.id} className="card" style={{marginBottom:12}}>
+                                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:12}}>
+                                        <div>
+                                            <div style={{fontWeight:700,fontSize:16}}>{b.client}</div>
+                                            <div style={{fontSize:13,color:"var(--stone)"}}>{b.event} · {b.guests} guests</div>
+                                        </div>
+                                        <span className="pill" style={{background:statusBg[b.status],color:statusColors[b.status]}}>{b.status}</span>
+                                    </div>
+                                    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12,marginBottom:12}}>
+                                        <div><div style={{fontSize:11,color:"var(--stone)",fontWeight:600}}>DATE</div><div style={{fontSize:14,fontWeight:500}}>{b.date}</div></div>
+                                        <div><div style={{fontSize:11,color:"var(--stone)",fontWeight:600}}>TIME</div><div style={{fontSize:14,fontWeight:500}}>{b.time}</div></div>
+                                        <div><div style={{fontSize:11,color:"var(--stone)",fontWeight:600}}>PACKAGE</div><div style={{fontSize:14,fontWeight:500}}>{b.pkg}</div></div>
+                                    </div>
+                                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 16px",background:"var(--warm)",borderRadius:12}}>
+                                        <span style={{fontSize:14,fontWeight:500}}>{b.notes||"No special notes"}</span>
+                                        <span style={{fontFamily:"var(--serif)",fontSize:20,fontWeight:700,color:"var(--violet)"}}>{fmtCLP(b.amount)}</span>
+                                    </div>
+                                    {b.status==='pending' && (
+                                        <div style={{display:"flex",gap:8,marginTop:12}}>
+                                            <button style={{flex:1,padding:"10px",borderRadius:12,border:"none",background:"var(--sage)",color:"#fff",fontWeight:600,fontSize:13}}>✓ Accept</button>
+                                            <button style={{flex:1,padding:"10px",borderRadius:12,border:"1.5px solid var(--border)",background:"transparent",fontWeight:600,fontSize:13}}>✗ Decline</button>
+                                            <a href={`https://wa.me/`} target="_blank" rel="noopener" style={{flex:1,padding:"10px",borderRadius:12,border:"none",background:"#25D366",color:"#fff",fontWeight:600,fontSize:13,textDecoration:"none",textAlign:"center"}}>💬 Chat</a>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {tab==='packages' && (
+                        <div className="fade-up">
+                            <div className="card" style={{marginBottom:20,background:"linear-gradient(135deg,rgba(124,92,224,.04),rgba(212,83,106,.04))"}}>
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:8}}>Your Packages</h3>
+                                <p style={{fontSize:14,color:"var(--stone)"}}>Manage pricing and descriptions for your services</p>
+                            </div>
+                            {myProfile.packages.map((pkg,i)=>(
+                                <div key={i} className="card" style={{marginBottom:12}}>
+                                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+                                        <div>
+                                            <div style={{fontWeight:700,fontSize:16}}>{pkg.name}</div>
+                                            <div style={{fontSize:14,color:"var(--stone)",marginTop:4}}>{pkg.desc}</div>
+                                        </div>
+                                        <div style={{textAlign:"right"}}>
+                                            <div style={{fontFamily:"var(--serif)",fontSize:22,color:"var(--violet)"}}>{pkg.flatRate?fmtCLP(pkg.flatRate):fmtCLP(pkg.pricePerHead)+"/pp"}</div>
+                                            {pkg.minGuests>1 && <div style={{fontSize:12,color:"var(--stone)"}}>min {pkg.minGuests} guests</div>}
+                                        </div>
+                                    </div>
+                                    <div style={{display:"flex",gap:8,marginTop:12}}>
+                                        <div style={{padding:"8px 14px",borderRadius:10,background:"var(--warm)",fontSize:12,color:"var(--stone)",fontWeight:500}}>📊 Booked {Math.floor(Math.random()*8)+2} times</div>
+                                        <div style={{padding:"8px 14px",borderRadius:10,background:"rgba(61,139,110,.06)",fontSize:12,color:"var(--sage)",fontWeight:500}}>💰 {fmtCLP((pkg.flatRate||pkg.pricePerHead*30)*(Math.floor(Math.random()*5)+1))} earned</div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {tab==='reviews' && (
+                        <div className="fade-up">
+                            <div className="card" style={{marginBottom:20,textAlign:"center"}}>
+                                <div style={{fontFamily:"var(--serif)",fontSize:48,color:"var(--amber)"}}>{myProfile.rating}</div>
+                                <div style={{fontSize:20,marginBottom:4}}>{"★".repeat(5)}</div>
+                                <div style={{fontSize:14,color:"var(--stone)"}}>Based on 23 reviews</div>
+                            </div>
+                            {[
+                                {name:"Camila R.",date:"2025-02-28",stars:5,text:"Absolutely incredible service. The fusion menu was a hit with everyone at the party!"},
+                                {name:"Diego M.",date:"2025-02-15",stars:5,text:"Professional, punctual, and the food quality was outstanding. Already rebooked for next quarter."},
+                                {name:"Sofía T.",date:"2025-01-20",stars:4,text:"Great cocktail spread. Only minor note: setup took a bit longer than expected."},
+                                {name:"Andrés K.",date:"2025-01-08",stars:5,text:"Perfect execution. Our guests couldn't stop raving about the ceviche station."},
+                            ].map((r,i)=>(
+                                <div key={i} className="card" style={{marginBottom:12}}>
+                                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                                        <div style={{fontWeight:600,fontSize:15}}>{r.name}</div>
+                                        <div style={{fontSize:13,color:"var(--stone)"}}>{r.date}</div>
+                                    </div>
+                                    <div style={{color:"var(--amber)",marginBottom:8}}>{"★".repeat(r.stars)}{"☆".repeat(5-r.stars)}</div>
+                                    <p style={{fontSize:14,lineHeight:1.6,color:"var(--stone)"}}>{r.text}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        /* =========================================
+           VENUE DASHBOARD
+           ========================================= */
+        const VenueDashboard = () => {
+            const [tab, setTab] = useState('overview');
+            const myVenue = VENDORS.venues[0]; // Demo: logged in as Lastarria Loft
+
+            const [bookings] = useState([
+                { id:1, client:"Camila R.", event:"Birthday Party", date:"2025-03-15", time:"17:00-23:00", guests:45, pkg:"Half Day (6h)", status:"confirmed", amount:450000 },
+                { id:2, client:"Diego M.", event:"Corporate Meetup", date:"2025-03-22", time:"14:00-02:00", pkg:"Full Day (12h)", guests:80, status:"confirmed", amount:780000 },
+                { id:3, client:"Valentina L.", event:"Dinner Party", date:"2025-04-05", time:"18:00-00:00", guests:25, pkg:"Half Day (6h)", status:"pending", amount:450000 },
+                { id:4, client:"Martín S.", event:"Wedding Reception", date:"2025-04-12", time:"14:00-02:00", guests:100, pkg:"Full Day + Bar", status:"pending", amount:1100000 },
+                { id:5, client:"NotCo Team", event:"Corporate Event", date:"2025-03-08", time:"14:00-02:00", guests:60, pkg:"Full Day (12h)", status:"completed", amount:780000 },
+            ]);
+
+            const statusColors = { confirmed:"var(--sage)", pending:"var(--amber)", completed:"var(--stone)" };
+            const statusBg = { confirmed:"rgba(61,139,110,.08)", pending:"rgba(212,147,10,.08)", completed:"rgba(138,133,120,.08)" };
+            const totalRevenue = bookings.filter(b=>b.status==='confirmed'||b.status==='completed').reduce((s,b)=>s+b.amount,0);
+
+            // Simple calendar for current month
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth();
+            const daysInMonth = new Date(year, month+1, 0).getDate();
+            const firstDay = new Date(year, month, 1).getDay();
+            const bookedDates = new Set(bookings.filter(b=>b.status!=='completed').map(b=>parseInt(b.date.split('-')[2])));
+
+            const tabs = [
+                { id:'overview', label:'Overview', icon:'📊' },
+                { id:'calendar', label:'Calendar', icon:'📅' },
+                { id:'bookings', label:'Bookings', icon:'📋' },
+                { id:'spaces', label:'My Spaces', icon:'🏛️' },
+            ];
+
+            return (
+                <div style={{maxWidth:900,margin:"0 auto",padding:"32px 24px 80px"}}>
+                    <div className="fade-up" style={{marginBottom:12}}>
+                        <div className="pill" style={{background:"rgba(124,92,224,.08)",color:"var(--violet)",marginBottom:16}}>🏛️ Venue Dashboard</div>
+                        <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:8}}>
+                            <div style={{fontSize:40,width:64,height:64,borderRadius:18,background:"var(--warm)",display:"flex",alignItems:"center",justifyContent:"center"}}>{myVenue.img}</div>
+                            <div>
+                                <h1 style={{fontFamily:"var(--serif)",fontSize:"clamp(28px,5vw,40px)"}}>{myVenue.name}</h1>
+                                <p style={{color:"var(--stone)",fontSize:15}}>{myVenue.specialty} · {myVenue.area} · Capacity: {myVenue.capacity}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="fade-up-d1" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:12,margin:"28px 0 36px"}}>
+                        <StatCard label="Revenue" value={fmtCLP(totalRevenue)} color="var(--sage)"/>
+                        <StatCard label="Bookings" value={bookings.filter(b=>b.status!=='completed').length} sub="active"/>
+                        <StatCard label="Capacity" value={myVenue.capacity} sub="guests"/>
+                        <StatCard label="Rating" value={"★ "+myVenue.rating} color="var(--amber)"/>
+                    </div>
+
+                    <div className="fade-up-d2" style={{display:"flex",gap:4,background:"var(--warm)",borderRadius:14,padding:4,marginBottom:32,overflowX:"auto"}}>
+                        {tabs.map(t=>(<button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,padding:"12px 6px",borderRadius:10,border:"none",background:tab===t.id?"var(--card)":"transparent",fontWeight:tab===t.id?600:500,fontSize:13,color:tab===t.id?"var(--ink)":"var(--stone)",boxShadow:tab===t.id?"0 2px 8px rgba(0,0,0,.04)":"none",whiteSpace:"nowrap"}}>{t.icon} {t.label}</button>))}
+                    </div>
+
+                    {tab==='overview' && (
+                        <div className="fade-up">
+                            <div className="card" style={{marginBottom:20}}>
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:16}}>This Month's Schedule</h3>
+                                {bookings.filter(b=>b.status!=='completed').sort((a,b)=>a.date.localeCompare(b.date)).map((b,i)=>(
+                                    <div key={b.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 16px",background:i%2===0?"var(--warm)":"transparent",borderRadius:12,marginBottom:4}}>
+                                        <div style={{display:"flex",gap:12,alignItems:"center"}}>
+                                            <div style={{width:44,height:44,borderRadius:12,background:b.status==='confirmed'?"rgba(61,139,110,.08)":"rgba(212,147,10,.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,fontWeight:700,fontFamily:"var(--serif)",color:b.status==='confirmed'?"var(--sage)":"var(--amber)"}}>{b.date.split('-')[2]}</div>
+                                            <div>
+                                                <div style={{fontWeight:600,fontSize:14}}>{b.client} — {b.event}</div>
+                                                <div style={{fontSize:12,color:"var(--stone)"}}>{b.time} · {b.guests} guests · {b.pkg}</div>
+                                            </div>
+                                        </div>
+                                        <span className="pill" style={{background:statusBg[b.status],color:statusColors[b.status],fontSize:11}}>{b.status}</span>
+                                    </div>
+                                ))}
+                            </div>
+                            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+                                <div className="card" style={{textAlign:"center"}}>
+                                    <div style={{fontSize:13,color:"var(--stone)",marginBottom:8}}>Occupancy Rate</div>
+                                    <div style={{fontFamily:"var(--serif)",fontSize:36,color:"var(--violet)"}}>68%</div>
+                                    <div style={{fontSize:12,color:"var(--stone)"}}>this month</div>
+                                </div>
+                                <div className="card" style={{textAlign:"center"}}>
+                                    <div style={{fontSize:13,color:"var(--stone)",marginBottom:8}}>Avg Event Size</div>
+                                    <div style={{fontFamily:"var(--serif)",fontSize:36,color:"var(--rose)"}}>{Math.round(bookings.reduce((s,b)=>s+b.guests,0)/bookings.length)}</div>
+                                    <div style={{fontSize:12,color:"var(--stone)"}}>guests</div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {tab==='calendar' && (
+                        <div className="fade-up">
+                            <div className="card">
+                                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:24}}>
+                                    <h3 style={{fontFamily:"var(--serif)",fontSize:22}}>{new Date(year,month).toLocaleDateString('en-US',{month:'long',year:'numeric'})}</h3>
+                                    <div style={{display:"flex",gap:8}}>
+                                        <span className="pill" style={{background:"rgba(124,92,224,.06)",fontSize:11}}><span style={{display:"inline-block",width:8,height:8,borderRadius:4,background:"var(--violet)",marginRight:4}}/>Booked</span>
+                                        <span className="pill" style={{background:"rgba(212,83,106,.06)",fontSize:11}}><span style={{display:"inline-block",width:8,height:8,borderRadius:4,background:"var(--rose)",marginRight:4}}/>Today</span>
+                                    </div>
+                                </div>
+                                <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:6,marginBottom:8}}>
+                                    {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>(
+                                        <div key={d} style={{textAlign:"center",fontSize:11,fontWeight:600,color:"var(--stone)",padding:"8px 0"}}>{d}</div>
+                                    ))}
+                                </div>
+                                <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:6}}>
+                                    {Array.from({length:firstDay},(_,i)=><div key={"e"+i}/>)}
+                                    {Array.from({length:daysInMonth},(_,i)=>{
+                                        const day=i+1;
+                                        const isToday=day===today.getDate();
+                                        const hasBooking=bookedDates.has(day);
+                                        return (
+                                            <div key={day} className={`calendar-day ${hasBooking?'has-booking':''} ${isToday?'today':''}`}>
+                                                <span>{day}</span>
+                                                {hasBooking && <span style={{fontSize:8,color:"var(--violet)",marginTop:2}}>●</span>}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            <div className="card" style={{marginTop:16}}>
+                                <h4 style={{fontWeight:600,fontSize:15,marginBottom:12}}>Booked Dates</h4>
+                                {bookings.filter(b=>b.status!=='completed').map(b=>(
+                                    <div key={b.id} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px solid var(--border)",fontSize:14}}>
+                                        <span style={{fontWeight:500}}>{b.date} — {b.client}</span>
+                                        <span style={{color:"var(--stone)"}}>{b.time}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {tab==='bookings' && (
+                        <div className="fade-up">
+                            {bookings.map(b=>(
+                                <div key={b.id} className="card" style={{marginBottom:12}}>
+                                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:12}}>
+                                        <div>
+                                            <div style={{fontWeight:700,fontSize:16}}>{b.client}</div>
+                                            <div style={{fontSize:13,color:"var(--stone)"}}>{b.event} · {b.guests} guests</div>
+                                        </div>
+                                        <span className="pill" style={{background:statusBg[b.status],color:statusColors[b.status]}}>{b.status}</span>
+                                    </div>
+                                    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12,marginBottom:12}}>
+                                        <div><div style={{fontSize:11,color:"var(--stone)",fontWeight:600}}>DATE</div><div style={{fontSize:14,fontWeight:500}}>{b.date}</div></div>
+                                        <div><div style={{fontSize:11,color:"var(--stone)",fontWeight:600}}>TIME</div><div style={{fontSize:14,fontWeight:500}}>{b.time}</div></div>
+                                        <div><div style={{fontSize:11,color:"var(--stone)",fontWeight:600}}>PACKAGE</div><div style={{fontSize:14,fontWeight:500}}>{b.pkg}</div></div>
+                                    </div>
+                                    <div style={{display:"flex",justifyContent:"flex-end",alignItems:"center",padding:"12px 16px",background:"var(--warm)",borderRadius:12}}>
+                                        <span style={{fontFamily:"var(--serif)",fontSize:20,fontWeight:700,color:"var(--violet)"}}>{fmtCLP(b.amount)}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {tab==='spaces' && (
+                        <div className="fade-up">
+                            <div className="card" style={{marginBottom:20,background:"linear-gradient(135deg,rgba(124,92,224,.04),rgba(212,83,106,.04))"}}>
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:8}}>Venue Packages</h3>
+                                <p style={{fontSize:14,color:"var(--stone)"}}>Your available space configurations and pricing</p>
+                            </div>
+                            {myVenue.packages.map((pkg,i)=>(
+                                <div key={i} className="card" style={{marginBottom:12}}>
+                                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+                                        <div>
+                                            <div style={{fontWeight:700,fontSize:16}}>{pkg.name}</div>
+                                            <div style={{fontSize:14,color:"var(--stone)",marginTop:4}}>{pkg.desc}</div>
+                                        </div>
+                                        <div style={{fontFamily:"var(--serif)",fontSize:24,color:"var(--violet)"}}>{fmtCLP(pkg.flatRate)}</div>
+                                    </div>
+                                    <div style={{display:"flex",gap:8,marginTop:12}}>
+                                        <div style={{padding:"8px 14px",borderRadius:10,background:"var(--warm)",fontSize:12,color:"var(--stone)",fontWeight:500}}>Capacity: {myVenue.capacity}</div>
+                                        <div style={{padding:"8px 14px",borderRadius:10,background:"rgba(61,139,110,.06)",fontSize:12,color:"var(--sage)",fontWeight:500}}>Available for booking</div>
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="card" style={{marginTop:16}}>
+                                <h4 style={{fontWeight:600,fontSize:15,marginBottom:12}}>Venue Details</h4>
+                                <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+                                    {[{l:"Location",v:myVenue.area},{l:"Price Range",v:myVenue.priceRange},{l:"Capacity",v:myVenue.capacity},{l:"Style",v:myVenue.tags.join(", ")}].map(d=>(
+                                        <div key={d.l} style={{padding:12,background:"var(--warm)",borderRadius:10}}><div style={{fontSize:11,color:"var(--stone)",fontWeight:600,marginBottom:4}}>{d.l.toUpperCase()}</div><div style={{fontSize:14,fontWeight:500}}>{d.v}</div></div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        /* =========================================
+           HOST DASHBOARD (with RSVP & Money Split)
+           ========================================= */
+        const HostDashboard = () => {
+            const [tab, setTab] = useState('overview');
+            const [guests, setGuests] = useState([
+                { id:1, name:"Camila Rodríguez", email:"camila@email.com", status:"confirmed", plusOne:true, dietary:"Vegetarian", paidAmount:0 },
+                { id:2, name:"Diego Muñoz", email:"diego@email.com", status:"confirmed", plusOne:false, dietary:"", paidAmount:0 },
+                { id:3, name:"Valentina López", email:"val@email.com", status:"pending", plusOne:false, dietary:"Gluten-free", paidAmount:0 },
+                { id:4, name:"Andrés Kramer", email:"andres@email.com", status:"confirmed", plusOne:true, dietary:"", paidAmount:0 },
+                { id:5, name:"Sofía Torres", email:"sofia@email.com", status:"declined", plusOne:false, dietary:"", paidAmount:0 },
+                { id:6, name:"Matías Soto", email:"matias@email.com", status:"confirmed", plusOne:false, dietary:"Vegan", paidAmount:0 },
+                { id:7, name:"Isabella Chen", email:"isabella@email.com", status:"pending", plusOne:true, dietary:"", paidAmount:0 },
+                { id:8, name:"Tomás Herrera", email:"tomas@email.com", status:"confirmed", plusOne:false, dietary:"", paidAmount:0 },
+                { id:9, name:"Fernanda Vidal", email:"fer@email.com", status:"confirmed", plusOne:true, dietary:"No shellfish", paidAmount:0 },
+                { id:10, name:"Nicolás Parra", email:"nico@email.com", status:"pending", plusOne:false, dietary:"", paidAmount:0 },
+            ]);
+            const [newGuestName, setNewGuestName] = useState('');
+            const [newGuestEmail, setNewGuestEmail] = useState('');
+            const [toast, setToast] = useState(null);
+            const [splitMethod, setSplitMethod] = useState('equal'); // equal, custom, proportional
+            const [totalEventCost, setTotalEventCost] = useState(2500000);
+            const [splitIncludeDeclined, setSplitIncludeDeclined] = useState(false);
+
+            const showToast=(msg)=>{setToast(msg);setTimeout(()=>setToast(null),2500);};
+
+            const confirmed = guests.filter(g=>g.status==='confirmed');
+            const pending = guests.filter(g=>g.status==='pending');
+            const declined = guests.filter(g=>g.status==='declined');
+            const totalAttending = confirmed.reduce((s,g)=>s+(g.plusOne?2:1),0);
+            const totalPending = pending.reduce((s,g)=>s+(g.plusOne?2:1),0);
+
+            const updateGuestStatus=(id,status)=>{setGuests(p=>p.map(g=>g.id===id?{...g,status}:g));showToast("Updated!");};
+            const updateGuestPaid=(id,amount)=>{setGuests(p=>p.map(g=>g.id===id?{...g,paidAmount:Math.max(0,parseInt(amount)||0)}:g));};
+
+            const addGuest=()=>{
+                if(!newGuestName.trim()) return;
+                setGuests(p=>[...p,{id:Date.now(),name:newGuestName.trim(),email:newGuestEmail.trim(),status:'pending',plusOne:false,dietary:'',paidAmount:0}]);
+                setNewGuestName('');setNewGuestEmail('');showToast("Guest added!");
+            };
+
+            const togglePlusOne=(id)=>{setGuests(p=>p.map(g=>g.id===id?{...g,plusOne:!g.plusOne}:g));};
+
+            // Money split calculations
+            const splitGuests = splitIncludeDeclined ? guests : guests.filter(g=>g.status!=='declined');
+            const splitHeadCount = splitGuests.reduce((s,g)=>s+(g.plusOne?2:1),0);
+            const perPersonCost = splitHeadCount > 0 ? Math.ceil(totalEventCost / splitHeadCount) : 0;
+            const totalPaid = guests.reduce((s,g)=>s+g.paidAmount,0);
+            const remaining = totalEventCost - totalPaid;
+
+            const statusColors = { confirmed:"var(--sage)", pending:"var(--amber)", declined:"var(--rose)" };
+            const statusBg = { confirmed:"rgba(61,139,110,.08)", pending:"rgba(212,147,10,.08)", declined:"rgba(212,83,106,.08)" };
+            const statusIcon = { confirmed:"✓", pending:"◯", declined:"✗" };
+
+            const tabs = [
+                { id:'overview', label:'Overview', icon:'📊' },
+                { id:'rsvp', label:'RSVP Tracker', icon:'📋' },
+                { id:'split', label:'Money Split', icon:'💰' },
+                { id:'share', label:'Share & Invite', icon:'💬' },
+            ];
+
+            return (
+                <div style={{maxWidth:900,margin:"0 auto",padding:"32px 24px 80px"}}>
+                    <div className="fade-up" style={{marginBottom:12}}>
+                        <div className="pill" style={{background:"rgba(61,139,110,.08)",color:"var(--sage)",marginBottom:16}}>🎉 Host Dashboard</div>
+                        <h1 style={{fontFamily:"var(--serif)",fontSize:"clamp(28px,5vw,40px)",marginBottom:8}}>Your Event Command Center</h1>
+                        <p style={{color:"var(--stone)",fontSize:15}}>Track RSVPs, manage guests, and split costs — all in one place.</p>
+                    </div>
+
+                    <div className="fade-up-d1" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))",gap:12,margin:"28px 0 36px"}}>
+                        <StatCard label="Confirmed" value={totalAttending} sub={`${confirmed.length} guests`} color="var(--sage)"/>
+                        <StatCard label="Pending" value={totalPending} sub={`${pending.length} guests`} color="var(--amber)"/>
+                        <StatCard label="Declined" value={declined.length} color="var(--rose)"/>
+                        <StatCard label="Total Cost" value={fmtCLP(totalEventCost)} sub="CLP"/>
+                    </div>
+
+                    <div className="fade-up-d2" style={{display:"flex",gap:4,background:"var(--warm)",borderRadius:14,padding:4,marginBottom:32,overflowX:"auto"}}>
+                        {tabs.map(t=>(<button key={t.id} onClick={()=>setTab(t.id)} style={{flex:1,padding:"12px 6px",borderRadius:10,border:"none",background:tab===t.id?"var(--card)":"transparent",fontWeight:tab===t.id?600:500,fontSize:13,color:tab===t.id?"var(--ink)":"var(--stone)",boxShadow:tab===t.id?"0 2px 8px rgba(0,0,0,.04)":"none",whiteSpace:"nowrap"}}>{t.icon} {t.label}</button>))}
+                    </div>
+
+                    {/* Overview */}
+                    {tab==='overview' && (
+                        <div className="fade-up">
+                            <div className="card" style={{marginBottom:20}}>
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:20}}>RSVP Summary</h3>
+                                <div style={{display:"flex",gap:8,marginBottom:20}}>
+                                    {[{label:"Confirmed",count:confirmed.length,heads:totalAttending,color:"var(--sage)"},{label:"Pending",count:pending.length,heads:totalPending,color:"var(--amber)"},{label:"Declined",count:declined.length,heads:declined.length,color:"var(--rose)"}].map(s=>(
+                                        <div key={s.label} style={{flex:1,padding:16,borderRadius:14,background:`${s.color}11`,textAlign:"center"}}>
+                                            <div style={{fontSize:28,fontWeight:700,fontFamily:"var(--serif)",color:s.color}}>{s.heads}</div>
+                                            <div style={{fontSize:12,color:"var(--stone)"}}>{s.label} ({s.count} {s.count===1?'guest':'guests'})</div>
+                                        </div>
+                                    ))}
+                                </div>
+                                {/* Progress bar */}
+                                <div style={{background:"var(--border)",borderRadius:8,height:12,overflow:"hidden",display:"flex"}}>
+                                    <div style={{width:`${(totalAttending/(totalAttending+totalPending+declined.length))*100}%`,background:"var(--sage)",transition:"width .3s"}}/>
+                                    <div style={{width:`${(totalPending/(totalAttending+totalPending+declined.length))*100}%`,background:"var(--amber)",transition:"width .3s"}}/>
+                                    <div style={{width:`${(declined.length/(totalAttending+totalPending+declined.length))*100}%`,background:"var(--rose)",transition:"width .3s"}}/>
+                                </div>
+                            </div>
+
+                            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12,marginBottom:20}}>
+                                <div className="card" onClick={()=>setTab('rsvp')} style={{cursor:"pointer",borderColor:"rgba(61,139,110,.12)",padding:20}}>
+                                    <span style={{fontSize:28}}>📋</span>
+                                    <div style={{fontWeight:700,fontSize:14,marginTop:8}}>RSVP Tracker</div>
+                                    <div style={{fontSize:12,color:"var(--stone)",marginTop:2}}>Manage all guest responses</div>
+                                </div>
+                                <div className="card" onClick={()=>setTab('split')} style={{cursor:"pointer",borderColor:"rgba(124,92,224,.12)",padding:20}}>
+                                    <span style={{fontSize:28}}>💰</span>
+                                    <div style={{fontWeight:700,fontSize:14,marginTop:8}}>Money Split</div>
+                                    <div style={{fontSize:12,color:"var(--stone)",marginTop:2}}>Split costs among guests</div>
+                                </div>
+                            </div>
+
+                            <div className="card">
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:16}}>Payment Progress</h3>
+                                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+                                    <span style={{fontSize:14,color:"var(--stone)"}}>Collected</span>
+                                    <span style={{fontWeight:700,color:"var(--sage)"}}>{fmtCLP(totalPaid)}</span>
+                                </div>
+                                <div style={{background:"var(--border)",borderRadius:8,height:8,overflow:"hidden",marginBottom:12}}>
+                                    <div style={{width:`${totalEventCost>0?(totalPaid/totalEventCost)*100:0}%`,background:"var(--sage)",height:"100%",borderRadius:8,transition:"width .3s"}}/>
+                                </div>
+                                <div style={{display:"flex",justifyContent:"space-between",fontSize:13,color:"var(--stone)"}}>
+                                    <span>Remaining: {fmtCLP(remaining)}</span>
+                                    <span>{totalEventCost>0?Math.round((totalPaid/totalEventCost)*100):0}% collected</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* RSVP Tracker */}
+                    {tab==='rsvp' && (
+                        <div className="fade-up">
+                            {/* Add guest */}
+                            <div className="card" style={{marginBottom:20}}>
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:20,marginBottom:16}}>Add Guest</h3>
+                                <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+                                    <input value={newGuestName} onChange={e=>setNewGuestName(e.target.value)} placeholder="Guest name" style={{flex:2,minWidth:160}}/>
+                                    <input value={newGuestEmail} onChange={e=>setNewGuestEmail(e.target.value)} placeholder="Email (optional)" style={{flex:2,minWidth:160}}/>
+                                    <button onClick={addGuest} style={{padding:"14px 24px",borderRadius:14,border:"none",background:"var(--ink)",color:"#fff",fontWeight:600,fontSize:14,whiteSpace:"nowrap"}}>+ Add</button>
+                                </div>
+                            </div>
+
+                            {/* Guest filters */}
+                            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+                                <div style={{fontSize:14,color:"var(--stone)",fontWeight:500}}>{guests.length} guests total · {totalAttending} attending</div>
+                            </div>
+
+                            {/* Guest list */}
+                            {['confirmed','pending','declined'].map(status=>{
+                                const group = guests.filter(g=>g.status===status);
+                                if(group.length===0) return null;
+                                return (
+                                    <div key={status} style={{marginBottom:24}}>
+                                        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
+                                            <div className="status-dot" style={{background:statusColors[status]}}/>
+                                            <h4 style={{fontSize:15,fontWeight:600,textTransform:"capitalize"}}>{status} ({group.length})</h4>
+                                        </div>
+                                        {group.map(g=>(
+                                            <div key={g.id} className="rsvp-row">
+                                                <div style={{width:36,height:36,borderRadius:10,background:statusBg[g.status],display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:700,color:statusColors[g.status],flexShrink:0}}>{statusIcon[g.status]}</div>
+                                                <div style={{flex:1,minWidth:0}}>
+                                                    <div style={{fontWeight:600,fontSize:14}}>{g.name}{g.plusOne?" +1":""}</div>
+                                                    <div style={{fontSize:12,color:"var(--stone)"}}>{g.email}{g.dietary?` · ${g.dietary}`:""}</div>
+                                                </div>
+                                                <div style={{display:"flex",gap:6,flexShrink:0}}>
+                                                    <button onClick={()=>togglePlusOne(g.id)} style={{padding:"6px 10px",borderRadius:8,border:"1px solid var(--border)",background:g.plusOne?"rgba(124,92,224,.06)":"transparent",fontSize:11,fontWeight:600,color:g.plusOne?"var(--violet)":"var(--stone)"}}>+1</button>
+                                                    {g.status!=='confirmed'&&<button onClick={()=>updateGuestStatus(g.id,'confirmed')} style={{padding:"6px 10px",borderRadius:8,border:"none",background:"rgba(61,139,110,.08)",fontSize:11,fontWeight:600,color:"var(--sage)"}}>✓</button>}
+                                                    {g.status!=='pending'&&<button onClick={()=>updateGuestStatus(g.id,'pending')} style={{padding:"6px 10px",borderRadius:8,border:"none",background:"rgba(212,147,10,.08)",fontSize:11,fontWeight:600,color:"var(--amber)"}}>◯</button>}
+                                                    {g.status!=='declined'&&<button onClick={()=>updateGuestStatus(g.id,'declined')} style={{padding:"6px 10px",borderRadius:8,border:"none",background:"rgba(212,83,106,.08)",fontSize:11,fontWeight:600,color:"var(--rose)"}}>✗</button>}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+
+                    {/* Money Split */}
+                    {tab==='split' && (
+                        <div className="fade-up">
+                            {/* Total cost input */}
+                            <div className="card" style={{marginBottom:20,background:"linear-gradient(135deg,rgba(124,92,224,.04),rgba(212,83,106,.04))"}}>
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:16}}>Cost Splitting</h3>
+                                <div style={{display:"flex",gap:16,alignItems:"flex-end",flexWrap:"wrap",marginBottom:16}}>
+                                    <div style={{flex:1,minWidth:200}}>
+                                        <label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Total Event Cost (CLP)</label>
+                                        <input type="number" value={totalEventCost} onChange={e=>setTotalEventCost(parseInt(e.target.value)||0)} style={{fontSize:18,fontWeight:600}}/>
+                                    </div>
+                                    <div style={{flex:1,minWidth:200}}>
+                                        <label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Split Method</label>
+                                        <div style={{display:"flex",gap:6}}>
+                                            {[{v:'equal',l:'Equal Split'},{v:'custom',l:'Custom'}].map(m=>(
+                                                <Chip key={m.v} selected={splitMethod===m.v} onClick={()=>setSplitMethod(m.v)}>{m.l}</Chip>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                                <label style={{display:"flex",alignItems:"center",gap:8,fontSize:13,color:"var(--stone)",cursor:"pointer"}}>
+                                    <div className={`custom-check ${splitIncludeDeclined?'checked':''}`} onClick={()=>setSplitIncludeDeclined(!splitIncludeDeclined)} style={{width:18,height:18}}>
+                                        {splitIncludeDeclined&&<svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7L6 10L11 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                                    </div>
+                                    Include declined guests in split
+                                </label>
+                            </div>
+
+                            {/* Split summary */}
+                            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12,marginBottom:20}}>
+                                <div className="card" style={{textAlign:"center",padding:20}}>
+                                    <div style={{fontSize:13,color:"var(--stone)",marginBottom:6}}>Per Person</div>
+                                    <div style={{fontFamily:"var(--serif)",fontSize:24,color:"var(--violet)"}}>{fmtCLP(perPersonCost)}</div>
+                                    <div style={{fontSize:11,color:"var(--stone)"}}>{splitHeadCount} heads</div>
+                                </div>
+                                <div className="card" style={{textAlign:"center",padding:20}}>
+                                    <div style={{fontSize:13,color:"var(--stone)",marginBottom:6}}>Collected</div>
+                                    <div style={{fontFamily:"var(--serif)",fontSize:24,color:"var(--sage)"}}>{fmtCLP(totalPaid)}</div>
+                                    <div style={{fontSize:11,color:"var(--stone)"}}>{totalEventCost>0?Math.round((totalPaid/totalEventCost)*100):0}%</div>
+                                </div>
+                                <div className="card" style={{textAlign:"center",padding:20}}>
+                                    <div style={{fontSize:13,color:"var(--stone)",marginBottom:6}}>Remaining</div>
+                                    <div style={{fontFamily:"var(--serif)",fontSize:24,color:remaining>0?"var(--rose)":"var(--sage)"}}>{fmtCLP(remaining)}</div>
+                                    <div style={{fontSize:11,color:"var(--stone)"}}>{remaining<=0?"All paid!":"outstanding"}</div>
+                                </div>
+                            </div>
+
+                            {/* Per-guest breakdown */}
+                            <div className="card">
+                                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+                                    <h3 style={{fontFamily:"var(--serif)",fontSize:20}}>Guest Breakdown</h3>
+                                    <button onClick={()=>{const t=guests.map(g=>{const owe=g.plusOne?perPersonCost*2:perPersonCost;const bal=owe-g.paidAmount;return `${g.name}: owes ${fmtCLP(owe)}${g.paidAmount>0?`, paid ${fmtCLP(g.paidAmount)}, balance: ${fmtCLP(bal)}`:''}`}).join('\n');navigator.clipboard.writeText(`💰 Cost Split - ${fmtCLP(totalEventCost)} total\nPer person: ${fmtCLP(perPersonCost)}\n\n${t}`);showToast("Copied!");}} style={{padding:"8px 16px",borderRadius:10,border:"1px solid var(--border)",background:"transparent",fontSize:12,fontWeight:600}}>📋 Copy Split</button>
+                                </div>
+                                <div style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr",gap:8,padding:"8px 16px",marginBottom:8}}>
+                                    <div style={{fontSize:11,color:"var(--stone)",fontWeight:600}}>GUEST</div>
+                                    <div style={{fontSize:11,color:"var(--stone)",fontWeight:600,textAlign:"center"}}>OWES</div>
+                                    <div style={{fontSize:11,color:"var(--stone)",fontWeight:600,textAlign:"center"}}>PAID</div>
+                                    <div style={{fontSize:11,color:"var(--stone)",fontWeight:600,textAlign:"center"}}>BALANCE</div>
+                                </div>
+                                {splitGuests.map(g=>{
+                                    const owes = splitMethod==='equal' ? (g.plusOne?perPersonCost*2:perPersonCost) : g.paidAmount;
+                                    const balance = (splitMethod==='equal'?(g.plusOne?perPersonCost*2:perPersonCost):0)-g.paidAmount;
+                                    return (
+                                        <div key={g.id} style={{display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr",gap:8,padding:"12px 16px",alignItems:"center",borderRadius:10,background:balance<=0&&g.paidAmount>0?"rgba(61,139,110,.03)":"transparent"}}>
+                                            <div>
+                                                <span style={{fontWeight:500,fontSize:14}}>{g.name}</span>
+                                                {g.plusOne&&<span style={{fontSize:11,color:"var(--violet)",marginLeft:6}}>+1</span>}
+                                                <span className="pill" style={{background:statusBg[g.status],color:statusColors[g.status],fontSize:10,marginLeft:6,padding:"2px 8px"}}>{g.status}</span>
+                                            </div>
+                                            <div style={{textAlign:"center",fontSize:14,fontWeight:500}}>{splitMethod==='equal'?fmtCLP(g.plusOne?perPersonCost*2:perPersonCost):'—'}</div>
+                                            <div style={{textAlign:"center"}}>
+                                                {splitMethod==='custom'||splitMethod==='equal'?(
+                                                    <input type="number" value={g.paidAmount||''} onChange={e=>updateGuestPaid(g.id,e.target.value)} placeholder="0" className="split-input" style={{border:`1.5px solid ${g.paidAmount>0?"var(--sage)":"var(--border)"}`,color:g.paidAmount>0?"var(--sage)":"var(--ink)"}}/>
+                                                ):<span style={{fontSize:14}}>{fmtCLP(g.paidAmount)}</span>}
+                                            </div>
+                                            <div style={{textAlign:"center",fontSize:14,fontWeight:600,color:balance>0?"var(--rose)":balance===0&&g.paidAmount===0?"var(--stone)":"var(--sage)"}}>
+                                                {splitMethod==='equal'?(balance>0?fmtCLP(balance):g.paidAmount>0?"Paid ✓":"—"):"—"}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Share & Invite */}
+                    {tab==='share' && (
+                        <div className="fade-up">
+                            <div className="card" style={{marginBottom:20}}>
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:16}}>Share Event Details</h3>
+                                <p style={{fontSize:14,color:"var(--stone)",marginBottom:20}}>Send invitations and share your event info via WhatsApp.</p>
+                                <div style={{display:"flex",flexDirection:"column",gap:12}}>
+                                    <button onClick={()=>{const msg=`🎉 *You're Invited!*\n\nGuest count so far: ${totalAttending} confirmed\nPending: ${pending.length} guests\n\nPlease RSVP as soon as possible!`;window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}} style={{padding:"14px 24px",borderRadius:14,border:"none",background:"#25D366",color:"#fff",fontWeight:600,fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>💬 Send Invite via WhatsApp</button>
+                                    <button onClick={()=>{const summary=`📊 *RSVP Status Update*\n\n✅ Confirmed: ${confirmed.length} guests (${totalAttending} total with +1s)\n⏳ Pending: ${pending.length} guests\n❌ Declined: ${declined.length} guests\n\n💰 Cost per person: ${fmtCLP(perPersonCost)}\n\nPlease respond if you haven't yet!`;window.open(`https://wa.me/?text=${encodeURIComponent(summary)}`,'_blank');}} style={{padding:"14px 24px",borderRadius:14,border:"1.5px solid var(--border)",background:"transparent",fontWeight:600,fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>📊 Share RSVP Status</button>
+                                    <button onClick={()=>{const splitMsg=`💰 *Cost Split Update*\n\nTotal: ${fmtCLP(totalEventCost)}\nPer person: ${fmtCLP(perPersonCost)}\n\n${splitGuests.map(g=>{const owe=g.plusOne?perPersonCost*2:perPersonCost;return `${g.name}: ${fmtCLP(owe)}${g.paidAmount>0?` (paid ${fmtCLP(g.paidAmount)})`:''}`}).join('\n')}\n\nCollected: ${fmtCLP(totalPaid)} / ${fmtCLP(totalEventCost)}`;window.open(`https://wa.me/?text=${encodeURIComponent(splitMsg)}`,'_blank');}} style={{padding:"14px 24px",borderRadius:14,border:"1.5px solid var(--border)",background:"transparent",fontWeight:600,fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>💰 Share Cost Split</button>
+                                </div>
+                            </div>
+                            <div className="card">
+                                <h3 style={{fontFamily:"var(--serif)",fontSize:20,marginBottom:16}}>Guest Contact List</h3>
+                                {guests.map(g=>(
+                                    <div key={g.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
+                                        <div><div style={{fontWeight:500,fontSize:14}}>{g.name}</div><div style={{fontSize:12,color:"var(--stone)"}}>{g.email||"No email"}</div></div>
+                                        <span className="pill" style={{background:statusBg[g.status],color:statusColors[g.status],fontSize:11}}>{g.status}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    <Toast message={toast} visible={!!toast}/>
+                </div>
+            );
+        };
+
+        /* =========================================
            APP
            ========================================= */
         function App() {
@@ -1586,6 +2315,9 @@ function buildShoppingList(supplies){
                     {view === 'onboarding' && <Onboarding onFinish={handleGenerate}/>}
                     {view === 'loading' && <Loading error={genError}/>}
                     {view === 'blueprint' && blueprint && <Blueprint data={formData} blueprint={blueprint} vendors={vendors}/>}
+                    {view === 'vendor-dashboard' && <VendorDashboard/>}
+                    {view === 'venue-dashboard' && <VenueDashboard/>}
+                    {view === 'host-dashboard' && <HostDashboard/>}
                 </div>
             );
         }
