@@ -38,9 +38,10 @@ Respond ONLY with valid JSON (no markdown, no commentary) exactly matching this 
   "summary":"one sentence",
   "timeline":[{"time":"HH:MM","task":"desc","owner":"who"}],
   "supplies":{
-    "food":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],
-    "drinks":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],
-    "equipment":[{"item":"name","quantity":0,"unit":"u","note":"tip"}]
+   "food":[{"item":"name","quantity":0,"unit":"u","note":"tip","preferred_store":"lider","suggestedStores":["lider","jumbo"]}],
+"drinks":[{"item":"name","quantity":0,"unit":"u","note":"tip","preferred_store":"rappi","suggestedStores":["rappi","lider"]}],
+"equipment":[{"item":"name","quantity":0,"unit":"u","note":"tip","preferred_store":"mercadolibre","suggestedStores":["mercadolibre","lider"]}]
+
   },
   "budget":{
     "venue":{"amount":0,"pct":0},
