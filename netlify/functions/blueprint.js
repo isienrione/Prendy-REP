@@ -1,148 +1,110 @@
 export async function handler(event) {
   const cors = {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "content-type,authorization",
+    "Access-Control-Allow-Headers": "content-type",
     "Access-Control-Allow-Methods": "POST,OPTIONS",
   };
 
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers: cors, body: "" };
   }
-
   if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      headers: cors,
-      body: JSON.stringify({ error: "Method not allowed" }),
-    };
+    return { statusCode: 405, headers: cors, body: JSON.stringify({ error: "Method not allowed" }) };
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
-    return {
-      statusCode: 500,
-      headers: cors,
-      body: JSON.stringify({ error: "OPENAI_API_KEY is not configured" }),
-    };
+    return { statusCode: 500, headers: cors, body: JSON.stringify({ error: "OPENAI_API_KEY missing" }) };
   }
 
   try {
     const formData = JSON.parse(event.body || "{}");
 
-    // Hard validation
-    const required = ["type", "guestCount", "budget", "setting", "vibe"];
-    const missing = required.filter((k) => !formData?.[k]);
-    if (missing.length) {
-      return {
-        statusCode: 400,
-        headers: cors,
-        body: JSON.stringify({
-          error: "Missing required fields",
-          missing,
-          received: formData,
-        }),
-      };
+    // Hard guard: don't allow missing guest count
+    if (!formData.guestCount && !formData.guestCountNumber) {
+      return { statusCode: 400, headers: cors, body: JSON.stringify({ error: "guestCount is required" }) };
     }
 
     const prompt = `
-You are Prendy, a logistics AI for social gatherings in Santiago, Chile.
-Generate a detailed event logistics blueprint.
+You are "Prendy", an operations planner for social gatherings in Santiago, Chile.
 
-Event:
-- Type: ${formData.type}
-- Guests: ${formData.guestCount}
-- Budget: ${formData.budget} CLP
-- Setting: ${formData.setting}
-- Vibe: ${formData.vibe}
-- Dietary: ${formData.dietary || "None"}
-- Notes: ${formData.notes || "None"}
+Goal:
+Create a high-quality, realistic event blueprint: timeline, staffing, budget, supplies.
 
-IMPORTANT OUTPUT RULES:
-1) Respond ONLY with valid JSON. No markdown. No commentary.
-2) Use 24-hour times in HH:MM.
-3) Supplies item names should prefer CANONICAL NAMES when possible:
-   - Food: "Empanadas", "Main protein", "Side salads", "Bread", "Cheese", "Dessert"
-   - Drinks: "Wine", "Beer", "Soft drinks", "Juice", "Water", "Ice", "Pisco", "Lemons"
-   - Equipment: "Napkin", "Plates", "Glass sets", "Tables", "Chairs"
-4) Quantities must be numbers (not ranges).
+CRITICAL RULES:
+1) Output ONLY valid JSON. No markdown. No extra text.
+2) Do NOT assume a single retailer. Use generic items and optionally include "preferred_store" field with realistic distribution.
+3) Make quantities scale with guestCountNumber if provided, else estimate from guestCount range.
+4) Use Chile-appropriate grocery terms (agua mineral, hielo, limon, queso, marraqueta, pollo, verduras, vino, cerveza, bebidas, etc.).
+5) Ensure budget percentages sum to 100 and amounts roughly match the budget.
 
-Return schema EXACTLY:
+Inputs:
+- type: ${formData.type}
+- guestCount: ${formData.guestCount}
+- guestCountNumber: ${formData.guestCountNumber || ""}
+- budgetCLP: ${formData.budget}
+- setting: ${formData.setting}
+- vibe: ${formData.vibe}
+- dietary: ${formData.dietary || "None"}
+- notes: ${formData.notes || "None"}
+
+Return this exact JSON schema:
 {
- "summary":"one sentence",
- "timeline":[{"time":"HH:MM","task":"desc","owner":"who"}],
- "supplies":{
-   "food":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],
-   "drinks":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],
-   "equipment":[{"item":"name","quantity":0,"unit":"u","note":"tip"}]
- },
- "budget":{
-   "venue":{"amount":0,"pct":0},
-   "food":{"amount":0,"pct":0},
-   "drinks":{"amount":0,"pct":0},
-   "entertainment":{"amount":0,"pct":0},
-   "staff":{"amount":0,"pct":0},
-   "misc":{"amount":0,"pct":0}
- },
- "staffing":{"servers":0,"bartenders":0,"setup_crew":0},
- "tips":["tip1","tip2","tip3"],
- "risks":["risk1","risk2"]
+  "summary": "string",
+  "assumptions": {
+    "guest_count": 0,
+    "budget_clp": 0,
+    "style_notes": "string"
+  },
+  "timeline": [{"time":"HH:MM","task":"string","owner":"string"}],
+  "supplies": {
+    "food": [{"item":"string","quantity":0,"unit":"string","note":"string","preferred_store":"string"}],
+    "drinks": [{"item":"string","quantity":0,"unit":"string","note":"string","preferred_store":"string"}],
+    "equipment": [{"item":"string","quantity":0,"unit":"string","note":"string","preferred_store":"string"}]
+  },
+  "budget": {
+    "venue":{"amount":0,"pct":0},
+    "food":{"amount":0,"pct":0},
+    "drinks":{"amount":0,"pct":0},
+    "entertainment":{"amount":0,"pct":0},
+    "staff":{"amount":0,"pct":0},
+    "misc":{"amount":0,"pct":0}
+  },
+  "staffing":{"servers":0,"bartenders":0,"setup_crew":0},
+  "tips":["string","string","string"],
+  "risks":["string","string"]
 }
-`.trim();
+`;
 
     const resp = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        // Pick a model you have access to; these are common:
-        model: "gpt-4o-mini",
+        model: "gpt-4.1-mini",
         input: prompt,
-        // Encourage JSON-only
-        text: { format: { type: "json_object" } },
-        max_output_tokens: 1200,
+        max_output_tokens: 1600
       }),
     });
 
     const data = await resp.json();
-
     if (!resp.ok) {
-      return {
-        statusCode: resp.status,
-        headers: cors,
-        body: JSON.stringify({ error: "OpenAI error", details: data }),
-      };
+      return { statusCode: resp.status, headers: cors, body: JSON.stringify({ error: "OpenAI error", details: data }) };
     }
 
-    // Responses API output extraction
-    const outText =
-      (data.output || [])
-        .flatMap((o) => o.content || [])
-        .map((c) => c.text || "")
-        .join("")
-        .trim() || "";
+    const text =
+      (data.output_text || "").trim()
+      || (data.output?.map(o => o.content?.map(c => c.text).join("")).join("") || "").trim();
 
-    // Parse JSON defensively
-    const start = outText.indexOf("{");
-    const end = outText.lastIndexOf("}");
+    const start = text.indexOf("{");
+    const end = text.lastIndexOf("}");
     if (start === -1 || end === -1) throw new Error("No JSON object found in model output");
 
-    const parsed = JSON.parse(outText.slice(start, end + 1));
-
-    return {
-      statusCode: 200,
-      headers: cors,
-      body: JSON.stringify(parsed),
-    };
+    const parsed = JSON.parse(text.slice(start, end + 1));
+    return { statusCode: 200, headers: cors, body: JSON.stringify(parsed) };
   } catch (err) {
-    return {
-      statusCode: 500,
-      headers: cors,
-      body: JSON.stringify({
-        error: "Server error",
-        message: String(err?.message || err),
-      }),
-    };
+    return { statusCode: 500, headers: cors, body: JSON.stringify({ error: "Server error", message: String(err?.message || err) }) };
   }
 }
