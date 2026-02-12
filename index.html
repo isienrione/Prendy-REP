@@ -274,6 +274,27 @@
             cornershop:{ name:"Cornershop", icon:"🚗", color:"#ff4438", bgLight:"rgba(255,68,56,0.06)", description:"Multi-store, same-day", searchUrl:(q)=>`https://cornershopapp.com/search?query=${encodeURIComponent(q)}`, delivery:"1-3 hours", minOrder:"None" },
             rappi:{ name:"Rappi", icon:"🧡", color:"#ff441f", bgLight:"rgba(255,68,31,0.06)", description:"Fast drinks & last-minute", searchUrl:(q)=>`https://www.rappi.cl/search?term=${encodeURIComponent(q)}`, delivery:"30-60 min", minOrder:"None" },
             ubereats:{ name:"Uber Eats", icon:"🍔", color:"#06c167", bgLight:"rgba(6,193,103,0.06)", description:"Prepared food & trays", searchUrl:(q)=>`https://www.ubereats.com/cl/search?q=${encodeURIComponent(q)}`, delivery:"30-60 min", minOrder:"Varies" },
+        pedidosya:{
+  name:"PedidosYa",
+  icon:"🛵",
+  color:"#ff1744",
+  bgLight:"rgba(255,23,68,0.06)",
+  description:"Fast party supplies & last-minute needs",
+  searchUrl:(q)=>`https://www.pedidosya.cl/buscar?search=${encodeURIComponent(q)}`,
+  delivery:"30-90 min",
+  minOrder:"Varies"
+},
+mercadolibre:{
+  name:"Mercado Libre",
+  icon:"📦",
+  color:"#ffe600",
+  bgLight:"rgba(255,230,0,0.10)",
+  description:"Equipment & rentals (chairs, benches, lights)",
+  searchUrl:(q)=>`https://listado.mercadolibre.cl/${encodeURIComponent(q)}`,
+  delivery:"1-3 days / Pick-up",
+  minOrder:"Varies"
+},
+
         };
 
         const GROCERY_PRICES = {
