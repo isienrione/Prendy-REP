@@ -32,6 +32,14 @@ export async function handler(event) {
     const prompt = `You are Prendy, a logistics AI for social gatherings in Santiago, Chile. Generate a detailed event logistics blueprint.
 
 Event: ${formData.type}, ${formData.guestCount} guests, ${formData.budget} CLP budget, Setting: ${formData.setting}, Vibe: ${formData.vibe}, Dietary: ${formData.dietary || "None"}, Notes: ${formData.notes || "None"}
+Store routing rules (Chile / Santiago):
+- lider: bulk groceries + staples (tortillas, meat, veg, soda, chips, paper goods).
+- jumbo: premium host items (gourmet cheese/charcuterie, nicer desserts, better wine, imported ingredients).
+- pedidosya or ubereats: last-minute party supplies + fast delivery (balloons, decor, candles, extra snacks, emergency items).
+- rappi: very fast drinks/ice.
+- mercadolibre: chairs, benches, tables, equipment, lighting, speakers, coolers.
+REQUIREMENT: Use at least 3 different preferred_store values across the supplies when guestCount >= 12.
+preferred_store must be one of: lider, jumbo, pedidosya, ubereats, rappi, mercadolibre.
 
 Respond ONLY with valid JSON (no markdown, no commentary) exactly matching this schema:
 {
