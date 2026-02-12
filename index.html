@@ -287,8 +287,55 @@
             "cheese":{unit_price:8990,store:"jumbo",searchTerm:"queso"},"lemons":{unit_price:1290,store:"lider",searchTerm:"limones"},
             "pisco":{unit_price:7990,store:"rappi",searchTerm:"pisco"},
         };
-        function matchItemToStore(n){const l=n.toLowerCase();for(const[k,v]of Object.entries(GROCERY_PRICES)){if(l.includes(k))return v;}if(l.includes("wine"))return{unit_price:5990,store:"lider",searchTerm:n};if(l.includes("beer"))return{unit_price:990,store:"rappi",searchTerm:n};if(l.includes("ice"))return{unit_price:1990,store:"rappi",searchTerm:"hielo"};return{unit_price:3000,store:"lider",searchTerm:n};}
-        function buildShoppingList(supplies){const items=[];let id=0;for(const[cat,list]of Object.entries(supplies)){for(const item of list){const m=matchItemToStore(item.item);items.push({id:id++,name:item.item,quantity:item.quantity,unit:item.unit,note:item.note,category:cat,store:m.store,searchTerm:m.searchTerm,estimatedPrice:m.unit_price*item.quantity,unitPrice:m.unit_price,checked:false});}}return items;}
+        function matchItemToStore(n){
+    const l = n.toLowerCase();
+    for(const [k,v] of Object.entries(GROCERY_PRICES)){
+        if(l.includes(k)) return v;
+    }
+    if(l.includes("wine")) return {unit_price:5990,store:"lider",searchTerm:n};
+    if(l.includes("beer")) return {unit_price:990,store:"rappi",searchTerm:n};
+    if(l.includes("ice")) return {unit_price:1990,store:"rappi",searchTerm:"hielo"};
+    return {unit_price:3000,store:"lider",searchTerm:n};
+}
+
+function buildShoppingList(supplies){
+    const items = [];
+    let id = 0;
+
+    for(const [cat,list] of Object.entries(supplies)){
+        for(const item of list){
+
+            // 1️⃣ Try AI-provided store
+            const aiStore =
+                item.preferred_store ||
+                (Array.isArray(item.suggestedStores) && item.suggestedStores.length
+                    ? item.suggestedStores[0]
+                    : null);
+
+            // 2️⃣ Get pricing fallback
+            const matched = matchItemToStore(item.item);
+
+            // 3️⃣ Final store decision
+            const finalStore = aiStore || matched.store;
+
+            items.push({
+                id: id++,
+                name: item.item,
+                quantity: item.quantity,
+                unit: item.unit,
+                note: item.note,
+                category: cat,
+                store: finalStore,
+                searchTerm: matched.searchTerm,
+                estimatedPrice: matched.unit_price * item.quantity,
+                unitPrice: matched.unit_price,
+                checked: false
+            });
+        }
+    }
+
+    return items;
+}
 
         /* =========================================
            AI & FALLBACK GENERATORS
