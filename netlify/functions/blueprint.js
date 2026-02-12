@@ -1,7 +1,7 @@
 export async function handler(event) {
   const cors = {
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers": "content-type",
+    "Access-Control-Allow-Headers": "content-type,authorization",
     "Access-Control-Allow-Methods": "POST,OPTIONS",
   };
 
@@ -17,32 +17,33 @@ export async function handler(event) {
     };
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return {
       statusCode: 500,
       headers: cors,
-      body: JSON.stringify({ error: "ANTHROPIC_API_KEY is not configured" }),
+      body: JSON.stringify({ error: "OPENAI_API_KEY is not configured" }),
     };
   }
 
   try {
     const formData = JSON.parse(event.body || "{}");
 
-    // Hard validation so frontend can't send incomplete payloads
-    if (!formData.type || !formData.guestCount || !formData.budget || !formData.setting || !formData.vibe) {
+    // Hard validation
+    const required = ["type", "guestCount", "budget", "setting", "vibe"];
+    const missing = required.filter((k) => !formData?.[k]);
+    if (missing.length) {
       return {
         statusCode: 400,
         headers: cors,
         body: JSON.stringify({
           error: "Missing required fields",
-          required: ["type", "guestCount", "budget", "setting", "vibe"],
+          missing,
           received: formData,
         }),
       };
     }
 
-    // Strongly steer model to use canonical item names that your routing understands
     const prompt = `
 You are Prendy, a logistics AI for social gatherings in Santiago, Chile.
 Generate a detailed event logistics blueprint.
@@ -57,9 +58,9 @@ Event:
 - Notes: ${formData.notes || "None"}
 
 IMPORTANT OUTPUT RULES:
-1) Respond ONLY with valid JSON (no markdown).
+1) Respond ONLY with valid JSON. No markdown. No commentary.
 2) Use 24-hour times in HH:MM.
-3) For supplies item names, prefer CANONICAL NAMES from this list when possible:
+3) Supplies item names should prefer CANONICAL NAMES when possible:
    - Food: "Empanadas", "Main protein", "Side salads", "Bread", "Cheese", "Dessert"
    - Drinks: "Wine", "Beer", "Soft drinks", "Juice", "Water", "Ice", "Pisco", "Lemons"
    - Equipment: "Napkin", "Plates", "Glass sets", "Tables", "Chairs"
@@ -88,17 +89,19 @@ Return schema EXACTLY:
 }
 `.trim();
 
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+    const resp = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "claude-3-5-sonnet-20241022",
-        max_tokens: 1200,
-        messages: [{ role: "user", content: prompt }],
+        // Pick a model you have access to; these are common:
+        model: "gpt-4o-mini",
+        input: prompt,
+        // Encourage JSON-only
+        text: { format: { type: "json_object" } },
+        max_output_tokens: 1200,
       }),
     });
 
@@ -108,18 +111,24 @@ Return schema EXACTLY:
       return {
         statusCode: resp.status,
         headers: cors,
-        body: JSON.stringify({ error: "Anthropic error", details: data }),
+        body: JSON.stringify({ error: "OpenAI error", details: data }),
       };
     }
 
-    const text = (data.content || []).map((b) => b.text || "").join("").trim();
-    const cleaned = text.replace(/```json|```/g, "").trim();
+    // Responses API output extraction
+    const outText =
+      (data.output || [])
+        .flatMap((o) => o.content || [])
+        .map((c) => c.text || "")
+        .join("")
+        .trim() || "";
 
-    const start = cleaned.indexOf("{");
-    const end = cleaned.lastIndexOf("}");
+    // Parse JSON defensively
+    const start = outText.indexOf("{");
+    const end = outText.lastIndexOf("}");
     if (start === -1 || end === -1) throw new Error("No JSON object found in model output");
 
-    const parsed = JSON.parse(cleaned.slice(start, end + 1));
+    const parsed = JSON.parse(outText.slice(start, end + 1));
 
     return {
       statusCode: 200,
