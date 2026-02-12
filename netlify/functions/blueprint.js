@@ -114,32 +114,70 @@ const ALLOWED_STORES = new Set(["lider","jumbo","pedidosya","ubereats","rappi","
 const normStore = (s) => String(s || "").trim().toLowerCase();
 
 
-    
-function ensureStores(list, cat){
-  return (Array.isArray(list) ? list : []).map(x => {
-   const ps = normStore(x.preferred_store);
-const ss = Array.isArray(x.suggestedStores) ? x.suggestedStores.map(normStore).filter(s => ALLOWED_STORES.has(s)) : [];
+function ensureStores(list, cat) {
+  return (Array.isArray(list) ? list : []).map((x) => {
+    // Normalize incoming store fields (if model provided them)
+    const ps = normStore(x.preferred_store);
+    const ss = Array.isArray(x.suggestedStores)
+      ? x.suggestedStores.map(normStore).filter((s) => ALLOWED_STORES.has(s))
+      : [];
 
-if (ALLOWED_STORES.has(ps) && ss.length) {
-  return { ...x, preferred_store: ps, suggestedStores: ss };
+ if (ALLOWED_STORES.has(ps) && ss.length) {
+  const merged = [ps, ...ss]
+    .filter((v, i, a) => a.indexOf(v) === i)
+    .slice(0, 4);
+  return { ...x, preferred_store: ps, suggestedStores: merged };
+}
+const g = Number(formData.guestCount) || 0;
+if (g >= 12) {
+  const used = new Set(
+    ["food","drinks","equipment"].flatMap(k => (parsed.supplies?.[k] || []).map(x => x.preferred_store))
+  );
+  if (used.size < 3) {
+    // force diversity without changing quantities
+    if (parsed.supplies.food?.length) parsed.supplies.food[0].preferred_store = "jumbo";
+    if (parsed.supplies.equipment?.length) parsed.supplies.equipment[0].preferred_store = "mercadolibre";
+  }
 }
 
 
-    const name = String(x.item||"").toLowerCase();
+    // Otherwise route based on content + category
+    const name = String(x.item || "").toLowerCase();
     let preferred = "lider";
 
-    if (cat === "equipment" || /chair|bench|table|speaker|light|projector|cooler/.test(name)) preferred = "mercadolibre";
-    else if (/cheese|charcut|brie|camembert|prosciutto|gourmet|wine|cabernet|carmenere|sauvignon/.test(name)) preferred = "jumbo";
-    else if (/balloon|garland|decor|decoration|candles|confetti/.test(name)) preferred = "pedidosya";
-    else if (/ice/.test(name)) preferred = "rappi";
+    // Equipment / rentals => MercadoLibre
+    if (
+      cat === "equipment" ||
+      /chair|chairs|bench|benches|table|tables|speaker|speakers|light|lights|projector|cooler/.test(name)
+    ) {
+      preferred = "mercadolibre";
+    }
+    // Premium host items => Jumbo
+    else if (
+      /cheese|charcut|brie|camembert|prosciutto|gourmet|wine|cabernet|carmenere|sauvignon|champagne|sparkling/.test(name)
+    ) {
+      preferred = "jumbo";
+    }
+    // Last-minute decor/party supplies => PedidosYa or UberEats
+    else if (
+      /balloon|balloons|garland|decor|decoration|candles|confetti|banner|centerpiece|tablecloth|globos|guirnalda/.test(name)
+    ) {
+      preferred = "pedidosya";
+    }
+    // Ice / urgent drinks => Rappi
+    else if (/ice|hielo/.test(name)) {
+      preferred = "rappi";
+    }
+
+    preferred = ALLOWED_STORES.has(preferred) ? preferred : "lider";
 
     const fallback = {
-      lider:["lider","jumbo"],
-      jumbo:["jumbo","lider"],
-      pedidosya:["pedidosya","ubereats","rappi"],
-      ubereats:["ubereats","pedidosya","rappi"],
-      rappi:["rappi","lider"],
-      mercadolibre:["mercadolibre","lider"]
+      lider: ["lider", "jumbo"],
+      jumbo: ["jumbo", "lider"],
+      pedidosya: ["pedidosya", "ubereats", "rappi"],
+      ubereats: ["ubereats", "pedidosya", "rappi"],
+      rappi: ["rappi", "lider"],
+      mercadolibre: ["mercadolibre", "lider"],
     }[preferred];
 
     return { ...x, preferred_store: preferred, suggestedStores: fallback };
