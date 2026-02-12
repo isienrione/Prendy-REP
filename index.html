@@ -1423,7 +1423,31 @@ function buildShoppingList(supplies){
 
         const Onboarding = ({ onFinish }) => {
             const [step,setStep]=useState(0);
-            const [form,setForm]=useState({type:'',guestCount:'',budget:'',date:'',setting:'',vibe:'',dietary:'',notes:''});
+            const isDemo = window.location.search.includes("demo=1");
+
+const [formData, setFormData] = useState(
+  isDemo
+    ? {
+        type: "Taco Tuesday",
+        guestCount: 20,
+        budget: 300000,
+        setting: "outdoor",
+        vibe: "Casual & Relaxed",
+        dietary: "Include vegetarian options",
+        notes:
+          "Reggaeton DJ. Surprise red velvet cake at 18:00 for a friend who has been working too hard.",
+      }
+    : {
+        type: "",
+        guestCount: "",
+        budget: "",
+        setting: "",
+        vibe: "",
+        dietary: "",
+        notes: "",
+      }
+);
+
             const up=(k,v)=>setForm(f=>({...f,[k]:v}));const next=()=>setStep(s=>s+1);const back=()=>setStep(s=>s-1);
             const canProceed=[()=>!!form.type,()=>!!form.guestCount&&!!form.budget,()=>!!form.setting&&!!form.vibe,()=>true];
             const steps=[
