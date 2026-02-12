@@ -302,8 +302,9 @@ function buildShoppingList(supplies){
     const items = [];
     let id = 0;
 
-    for(const [cat,list] of Object.entries(supplies)){
-        for(const item of list){
+   for (const [cat, list] of Object.entries(supplies || {})) {
+    for (const item of (Array.isArray(list) ? list : [])) {
+
 
             // 1️⃣ Try AI-provided store
             const aiStore =
