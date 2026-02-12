@@ -101,6 +101,35 @@ Respond ONLY with valid JSON (no markdown, no commentary) exactly matching this 
     if (start === -1 || end === -1) throw new Error("No JSON found in model output");
 
     const parsed = JSON.parse(cleaned.slice(start, end + 1));
+function ensureStores(list, cat){
+  return (Array.isArray(list) ? list : []).map(x => {
+    if (x.preferred_store && Array.isArray(x.suggestedStores) && x.suggestedStores.length) return x;
+
+    const name = String(x.item||"").toLowerCase();
+    let preferred = "lider";
+
+    if (cat === "equipment" || /chair|bench|table|speaker|light|projector|cooler/.test(name)) preferred = "mercadolibre";
+    else if (/cheese|charcut|brie|camembert|prosciutto|gourmet|wine|cabernet|carmenere|sauvignon/.test(name)) preferred = "jumbo";
+    else if (/balloon|garland|decor|decoration|candles|confetti/.test(name)) preferred = "pedidosya";
+    else if (/ice/.test(name)) preferred = "rappi";
+
+    const fallback = {
+      lider:["lider","jumbo"],
+      jumbo:["jumbo","lider"],
+      pedidosya:["pedidosya","ubereats","rappi"],
+      ubereats:["ubereats","pedidosya","rappi"],
+      rappi:["rappi","lider"],
+      mercadolibre:["mercadolibre","lider"]
+    }[preferred];
+
+    return { ...x, preferred_store: preferred, suggestedStores: fallback };
+  });
+}
+
+parsed.supplies = parsed.supplies || {};
+parsed.supplies.food = ensureStores(parsed.supplies.food, "food");
+parsed.supplies.drinks = ensureStores(parsed.supplies.drinks, "drinks");
+parsed.supplies.equipment = ensureStores(parsed.supplies.equipment, "equipment");
 
     return {
       statusCode: 200,
