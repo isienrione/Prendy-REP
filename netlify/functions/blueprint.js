@@ -17,57 +17,88 @@ export async function handler(event) {
     };
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return {
       statusCode: 500,
       headers: cors,
-      body: JSON.stringify({ error: "OPENAI_API_KEY is not configured" }),
+      body: JSON.stringify({ error: "ANTHROPIC_API_KEY is not configured" }),
     };
   }
 
   try {
     const formData = JSON.parse(event.body || "{}");
 
-    const prompt = `You are Prendy, a logistics AI for social gatherings in Santiago, Chile. Generate a detailed event logistics blueprint.
+    // Hard validation so frontend can't send incomplete payloads
+    if (!formData.type || !formData.guestCount || !formData.budget || !formData.setting || !formData.vibe) {
+      return {
+        statusCode: 400,
+        headers: cors,
+        body: JSON.stringify({
+          error: "Missing required fields",
+          required: ["type", "guestCount", "budget", "setting", "vibe"],
+          received: formData,
+        }),
+      };
+    }
 
-Event: ${formData.type}, ${formData.guestCount} guests, ${formData.budget} CLP budget, Setting: ${formData.setting}, Vibe: ${formData.vibe}, Dietary: ${formData.dietary || "None"}, Notes: ${formData.notes || "None"}
+    // Strongly steer model to use canonical item names that your routing understands
+    const prompt = `
+You are Prendy, a logistics AI for social gatherings in Santiago, Chile.
+Generate a detailed event logistics blueprint.
 
-Respond ONLY with valid JSON (no markdown, no commentary) exactly matching this schema:
+Event:
+- Type: ${formData.type}
+- Guests: ${formData.guestCount}
+- Budget: ${formData.budget} CLP
+- Setting: ${formData.setting}
+- Vibe: ${formData.vibe}
+- Dietary: ${formData.dietary || "None"}
+- Notes: ${formData.notes || "None"}
+
+IMPORTANT OUTPUT RULES:
+1) Respond ONLY with valid JSON (no markdown).
+2) Use 24-hour times in HH:MM.
+3) For supplies item names, prefer CANONICAL NAMES from this list when possible:
+   - Food: "Empanadas", "Main protein", "Side salads", "Bread", "Cheese", "Dessert"
+   - Drinks: "Wine", "Beer", "Soft drinks", "Juice", "Water", "Ice", "Pisco", "Lemons"
+   - Equipment: "Napkin", "Plates", "Glass sets", "Tables", "Chairs"
+4) Quantities must be numbers (not ranges).
+
+Return schema EXACTLY:
 {
-  "summary":"one sentence",
-  "timeline":[{"time":"HH:MM","task":"desc","owner":"who"}],
-  "supplies":{
-    "food":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],
-    "drinks":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],
-    "equipment":[{"item":"name","quantity":0,"unit":"u","note":"tip"}]
-  },
-  "budget":{
-    "venue":{"amount":0,"pct":0},
-    "food":{"amount":0,"pct":0},
-    "drinks":{"amount":0,"pct":0},
-    "entertainment":{"amount":0,"pct":0},
-    "staff":{"amount":0,"pct":0},
-    "misc":{"amount":0,"pct":0}
-  },
-  "staffing":{"servers":0,"bartenders":0,"setup_crew":0},
-  "tips":["tip1","tip2","tip3"],
-  "risks":["risk1","risk2"]
-}`;
+ "summary":"one sentence",
+ "timeline":[{"time":"HH:MM","task":"desc","owner":"who"}],
+ "supplies":{
+   "food":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],
+   "drinks":[{"item":"name","quantity":0,"unit":"u","note":"tip"}],
+   "equipment":[{"item":"name","quantity":0,"unit":"u","note":"tip"}]
+ },
+ "budget":{
+   "venue":{"amount":0,"pct":0},
+   "food":{"amount":0,"pct":0},
+   "drinks":{"amount":0,"pct":0},
+   "entertainment":{"amount":0,"pct":0},
+   "staff":{"amount":0,"pct":0},
+   "misc":{"amount":0,"pct":0}
+ },
+ "staffing":{"servers":0,"bartenders":0,"setup_crew":0},
+ "tips":["tip1","tip2","tip3"],
+ "risks":["risk1","risk2"]
+}
+`.trim();
 
-    const resp = await fetch("https://api.openai.com/v1/chat/completions", {
+    const resp = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
-        temperature: 0.4,
-        messages: [
-          { role: "system", content: "You output ONLY valid JSON. No markdown." },
-          { role: "user", content: prompt },
-        ],
+        model: "claude-3-5-sonnet-20241022",
+        max_tokens: 1200,
+        messages: [{ role: "user", content: prompt }],
       }),
     });
 
@@ -77,19 +108,16 @@ Respond ONLY with valid JSON (no markdown, no commentary) exactly matching this 
       return {
         statusCode: resp.status,
         headers: cors,
-        body: JSON.stringify({ error: "OpenAI error", details: data }),
+        body: JSON.stringify({ error: "Anthropic error", details: data }),
       };
     }
 
-    const text = data?.choices?.[0]?.message?.content?.trim() || "";
-
-    // Hardening: strip accidental code fences
+    const text = (data.content || []).map((b) => b.text || "").join("").trim();
     const cleaned = text.replace(/```json|```/g, "").trim();
 
-    // Extract JSON object if there is extra text
     const start = cleaned.indexOf("{");
     const end = cleaned.lastIndexOf("}");
-    if (start === -1 || end === -1) throw new Error("No JSON found in model output");
+    if (start === -1 || end === -1) throw new Error("No JSON object found in model output");
 
     const parsed = JSON.parse(cleaned.slice(start, end + 1));
 
