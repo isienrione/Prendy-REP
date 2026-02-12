@@ -71,8 +71,8 @@ Respond ONLY with valid JSON (no markdown, no commentary) exactly matching this 
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
-        temperature: 0.4,
+        model: "gpt-4o",
+        temperature: 0.8,
         messages: [
           { role: "system", content: "You output ONLY valid JSON. No markdown." },
           { role: "user", content: prompt },
