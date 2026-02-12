@@ -58,13 +58,14 @@
         .time-slot{padding:10px 16px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);font-size:14px;font-weight:500;text-align:center;cursor:pointer;transition:all .15s}
         .time-slot:hover{border-color:var(--violet)}
         .time-slot.selected{border-color:var(--violet);background:rgba(124,92,224,.06);color:var(--violet);font-weight:600}
-        .carousel-track{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:0 24px 16px;scrollbar-width:none}
+        .carousel-track{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;scrollbar-width:none;padding:0 calc(50vw - 170px) 16px}
         .carousel-track::-webkit-scrollbar{display:none}
-        .carousel-card{scroll-snap-align:start;flex-shrink:0;width:340px;border-radius:24px;overflow:hidden;position:relative;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease}
+        .carousel-card{scroll-snap-align:center;flex-shrink:0;width:340px;border-radius:24px;overflow:hidden;position:relative;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease,opacity .3s ease}
         .carousel-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.2)}
         @media(max-width:700px){
             .grid-2{grid-template-columns:1fr!important}
             .carousel-card{width:290px}
+            .carousel-track{padding:0 calc(50vw - 145px) 16px}
         }
         /* About Section */
         .about-section{position:relative;overflow:hidden}
@@ -744,14 +745,20 @@ function buildShoppingList(supplies){
             const [imgLoaded, setImgLoaded] = useState({});
             const autoSlideRef = useRef(null);
 
-            const cardWidth = 370;
+            const cardW = 340;
+            const gap = 24;
+            const cardWidth = cardW + gap;
             const totalSlides = SHOWCASE_EVENTS.length;
 
             const scrollToSlide = (index) => {
-                if (scrollRef.current) {
-                    scrollRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
-                    setCurrentSlide(index);
-                }
+                const el = scrollRef.current;
+                if (!el) return;
+                const card = el.children[index];
+                if (!card) return;
+                const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+                const containerCenter = el.offsetWidth / 2;
+                el.scrollTo({ left: cardCenter - containerCenter, behavior: 'smooth' });
+                setCurrentSlide(index);
             };
 
             const scroll = (dir) => {
@@ -767,8 +774,12 @@ function buildShoppingList(supplies){
                 autoSlideRef.current = setInterval(() => {
                     setCurrentSlide(prev => {
                         const next = (prev + 1) % totalSlides;
-                        if (scrollRef.current) {
-                            scrollRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
+                        const el = scrollRef.current;
+                        if (el && el.children[next]) {
+                            const card = el.children[next];
+                            const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+                            const containerCenter = el.offsetWidth / 2;
+                            el.scrollTo({ left: cardCenter - containerCenter, behavior: 'smooth' });
                         }
                         return next;
                     });
@@ -781,8 +792,15 @@ function buildShoppingList(supplies){
                 const el = scrollRef.current;
                 if (!el) return;
                 const handleScroll = () => {
-                    const idx = Math.round(el.scrollLeft / cardWidth);
-                    setCurrentSlide(idx);
+                    const center = el.scrollLeft + el.offsetWidth / 2;
+                    let closest = 0;
+                    let minDist = Infinity;
+                    Array.from(el.children).forEach((card, i) => {
+                        const cardCenter = card.offsetLeft + card.offsetWidth / 2;
+                        const dist = Math.abs(center - cardCenter);
+                        if (dist < minDist) { minDist = dist; closest = i; }
+                    });
+                    setCurrentSlide(closest);
                 };
                 el.addEventListener('scroll', handleScroll, { passive: true });
                 return () => el.removeEventListener('scroll', handleScroll);
