@@ -1419,6 +1419,181 @@ Everything in one place. Just a few clicks. No stress.
         );
 
         const Onboarding = ({ onFinish }) => {
+  const [step, setStep] = useState(0);
+
+  const [form, setForm] = useState({
+    scenarioKey: "",
+    type: "",
+    hostingMode: "",
+    venueStyle: "",
+    tier: "",
+    guestCount: "",
+    budget: "",
+    date: "",
+    setting: "",
+    vibe: "",
+    dietary: "",
+    notes: ""
+  });
+
+  const up = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const next = () => setStep(s => s + 1);
+  const back = () => setStep(s => Math.max(0, s - 1));
+
+  const CURATED = [
+    { key: "adult_birthday", emoji: "🎂", title: "Adult Birthday", desc: "10–25 guests", type: "Birthday" },
+    { key: "kids_birthday", emoji: "🧸", title: "Kids Birthday", desc: "15–40 guests", type: "Birthday" },
+    { key: "farewell_drinks", emoji: "🍻", title: "Farewell Drinks / Bar Meetup", desc: "10–35 guests", type: "House Party" },
+    { key: "family_lunch", emoji: "🍽️", title: "Family Lunch Hosting", desc: "12–30 guests", type: "Dinner Party" },
+    { key: "bachelorette", emoji: "💃", title: "Bachelorette / Pre-party", desc: "8–20 guests", type: "House Party" },
+    { key: "baptism_communion", emoji: "⛪", title: "Baptism / First Communion", desc: "15–25 guests", type: "Dinner Party" },
+    { key: "other", emoji: "✨", title: "Other", desc: "Use generic event types", type: "" }
+  ];
+
+  const GENERIC_TYPES = [
+    { t: "Dinner Party", e: "🍷", d: "Intimate seated meal" },
+    { t: "Birthday", e: "🎂", d: "Celebration with food & fun" },
+    { t: "Corporate Meetup", e: "💼", d: "Team event or offsite" },
+    { t: "House Party", e: "🎉", d: "Casual drinks & music" },
+    { t: "Wedding Reception", e: "💒", d: "Post-ceremony celebration" }
+  ];
+
+  const steps = [];
+
+  // STEP 1 – Scenario
+  steps.push(
+    <div key="scenario">
+      <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>What are you planning?</h2>
+      <p style={{ color: "var(--stone)", marginBottom: 24 }}>
+        Choose a curated scenario — or select <b>Other</b>.
+      </p>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {CURATED.map(o => (
+          <OptionCard
+            key={o.key}
+            selected={form.scenarioKey === o.key}
+            onClick={() => {
+              up("scenarioKey", o.key);
+              if (o.key !== "other") up("type", o.type);
+              if (o.key === "other") up("type", "");
+              next();
+            }}
+            emoji={o.emoji}
+            title={o.title}
+            desc={o.desc}
+          />
+        ))}
+      </div>
+    </div>
+  );
+
+  // STEP 2 – Generic type (if Other)
+  if (form.scenarioKey === "other") {
+    steps.push(
+      <div key="generic">
+        <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>Select event type</h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {GENERIC_TYPES.map(o => (
+            <OptionCard
+              key={o.t}
+              selected={form.type === o.t}
+              onClick={() => { up("type", o.t); next(); }}
+              emoji={o.e}
+              title={o.t}
+              desc={o.d}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // STEP 3 – Hosting mode + tier
+  steps.push(
+    <div key="hosting">
+      <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>How are you hosting?</h2>
+
+      <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
+        <Chip selected={form.hostingMode === "home"} onClick={() => up("hostingMode", "home")}>At Home</Chip>
+        <Chip selected={form.hostingMode === "venue"} onClick={() => up("hostingMode", "venue")}>Venue / Restaurant</Chip>
+      </div>
+
+      {form.hostingMode === "venue" && (
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
+          {["Burger Joint","French Bistro","Dive Bar","Rooftop Bar","Cocktail Bar","Family Restaurant"].map(s => (
+            <Chip key={s} selected={form.venueStyle === s} onClick={() => up("venueStyle", s)}>{s}</Chip>
+          ))}
+        </div>
+      )}
+
+      <div style={{ display: "flex", gap: 10 }}>
+        <Chip selected={form.tier === "value"} onClick={() => up("tier", "value")}>Value</Chip>
+        <Chip selected={form.tier === "standard"} onClick={() => up("tier", "standard")}>Signature</Chip>
+        <Chip selected={form.tier === "premium"} onClick={() => up("tier", "premium")}>Elevated</Chip>
+      </div>
+    </div>
+  );
+
+  // STEP 4 – Scale
+  steps.push(
+    <div key="scale">
+      <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>The Scale</h2>
+
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
+        {["10-20","20-40","40-60","60-100","100+"].map(g => (
+          <Chip key={g} selected={form.guestCount === g} onClick={() => up("guestCount", g)}>{g}</Chip>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        {[{v:"500000",l:"$500K"},{v:"1000000",l:"$1M"},{v:"2000000",l:"$2M"},{v:"5000000",l:"$5M"}].map(b => (
+          <Chip key={b.v} selected={form.budget === b.v} onClick={() => up("budget", b.v)}>{b.l}</Chip>
+        ))}
+      </div>
+    </div>
+  );
+
+  // STEP 5 – Vibe
+  steps.push(
+    <div key="vibe">
+      <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>The Vibe</h2>
+
+      <input placeholder="Indoor / Outdoor" value={form.setting} onChange={e=>up("setting",e.target.value)} />
+      <input placeholder="Elegant / Party / Cozy..." value={form.vibe} onChange={e=>up("vibe",e.target.value)} />
+      <input placeholder="Dietary notes" value={form.dietary} onChange={e=>up("dietary",e.target.value)} />
+      <textarea rows={4} placeholder="Additional notes" value={form.notes} onChange={e=>up("notes",e.target.value)} />
+    </div>
+  );
+
+  const totalSteps = steps.length;
+
+  const isStepValid = () => {
+    if (step === 0) return !!form.scenarioKey;
+    if (form.scenarioKey === "other" && step === 1) return !!form.type;
+    if (step === totalSteps - 3) return !!form.hostingMode && !!form.tier && (form.hostingMode !== "venue" || !!form.venueStyle);
+    if (step === totalSteps - 2) return !!form.guestCount && !!form.budget;
+    if (step === totalSteps - 1) return !!form.setting;
+    return true;
+  };
+
+  return (
+    <div style={{ maxWidth: 560, margin: "40px auto", padding: "0 24px" }}>
+      <ProgressBar step={step} total={totalSteps} />
+
+      {steps[step]}
+
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 40 }}>
+        {step > 0 ? <button onClick={back}>← Back</button> : <div />}
+
+        {step < totalSteps - 1
+          ? <button onClick={next} disabled={!isStepValid()}>Continue →</button>
+          : <button onClick={() => onFinish(form)} disabled={!isStepValid()}>Generate Blueprint 🚀</button>
+        }
+      </div>
+    </div>
+  );
+};
         const Loading = ({ error }) => {
             const [msg,setMsg]=useState(0);
             const msgs=["Analyzing event parameters...","Calculating supply logistics...","Matching vendors to your vibe...","Building timeline...","Routing items to stores...","Estimating prices...","Finalizing Blueprint..."];
