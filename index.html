@@ -1425,9 +1425,17 @@ Everything in one place. Just a few clicks. No stress.
 const [form, setForm] = useState(
   isDemo
     ? {
-        type: "Taco Tuesday",
-        guestCount: 20,
-        budget: 300000,
+        // NEW: scenarioKey for curated flow
+        scenarioKey: "adult_birthday_home",
+
+        // Keep type compatible with your existing generator (used when scenarioKey === "other")
+        // For curated scenarios we still set a compatible type so nothing breaks downstream.
+        type: "Birthday",
+
+        // IMPORTANT: these must match your chip values (strings)
+        guestCount: "20-40",
+        budget: "500000",
+
         setting: "outdoor",
         vibe: "Casual & Relaxed",
         dietary: "Include vegetarian options",
@@ -1435,6 +1443,8 @@ const [form, setForm] = useState(
           "Reggaeton DJ. Surprise red velvet cake at 18:00 for a friend who has been working too hard.",
       }
     : {
+        // NEW
+        scenarioKey: "",
         type: "",
         guestCount: "",
         budget: "",
