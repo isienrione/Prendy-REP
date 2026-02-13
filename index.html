@@ -1456,7 +1456,13 @@ const [form, setForm] = useState(
 );
 
             const up=(k,v)=>setForm(f=>({...f,[k]:v}));const next=()=>setStep(s=>s+1);const back=()=>setStep(s=>s-1);
-            const canProceed=[()=>!!form.type,()=>!!form.guestCount&&!!form.budget,()=>!!form.setting&&!!form.vibe,()=>true];
+            const canProceed = [
+  () => !!form.scenarioKey,
+  ...(form.scenarioKey === "other" ? [() => !!form.type] : []),
+  () => !!form.guestCount && !!form.budget,
+  () => !!form.setting && !!form.vibe,
+  () => true,
+];
             const steps=[
                 <div key="s0" className="fade-up"><h2 style={{fontFamily:"var(--serif)",fontSize:36,marginBottom:8}}>What are we planning?</h2><p style={{color:"var(--stone)",marginBottom:32}}>Pick the closest type — we'll customize from there.</p><div style={{display:"flex",flexDirection:"column",gap:12}}>{[{t:"Dinner Party",e:"🍷",d:"Intimate seated meal"},{t:"Birthday",e:"🎂",d:"Celebration with food & fun"},{t:"Corporate Meetup",e:"💼",d:"Team event or offsite"},{t:"House Party",e:"🎉",d:"Casual drinks & music"},{t:"Wedding Reception",e:"💒",d:"Post-ceremony celebration"}].map(o=><OptionCard key={o.t} selected={form.type===o.t} onClick={()=>{up('type',o.t);setTimeout(next,200)}} emoji={o.e} title={o.t} desc={o.d}/>)}</div></div>,
                 <div key="s1" className="fade-up"><h2 style={{fontFamily:"var(--serif)",fontSize:36,marginBottom:8}}>The scale</h2><p style={{color:"var(--stone)",marginBottom:32}}>How many people and what's the budget?</p><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Guest Count</label><div style={{display:"flex",gap:10,marginBottom:28,flexWrap:"wrap"}}>{['10-20','20-40','40-60','60-100','100+'].map(g=><Chip key={g} selected={form.guestCount===g} onClick={()=>up('guestCount',g)}>{g}</Chip>)}</div><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Total Budget (CLP)</label><div style={{display:"flex",gap:10,marginBottom:28,flexWrap:"wrap"}}>{[{v:'500000',l:'$500K'},{v:'1000000',l:'$1M'},{v:'2000000',l:'$2M'},{v:'5000000',l:'$5M'},{v:'10000000',l:'$10M+'}].map(b=><Chip key={b.v} selected={form.budget===b.v} onClick={()=>up('budget',b.v)}>{b.l}</Chip>)}</div><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Preferred Date</label><input type="date" value={form.date} onChange={e=>up('date',e.target.value)}/></div>,
