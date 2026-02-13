@@ -1418,27 +1418,27 @@ Everything in one place. Just a few clicks. No stress.
             </div>
         );
 
-        const Onboarding = ({ onFinish }) => {
+       const Onboarding = ({ onFinish }) => {
   const [step, setStep] = useState(0);
 
   const [form, setForm] = useState({
     scenarioKey: "",
     type: "",
-    hostingMode: "",
-    venueStyle: "",
-    tier: "",
+    hostingMode: "",   // "home" | "venue"
+    venueStyle: "",    // only if hostingMode === "venue"
+    tier: "",          // "value" | "standard" | "premium"
     guestCount: "",
     budget: "",
     date: "",
     setting: "",
     vibe: "",
     dietary: "",
-    notes: ""
+    notes: "",
   });
 
-  const up = (k, v) => setForm(f => ({ ...f, [k]: v }));
-  const next = () => setStep(s => s + 1);
-  const back = () => setStep(s => Math.max(0, s - 1));
+  const up = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+  const next = () => setStep((s) => Math.min(s + 1, 50));
+  const back = () => setStep((s) => Math.max(0, s - 1));
 
   const CURATED = [
     { key: "adult_birthday", emoji: "🎂", title: "Adult Birthday", desc: "10–25 guests", type: "Birthday" },
@@ -1447,7 +1447,7 @@ Everything in one place. Just a few clicks. No stress.
     { key: "family_lunch", emoji: "🍽️", title: "Family Lunch Hosting", desc: "12–30 guests", type: "Dinner Party" },
     { key: "bachelorette", emoji: "💃", title: "Bachelorette / Pre-party", desc: "8–20 guests", type: "House Party" },
     { key: "baptism_communion", emoji: "⛪", title: "Baptism / First Communion", desc: "15–25 guests", type: "Dinner Party" },
-    { key: "other", emoji: "✨", title: "Other", desc: "Use generic event types", type: "" }
+    { key: "other", emoji: "✨", title: "Other", desc: "Use generic event types", type: "" },
   ];
 
   const GENERIC_TYPES = [
@@ -1455,141 +1455,361 @@ Everything in one place. Just a few clicks. No stress.
     { t: "Birthday", e: "🎂", d: "Celebration with food & fun" },
     { t: "Corporate Meetup", e: "💼", d: "Team event or offsite" },
     { t: "House Party", e: "🎉", d: "Casual drinks & music" },
-    { t: "Wedding Reception", e: "💒", d: "Post-ceremony celebration" }
+    { t: "Wedding Reception", e: "💒", d: "Post-ceremony celebration" },
+  ];
+
+  const GUEST_BUCKETS = ["10-20", "20-40", "40-60", "60-100", "100+"];
+  const BUDGET_BUCKETS = [
+    { v: "500000", l: "$500K" },
+    { v: "1000000", l: "$1M" },
+    { v: "2000000", l: "$2M" },
+    { v: "5000000", l: "$5M" },
+    { v: "10000000", l: "$10M+" },
+  ];
+
+  const VIBE_OPTIONS = [
+    { v: "Casual & Relaxed", e: "😌", d: "Chill, no dress code" },
+    { v: "Elegant & Refined", e: "✨", d: "Upscale, polished" },
+    { v: "Party & High-Energy", e: "🔥", d: "Music, dancing, late night" },
+    { v: "Cozy & Intimate", e: "🕯️", d: "Small group, warm" },
   ];
 
   const steps = [];
 
-  // STEP 1 – Scenario
-  steps.push(
-    <div key="scenario">
-      <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>What are you planning?</h2>
-      <p style={{ color: "var(--stone)", marginBottom: 24 }}>
-        Choose a curated scenario — or select <b>Other</b>.
-      </p>
+  // STEP — Scenario (curated)
+  steps.push({
+    key: "scenario",
+    content: (
+      <div className="fade-up">
+        <h2 style={{ fontFamily: "var(--serif)", fontSize: 36, marginBottom: 8 }}>
+          What are you planning?
+        </h2>
+        <p style={{ color: "var(--stone)", marginBottom: 24 }}>
+          Choose a curated scenario — or select <b>Other</b>.
+        </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        {CURATED.map(o => (
-          <OptionCard
-            key={o.key}
-            selected={form.scenarioKey === o.key}
-            onClick={() => {
-              up("scenarioKey", o.key);
-              if (o.key !== "other") up("type", o.type);
-              if (o.key === "other") up("type", "");
-              next();
-            }}
-            emoji={o.emoji}
-            title={o.title}
-            desc={o.desc}
-          />
-        ))}
-      </div>
-    </div>
-  );
-
-  // STEP 2 – Generic type (if Other)
-  if (form.scenarioKey === "other") {
-    steps.push(
-      <div key="generic">
-        <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>Select event type</h2>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {GENERIC_TYPES.map(o => (
+          {CURATED.map((o) => (
             <OptionCard
-              key={o.t}
-              selected={form.type === o.t}
-              onClick={() => { up("type", o.t); next(); }}
-              emoji={o.e}
-              title={o.t}
-              desc={o.d}
+              key={o.key}
+              selected={form.scenarioKey === o.key}
+              onClick={() => {
+                up("scenarioKey", o.key);
+                if (o.key !== "other") up("type", o.type);
+                if (o.key === "other") up("type", "");
+                setTimeout(next, 120);
+              }}
+              emoji={o.emoji}
+              title={o.title}
+              desc={o.desc}
             />
           ))}
         </div>
       </div>
-    );
+    ),
+  });
+
+  // STEP — Generic type (only if Other)
+  if (form.scenarioKey === "other") {
+    steps.push({
+      key: "generic",
+      content: (
+        <div className="fade-up">
+          <h2 style={{ fontFamily: "var(--serif)", fontSize: 36, marginBottom: 8 }}>
+            Select event type
+          </h2>
+          <p style={{ color: "var(--stone)", marginBottom: 24 }}>
+            We’ll customize from here.
+          </p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {GENERIC_TYPES.map((o) => (
+              <OptionCard
+                key={o.t}
+                selected={form.type === o.t}
+                onClick={() => {
+                  up("type", o.t);
+                  setTimeout(next, 120);
+                }}
+                emoji={o.e}
+                title={o.t}
+                desc={o.d}
+              />
+            ))}
+          </div>
+        </div>
+      ),
+    });
   }
 
-  // STEP 3 – Hosting mode + tier
-  steps.push(
-    <div key="hosting">
-      <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>How are you hosting?</h2>
+  // STEP — Hosting
+  steps.push({
+    key: "hosting",
+    content: (
+      <div className="fade-up">
+        <h2 style={{ fontFamily: "var(--serif)", fontSize: 36, marginBottom: 8 }}>
+          How are you hosting?
+        </h2>
+        <p style={{ color: "var(--stone)", marginBottom: 24 }}>
+          This changes execution (groceries vs. booking packages).
+        </p>
 
-      <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
-        <Chip selected={form.hostingMode === "home"} onClick={() => up("hostingMode", "home")}>At Home</Chip>
-        <Chip selected={form.hostingMode === "venue"} onClick={() => up("hostingMode", "venue")}>Venue / Restaurant</Chip>
+        <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+          Hosting mode
+        </label>
+        <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
+          <Chip selected={form.hostingMode === "home"} onClick={() => { up("hostingMode", "home"); up("venueStyle", ""); }}>
+            At Home
+          </Chip>
+          <Chip selected={form.hostingMode === "venue"} onClick={() => up("hostingMode", "venue")}>
+            Venue / Restaurant
+          </Chip>
+        </div>
+
+        {form.hostingMode === "venue" && (
+          <>
+            <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+              Venue style
+            </label>
+            <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
+              {["Burger Joint", "French Bistro", "Dive Bar", "Rooftop Bar", "Cocktail Bar", "Family Restaurant"].map((s) => (
+                <Chip key={s} selected={form.venueStyle === s} onClick={() => up("venueStyle", s)}>
+                  {s}
+                </Chip>
+              ))}
+            </div>
+          </>
+        )}
+
+        <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+          Recommendation level
+        </label>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          <Chip selected={form.tier === "value"} onClick={() => up("tier", "value")}>Value</Chip>
+          <Chip selected={form.tier === "standard"} onClick={() => up("tier", "standard")}>Signature</Chip>
+          <Chip selected={form.tier === "premium"} onClick={() => up("tier", "premium")}>Elevated</Chip>
+        </div>
+
+        <div style={{ color: "var(--stone)", fontSize: 12, marginTop: 10 }}>
+          (This powers specific recommendations like brand/examples, not generic “cheese & crackers”.)
+        </div>
       </div>
+    ),
+  });
 
-      {form.hostingMode === "venue" && (
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
-          {["Burger Joint","French Bistro","Dive Bar","Rooftop Bar","Cocktail Bar","Family Restaurant"].map(s => (
-            <Chip key={s} selected={form.venueStyle === s} onClick={() => up("venueStyle", s)}>{s}</Chip>
+  // STEP — Scale
+  steps.push({
+    key: "scale",
+    content: (
+      <div className="fade-up">
+        <h2 style={{ fontFamily: "var(--serif)", fontSize: 36, marginBottom: 8 }}>
+          The scale
+        </h2>
+        <p style={{ color: "var(--stone)", marginBottom: 24 }}>
+          How many people and what’s the budget?
+        </p>
+
+        <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+          Guest count
+        </label>
+        <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
+          {GUEST_BUCKETS.map((g) => (
+            <Chip key={g} selected={form.guestCount === g} onClick={() => up("guestCount", g)}>
+              {g}
+            </Chip>
           ))}
         </div>
-      )}
 
-      <div style={{ display: "flex", gap: 10 }}>
-        <Chip selected={form.tier === "value"} onClick={() => up("tier", "value")}>Value</Chip>
-        <Chip selected={form.tier === "standard"} onClick={() => up("tier", "standard")}>Signature</Chip>
-        <Chip selected={form.tier === "premium"} onClick={() => up("tier", "premium")}>Elevated</Chip>
+        <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+          Total budget (CLP)
+        </label>
+        <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
+          {BUDGET_BUCKETS.map((b) => (
+            <Chip key={b.v} selected={form.budget === b.v} onClick={() => up("budget", b.v)}>
+              {b.l}
+            </Chip>
+          ))}
+        </div>
+
+        <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+          Preferred date (optional)
+        </label>
+        <input
+          type="date"
+          value={form.date}
+          onChange={(e) => up("date", e.target.value)}
+        />
       </div>
-    </div>
-  );
+    ),
+  });
 
-  // STEP 4 – Scale
-  steps.push(
-    <div key="scale">
-      <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>The Scale</h2>
+  // STEP — Vibe
+  steps.push({
+    key: "vibe",
+    content: (
+      <div className="fade-up">
+        <h2 style={{ fontFamily: "var(--serif)", fontSize: 36, marginBottom: 8 }}>
+          The vibe
+        </h2>
+        <p style={{ color: "var(--stone)", marginBottom: 24 }}>
+          Helps us match vendors and plan the flow.
+        </p>
 
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
-        {["10-20","20-40","40-60","60-100","100+"].map(g => (
-          <Chip key={g} selected={form.guestCount === g} onClick={() => up("guestCount", g)}>{g}</Chip>
-        ))}
+        <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+          Setting
+        </label>
+        <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap" }}>
+          {[
+            { v: "indoor", e: "🏠", l: "Indoor" },
+            { v: "outdoor", e: "🌳", l: "Outdoor" },
+            { v: "mixed", e: "🏡", l: "Mixed" },
+          ].map((s) => (
+            <Chip key={s.v} selected={form.setting === s.v} onClick={() => up("setting", s.v)}>
+              {s.e} {s.l}
+            </Chip>
+          ))}
+        </div>
+
+        <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+          Vibe
+        </label>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 18 }}>
+          {VIBE_OPTIONS.map((v) => (
+            <OptionCard
+              key={v.v}
+              selected={form.vibe === v.v}
+              onClick={() => up("vibe", v.v)}
+              emoji={v.e}
+              title={v.v}
+              desc={v.d}
+            />
+          ))}
+        </div>
+
+        <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+          Dietary requirements (optional)
+        </label>
+        <input
+          placeholder="e.g. vegetarian, gluten-free, no shellfish"
+          value={form.dietary}
+          onChange={(e) => up("dietary", e.target.value)}
+          style={{ marginBottom: 16 }}
+        />
+
+        <label style={{ fontWeight: 600, fontSize: 14, display: "block", marginBottom: 8 }}>
+          Anything else? (optional)
+        </label>
+        <textarea
+          placeholder="e.g. surprise cake at 18:00, DJ reggaeton, kids activities..."
+          value={form.notes}
+          onChange={(e) => up("notes", e.target.value)}
+          rows={4}
+          style={{ resize: "vertical" }}
+        />
       </div>
-
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-        {[{v:"500000",l:"$500K"},{v:"1000000",l:"$1M"},{v:"2000000",l:"$2M"},{v:"5000000",l:"$5M"}].map(b => (
-          <Chip key={b.v} selected={form.budget === b.v} onClick={() => up("budget", b.v)}>{b.l}</Chip>
-        ))}
-      </div>
-    </div>
-  );
-
-  // STEP 5 – Vibe
-  steps.push(
-    <div key="vibe">
-      <h2 style={{ fontFamily: "var(--serif)", fontSize: 36 }}>The Vibe</h2>
-
-      <input placeholder="Indoor / Outdoor" value={form.setting} onChange={e=>up("setting",e.target.value)} />
-      <input placeholder="Elegant / Party / Cozy..." value={form.vibe} onChange={e=>up("vibe",e.target.value)} />
-      <input placeholder="Dietary notes" value={form.dietary} onChange={e=>up("dietary",e.target.value)} />
-      <textarea rows={4} placeholder="Additional notes" value={form.notes} onChange={e=>up("notes",e.target.value)} />
-    </div>
-  );
+    ),
+  });
 
   const totalSteps = steps.length;
 
   const isStepValid = () => {
-    if (step === 0) return !!form.scenarioKey;
-    if (form.scenarioKey === "other" && step === 1) return !!form.type;
-    if (step === totalSteps - 3) return !!form.hostingMode && !!form.tier && (form.hostingMode !== "venue" || !!form.venueStyle);
-    if (step === totalSteps - 2) return !!form.guestCount && !!form.budget;
-    if (step === totalSteps - 1) return !!form.setting;
-    return true;
+    const k = steps[step]?.key;
+    switch (k) {
+      case "scenario":
+        return !!form.scenarioKey;
+
+      case "generic":
+        return !!form.type;
+
+      case "hosting":
+        return (
+          !!form.hostingMode &&
+          !!form.tier &&
+          (form.hostingMode !== "venue" || !!form.venueStyle)
+        );
+
+      case "scale":
+        return !!form.guestCount && !!form.budget;
+
+      case "vibe":
+        return !!form.setting && !!form.vibe;
+
+      default:
+        return true;
+    }
   };
+
+  const safeSetStep = (n) => {
+    const clamped = Math.max(0, Math.min(n, totalSteps - 1));
+    setStep(clamped);
+  };
+
+  // If scenarioKey changes and removes/ adds the "generic" step, keep step in bounds
+  useEffect(() => {
+    if (step > totalSteps - 1) safeSetStep(totalSteps - 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalSteps]);
 
   return (
     <div style={{ maxWidth: 560, margin: "40px auto", padding: "0 24px" }}>
       <ProgressBar step={step} total={totalSteps} />
 
-      {steps[step]}
+      {steps[step]?.content}
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 40 }}>
-        {step > 0 ? <button onClick={back}>← Back</button> : <div />}
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 40, gap: 12 }}>
+        {step > 0 ? (
+          <button
+            onClick={back}
+            style={{
+              padding: "14px 28px",
+              borderRadius: 100,
+              border: "1.5px solid var(--border)",
+              background: "transparent",
+              fontWeight: 600,
+              fontSize: 15,
+            }}
+          >
+            ← Back
+          </button>
+        ) : (
+          <div />
+        )}
 
-        {step < totalSteps - 1
-          ? <button onClick={next} disabled={!isStepValid()}>Continue →</button>
-          : <button onClick={() => onFinish(form)} disabled={!isStepValid()}>Generate Blueprint 🚀</button>
-        }
+        {step < totalSteps - 1 ? (
+          <button
+            onClick={next}
+            disabled={!isStepValid()}
+            style={{
+              padding: "14px 36px",
+              borderRadius: 100,
+              border: "none",
+              background: isStepValid() ? "var(--ink)" : "var(--border)",
+              color: isStepValid() ? "#fff" : "var(--stone)",
+              fontWeight: 600,
+              fontSize: 15,
+            }}
+          >
+            Continue →
+          </button>
+        ) : (
+          <button
+            onClick={() => onFinish(form)}
+            disabled={!isStepValid()}
+            style={{
+              padding: "14px 36px",
+              borderRadius: 100,
+              border: "none",
+              background: "linear-gradient(135deg,var(--rose),var(--violet))",
+              color: "#fff",
+              fontWeight: 600,
+              fontSize: 15,
+              opacity: isStepValid() ? 1 : 0.55,
+              boxShadow: "0 8px 24px rgba(124,92,224,0.2)",
+            }}
+          >
+            Generate Blueprint 🚀
+          </button>
+        )}
       </div>
     </div>
   );
