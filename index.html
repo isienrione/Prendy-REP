@@ -1508,6 +1508,30 @@ const [form, setForm] = useState(
     )}
   </div>
 </div>,
+                form.scenarioKey==="other"
+  ? <div key="s0b" className="fade-up">
+      <h2 style={{fontFamily:"var(--serif)",fontSize:36,marginBottom:8}}>Pick a generic type</h2>
+      <p style={{color:"var(--stone)",marginBottom:32}}>We'll customize from here.</p>
+      <div style={{display:"flex",flexDirection:"column",gap:12}}>
+        {[
+          {t:"Dinner Party",e:"🍷",d:"Intimate seated meal"},
+          {t:"Birthday",e:"🎂",d:"Celebration with food & fun"},
+          {t:"Corporate Meetup",e:"💼",d:"Team event or offsite"},
+          {t:"House Party",e:"🎉",d:"Casual drinks & music"},
+          {t:"Wedding Reception",e:"💒",d:"Post-ceremony celebration"},
+        ].map(o =>
+          <OptionCard
+            key={o.t}
+            selected={form.type===o.t}
+            onClick={()=>{ up("type",o.t); setTimeout(next,200); }}
+            emoji={o.e}
+            title={o.t}
+            desc={o.d}
+          />
+        )}
+      </div>
+    </div>
+  : null,
                 <div key="s1" className="fade-up"><h2 style={{fontFamily:"var(--serif)",fontSize:36,marginBottom:8}}>The scale</h2><p style={{color:"var(--stone)",marginBottom:32}}>How many people and what's the budget?</p><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Guest Count</label><div style={{display:"flex",gap:10,marginBottom:28,flexWrap:"wrap"}}>{['10-20','20-40','40-60','60-100','100+'].map(g=><Chip key={g} selected={form.guestCount===g} onClick={()=>up('guestCount',g)}>{g}</Chip>)}</div><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Total Budget (CLP)</label><div style={{display:"flex",gap:10,marginBottom:28,flexWrap:"wrap"}}>{[{v:'500000',l:'$500K'},{v:'1000000',l:'$1M'},{v:'2000000',l:'$2M'},{v:'5000000',l:'$5M'},{v:'10000000',l:'$10M+'}].map(b=><Chip key={b.v} selected={form.budget===b.v} onClick={()=>up('budget',b.v)}>{b.l}</Chip>)}</div><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Preferred Date</label><input type="date" value={form.date} onChange={e=>up('date',e.target.value)}/></div>,
                 <div key="s2" className="fade-up"><h2 style={{fontFamily:"var(--serif)",fontSize:36,marginBottom:8}}>The vibe</h2><p style={{color:"var(--stone)",marginBottom:32}}>Helps us match vendors and plan the flow.</p><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Setting</label><div style={{display:"flex",gap:10,marginBottom:28}}>{[{v:'indoor',e:'🏠',l:'Indoor'},{v:'outdoor',e:'🌳',l:'Outdoor'},{v:'mixed',e:'🏡',l:'Mixed'}].map(s=><Chip key={s.v} selected={form.setting===s.v} onClick={()=>up('setting',s.v)}>{s.e} {s.l}</Chip>)}</div><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Vibe</label><div style={{display:"flex",flexDirection:"column",gap:10}}>{[{v:'Casual & Relaxed',e:'😌',d:'Chill, no dress code'},{v:'Elegant & Refined',e:'✨',d:'Upscale, polished'},{v:'Party & High-Energy',e:'🔥',d:'Music, dancing, late night'},{v:'Cozy & Intimate',e:'🕯️',d:'Small group, warm'}].map(v=><OptionCard key={v.v} selected={form.vibe===v.v} onClick={()=>up('vibe',v.v)} emoji={v.e} title={v.v} desc={v.d}/>)}</div></div>,
                 <div key="s3" className="fade-up"><h2 style={{fontFamily:"var(--serif)",fontSize:36,marginBottom:8}}>Final details</h2><p style={{color:"var(--stone)",marginBottom:32}}>Optional but makes the blueprint more precise.</p><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Dietary Requirements</label><input placeholder="e.g. 3 vegetarians, 1 gluten-free" value={form.dietary} onChange={e=>up('dietary',e.target.value)} style={{marginBottom:24}}/><label style={{fontWeight:600,fontSize:14,display:"block",marginBottom:8}}>Anything else?</label><textarea placeholder="e.g. Surprise party, need projector, birthday person loves jazz..." value={form.notes} onChange={e=>up('notes',e.target.value)} rows={4} style={{resize:"vertical"}}/></div>,
