@@ -1,0 +1,3113 @@
+{
+  "version": "v4",
+  "lastUpdated": "2026-02-19",
+  "currency": "CLP",
+  "stores": [
+    {
+      "id": "novoandina",
+      "name": "Novoandina Catering",
+      "url": "https://www.novoandina.cl",
+      "type": "caterer",
+      "locations": [
+        "Santiago"
+      ],
+      "notes": "Cocktail dinner replacement, mini sandwiches, gourmet prepared meals for events."
+    },
+    {
+      "id": "cafediario",
+      "name": "Café Diario",
+      "url": "https://www.cafediario.cl",
+      "type": "caterer",
+      "locations": [
+        "Santiago"
+      ],
+      "notes": "Brunch boxes, coffee break catering, networking events, gift boxes."
+    },
+    {
+      "id": "manungo",
+      "name": "Mañungo",
+      "url": "https://manungo.cl",
+      "type": "caterer",
+      "locations": [
+        "Santiago"
+      ],
+      "notes": "Main meals and sandwich packs for big informal home parties."
+    },
+    {
+      "id": "aperitivo",
+      "name": "Aperitivo.cl",
+      "url": "https://aperitivo.cl",
+      "type": "gourmet_store",
+      "locations": [
+        "Santiago"
+      ],
+      "notes": "Premium cheeses, charcuterie, wines, spirits, gourmet pantry items, frozen finger foods."
+    }
+  ],
+  "items": [
+    {
+      "id": "novoandina-mini-sándwich-miga-ave-palmito-ricotta-ciboulette-12",
+      "storeId": "novoandina",
+      "name": "Mini sándwich miga ave palmito ricotta ciboulette",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 15900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "vegetarian",
+        "gourmet",
+        "chicken"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-miga-ave-pimentón-12",
+      "storeId": "novoandina",
+      "name": "Mini sándwich miga ave pimentón",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 13900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "chicken"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-miga-ave-mayo-12",
+      "storeId": "novoandina",
+      "name": "Mini sándwich miga ave mayo",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 13900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "chicken"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-miga-ave-palta-12",
+      "storeId": "novoandina",
+      "name": "Mini sándwich miga ave palta",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 14900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "chicken",
+        "avocado"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-palmito-ricotta-12",
+      "storeId": "novoandina",
+      "name": "Mini sándwich Palmito Ricotta",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 15900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "vegetarian",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-de-milanga-12",
+      "storeId": "novoandina",
+      "name": "Mini sándwich de Milanga",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 14900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "beef"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "family_lunch_bbq_home"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-vegan-mini-sándwich-napolitano-12",
+      "storeId": "novoandina",
+      "name": "Vegan Mini Sándwich Napolitano",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 15900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "vegan",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-vegan-mini-sándwich-caprese-12",
+      "storeId": "novoandina",
+      "name": "Vegan Mini sándwich Caprese",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 15900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "vegan",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-pavo-en-su-salsa-12",
+      "storeId": "novoandina",
+      "name": "Mini sándwich Pavo en su salsa",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 16900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "turkey"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-napolitano-12",
+      "storeId": "novoandina",
+      "name": "Mini Sándwich Napolitano",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 14900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "ham",
+        "cheese"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-chacarero-12",
+      "storeId": "novoandina",
+      "name": "Mini sándwich Chacarero",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 15900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "beef",
+        "chilean"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "family_lunch_bbq_home"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-pollo-queso-crema-al-morrón-12",
+      "storeId": "novoandina",
+      "name": "Mini Sándwich Pollo Queso Crema al Morrón",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 15900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "chicken"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-sándwich-roast-beef-12",
+      "storeId": "novoandina",
+      "name": "Mini Sándwich Roast Beef",
+      "category": "finger_food",
+      "role": "mini_sandwich",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 17900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "beef",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-croissant-jamón-y-queso-12",
+      "storeId": "novoandina",
+      "name": "Mini croissant jamón y queso",
+      "category": "finger_food",
+      "role": "mini_croissant",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 14700,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "ham",
+        "cheese"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-croissant-caprese-12",
+      "storeId": "novoandina",
+      "name": "Mini croissant caprese",
+      "category": "finger_food",
+      "role": "mini_croissant",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 15900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "vegetarian",
+        "italian"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-croissant-jamón-serrano-queso-cabra-al-pesto-12",
+      "storeId": "novoandina",
+      "name": "Mini croissant jamón serrano queso cabra al pesto",
+      "category": "finger_food",
+      "role": "mini_croissant",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 24300,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "gourmet",
+        "spanish"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-croissant-napolitano-12",
+      "storeId": "novoandina",
+      "name": "Mini croissant Napolitano",
+      "category": "finger_food",
+      "role": "mini_croissant",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 14900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "ham",
+        "cheese"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mini-croissant-salmón-queso-crema-ciboulette-12",
+      "storeId": "novoandina",
+      "name": "Mini Croissant Salmón Queso Crema Ciboulette",
+      "category": "finger_food",
+      "role": "mini_croissant",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 19900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "seafood",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mix-mini-sándwiches-x-30-30",
+      "storeId": "novoandina",
+      "name": "Mix Mini sándwiches x 30",
+      "category": "finger_food",
+      "role": "mix_pack",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 30
+      },
+      "price": {
+        "amount": 37900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "assorted"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-mix-mini-sándwiches-miga-x-50-50",
+      "storeId": "novoandina",
+      "name": "Mix Mini sándwiches Miga x 50",
+      "category": "finger_food",
+      "role": "mix_pack",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 50
+      },
+      "price": {
+        "amount": 62900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "assorted"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "big_home_party"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-pack-mini-sándwiches-miga-x-48-48",
+      "storeId": "novoandina",
+      "name": "Pack Mini sándwiches Miga x 48",
+      "category": "finger_food",
+      "role": "mix_pack",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 48
+      },
+      "price": {
+        "amount": 49900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "assorted"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "big_home_party"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-picoteo-celebremos-para-15-15",
+      "storeId": "novoandina",
+      "name": "Picoteo Celebremos! (para 15)",
+      "category": "catering_pack",
+      "role": "cocktail_dinner",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 15
+      },
+      "price": {
+        "amount": 260900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "full_service",
+        "cocktail"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "big_home_party"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-picoteo-los-sibaritas-para-15-15",
+      "storeId": "novoandina",
+      "name": "Picoteo Los Sibaritas (para 15)",
+      "category": "catering_pack",
+      "role": "cocktail_dinner",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 15
+      },
+      "price": {
+        "amount": 389900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "seafood",
+        "ceviche",
+        "premium"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-picoteo-del-mar-para-15-15",
+      "storeId": "novoandina",
+      "name": "Picoteo del Mar (para 15)",
+      "category": "catering_pack",
+      "role": "cocktail_dinner",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 15
+      },
+      "price": {
+        "amount": 605200,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "seafood",
+        "full_service",
+        "chef"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-picoteo-i-love-veggie-para-15-15",
+      "storeId": "novoandina",
+      "name": "Picoteo I Love Veggie (para 15)",
+      "category": "catering_pack",
+      "role": "cocktail_dinner",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 15
+      },
+      "price": {
+        "amount": 289900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "vegan",
+        "vegetarian"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-milanesa-de-res-con-puré-natural-1",
+      "storeId": "novoandina",
+      "name": "Milanesa de res con puré natural",
+      "category": "main_prepared",
+      "role": "individual_meal",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 7900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "family_lunch_bbq_home"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-strogonoff-de-cerdo-y-champiñones-con-arroz-1",
+      "storeId": "novoandina",
+      "name": "Strogonoff de cerdo y champiñones con arroz",
+      "category": "main_prepared",
+      "role": "individual_meal",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 7900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "pork",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "family_lunch_bbq_home"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-strogonoff-de-res-y-champiñones-con-arroz-1",
+      "storeId": "novoandina",
+      "name": "Strogonoff de res y champiñones con arroz",
+      "category": "main_prepared",
+      "role": "individual_meal",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 8900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "family_lunch_bbq_home"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-pollo-al-curry-thai-con-arroz-1",
+      "storeId": "novoandina",
+      "name": "Pollo al Curry Thai con arroz",
+      "category": "main_prepared",
+      "role": "individual_meal",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 7900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "chicken",
+        "thai",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "family_lunch_bbq_home"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-fetuccini-a-lo-alfredo-1",
+      "storeId": "novoandina",
+      "name": "Fetuccini a lo Alfredo",
+      "category": "main_prepared",
+      "role": "individual_meal",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 6900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "pasta",
+        "vegetarian",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "family_lunch_bbq_home"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-carne-mechada-con-puré-rústico-1",
+      "storeId": "novoandina",
+      "name": "Carne Mechada con Puré Rústico",
+      "category": "main_prepared",
+      "role": "individual_meal",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 7900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "family_lunch_bbq_home"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "novoandina-crema-de-verduras-1",
+      "storeId": "novoandina",
+      "name": "Crema de Verduras",
+      "category": "main_prepared",
+      "role": "soup",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 4900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "soup",
+        "vegetarian",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "family_lunch_bbq_home"
+      ],
+      "source": "novoandina.cl"
+    },
+    {
+      "id": "cafediario-brunch-clásico-1",
+      "storeId": "cafediario",
+      "name": "Brunch clásico",
+      "category": "brunch_box",
+      "role": "brunch_individual",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 18900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "gift"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-gourmet-1",
+      "storeId": "cafediario",
+      "name": "Brunch gourmet",
+      "category": "brunch_box",
+      "role": "brunch_individual",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 24900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-saludable-1",
+      "storeId": "cafediario",
+      "name": "Brunch saludable",
+      "category": "brunch_box",
+      "role": "brunch_individual",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 19900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "healthy"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-salado-1",
+      "storeId": "cafediario",
+      "name": "Brunch salado",
+      "category": "brunch_box",
+      "role": "brunch_individual",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 17900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "savory"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-mediterráneo-1",
+      "storeId": "cafediario",
+      "name": "Brunch mediterráneo",
+      "category": "brunch_box",
+      "role": "brunch_individual",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 22900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "mediterranean"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-pancake-1",
+      "storeId": "cafediario",
+      "name": "Brunch pancake",
+      "category": "brunch_box",
+      "role": "brunch_individual",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 16900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "pancakes"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "family_lunch_bbq_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-pancake-xxl-1",
+      "storeId": "cafediario",
+      "name": "Brunch Pancake XXL",
+      "category": "brunch_box",
+      "role": "brunch_individual",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 18900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "pancakes"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "family_lunch_bbq_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-desayuno-simple-1",
+      "storeId": "cafediario",
+      "name": "Desayuno simple",
+      "category": "brunch_box",
+      "role": "brunch_individual",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 12900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-clásico-para-compartir-2",
+      "storeId": "cafediario",
+      "name": "Brunch clásico para compartir",
+      "category": "brunch_box",
+      "role": "brunch_sharing",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 2
+      },
+      "price": {
+        "amount": 34900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "gift"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-gourmet-para-compartir-2",
+      "storeId": "cafediario",
+      "name": "Brunch gourmet para compartir",
+      "category": "brunch_box",
+      "role": "brunch_sharing",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 2
+      },
+      "price": {
+        "amount": 44900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-pancake-xxl-para-compartir-2",
+      "storeId": "cafediario",
+      "name": "Brunch Pancake XXL para compartir",
+      "category": "brunch_box",
+      "role": "brunch_sharing",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 2
+      },
+      "price": {
+        "amount": 32900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "breakfast",
+        "pancakes"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "family_lunch_bbq_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-día-del-amor-1",
+      "storeId": "cafediario",
+      "name": "Brunch día del amor",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 32900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "valentines",
+        "ferrero"
+      ],
+      "useCases": [
+        "adult_birthday_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-día-del-amor-para-compartir-2",
+      "storeId": "cafediario",
+      "name": "Brunch día del amor para compartir",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 2
+      },
+      "price": {
+        "amount": 52900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "valentines",
+        "ferrero"
+      ],
+      "useCases": [
+        "adult_birthday_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-del-amor-1",
+      "storeId": "cafediario",
+      "name": "Brunch del amor",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 36900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "acai",
+        "salmon",
+        "ferrero"
+      ],
+      "useCases": [
+        "adult_birthday_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-del-amor-para-compartir-2",
+      "storeId": "cafediario",
+      "name": "Brunch del amor para compartir",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 2
+      },
+      "price": {
+        "amount": 59900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "acai",
+        "salmon",
+        "ferrero"
+      ],
+      "useCases": [
+        "adult_birthday_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-cumpleaños-1",
+      "storeId": "cafediario",
+      "name": "Brunch cumpleaños",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 26900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "birthday",
+        "cake"
+      ],
+      "useCases": [
+        "adult_birthday_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-cumpleaños-para-compartir-2",
+      "storeId": "cafediario",
+      "name": "Brunch cumpleaños para compartir",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 2
+      },
+      "price": {
+        "amount": 42900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "birthday",
+        "cake"
+      ],
+      "useCases": [
+        "adult_birthday_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-cumpleaños-simple-1",
+      "storeId": "cafediario",
+      "name": "Brunch cumpleaños simple",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 19900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "birthday",
+        "cake"
+      ],
+      "useCases": [
+        "adult_birthday_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brunch-cumpleaños-con-tazón-1",
+      "storeId": "cafediario",
+      "name": "Brunch cumpleaños con tazón",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 28900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "birthday",
+        "cake",
+        "cup"
+      ],
+      "useCases": [
+        "adult_birthday_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-caja-celebración-1",
+      "storeId": "cafediario",
+      "name": "Caja celebración",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 22900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "celebration"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-caja-celebración-con-tazón-1",
+      "storeId": "cafediario",
+      "name": "Caja celebración con tazón",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 29900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "celebration",
+        "cup"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-caja-macarrones-24-un-1",
+      "storeId": "cafediario",
+      "name": "Caja Macarrones (24 un)",
+      "category": "brunch_box",
+      "role": "special_occasion",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 32900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "gift",
+        "macarons",
+        "dessert"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-pack-acaí-bowl-1",
+      "storeId": "cafediario",
+      "name": "Pack Acaí bowl",
+      "category": "brunch_box",
+      "role": "daily_pack",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 15000,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "acai",
+        "healthy"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-pack-waffle-1",
+      "storeId": "cafediario",
+      "name": "Pack Waffle",
+      "category": "brunch_box",
+      "role": "daily_pack",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 14900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "waffle",
+        "dessert"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-pack-tostadas-1",
+      "storeId": "cafediario",
+      "name": "Pack Tostadas",
+      "category": "brunch_box",
+      "role": "daily_pack",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 11900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "toast",
+        "savory"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-pack-hummus-1",
+      "storeId": "cafediario",
+      "name": "Pack Hummus",
+      "category": "brunch_box",
+      "role": "daily_pack",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 12900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "hummus",
+        "vegan"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-pack-croissant-1",
+      "storeId": "cafediario",
+      "name": "Pack Croissant",
+      "category": "brunch_box",
+      "role": "daily_pack",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 8900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "croissant"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-pack-croissant-y-dulces-1",
+      "storeId": "cafediario",
+      "name": "Pack Croissant y dulces",
+      "category": "brunch_box",
+      "role": "daily_pack",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 13900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "croissant",
+        "dessert"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-pack-ensalada-1",
+      "storeId": "cafediario",
+      "name": "Pack Ensalada",
+      "category": "brunch_box",
+      "role": "daily_pack",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 12900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "salad",
+        "healthy"
+      ],
+      "useCases": [
+        "networking_venue",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-pack-baguette-1",
+      "storeId": "cafediario",
+      "name": "Pack Baguette",
+      "category": "brunch_box",
+      "role": "daily_pack",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "servings",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 10900,
+        "currency": "CLP",
+        "basis": "per_pack"
+      },
+      "tags": [
+        "coffee",
+        "sandwich"
+      ],
+      "useCases": [
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-croissant-clásico-1",
+      "storeId": "cafediario",
+      "name": "Mini croissant clásico",
+      "category": "finger_food",
+      "role": "mini_croissant",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2800,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "chicken",
+        "ham",
+        "egg"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-croissant-premium-1-1",
+      "storeId": "cafediario",
+      "name": "Mini croissant Premium 1",
+      "category": "finger_food",
+      "role": "mini_croissant",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3500,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "serrano",
+        "salmon",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-croissant-premium-2-1",
+      "storeId": "cafediario",
+      "name": "Mini croissant Premium 2",
+      "category": "finger_food",
+      "role": "mini_croissant",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3800,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "salmon",
+        "curry",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brioche-tapaditos-premium-1-1",
+      "storeId": "cafediario",
+      "name": "Brioche tapaditos Premium 1",
+      "category": "finger_food",
+      "role": "brioche_tapaditos",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3200,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "serrano",
+        "salmon",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brioche-tapaditos-premium-2-1",
+      "storeId": "cafediario",
+      "name": "Brioche tapaditos Premium 2",
+      "category": "finger_food",
+      "role": "brioche_tapaditos",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3500,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "salmon",
+        "curry",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brioche-vegetarianos-1",
+      "storeId": "cafediario",
+      "name": "Brioche Vegetarianos",
+      "category": "finger_food",
+      "role": "brioche_tapaditos",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2900,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "vegetarian",
+        "caprese"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-croissant-vegetarianos-1",
+      "storeId": "cafediario",
+      "name": "Mini croissant Vegetarianos",
+      "category": "finger_food",
+      "role": "mini_croissant",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2800,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "vegetarian",
+        "caprese"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-caja-12-un-tapaditos-brioche-12",
+      "storeId": "cafediario",
+      "name": "Caja 12 un Tapaditos Brioche",
+      "category": "finger_food",
+      "role": "box_unit",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 16900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "chicken",
+        "ham",
+        "egg"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-caja-25-un-mini-croissant-25",
+      "storeId": "cafediario",
+      "name": "Caja 25 un Mini Croissant",
+      "category": "finger_food",
+      "role": "box_unit",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 25
+      },
+      "price": {
+        "amount": 34900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "assorted"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-caja-croissant-surtida-assorted-25",
+      "storeId": "cafediario",
+      "name": "Caja croissant surtida (assorted)",
+      "category": "finger_food",
+      "role": "box_unit",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 25
+      },
+      "price": {
+        "amount": 44900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "salmon",
+        "serrano",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-quiches-surtidos-1",
+      "storeId": "cafediario",
+      "name": "Mini quiches surtidos",
+      "category": "finger_food",
+      "role": "mini_quiche",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2500,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "quiche",
+        "assorted"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-caja-mini-quiches-24-uni-24",
+      "storeId": "cafediario",
+      "name": "Caja mini quiches 24 uni",
+      "category": "finger_food",
+      "role": "box_unit",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 24
+      },
+      "price": {
+        "amount": 29900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "quiche",
+        "assorted"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brochetas-mediterráneas-1",
+      "storeId": "cafediario",
+      "name": "Brochetas mediterráneas",
+      "category": "finger_food",
+      "role": "brocheta",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2200,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "vegetarian",
+        "cheese"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brochetas-vegetarianas-1",
+      "storeId": "cafediario",
+      "name": "Brochetas vegetarianas",
+      "category": "finger_food",
+      "role": "brocheta",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 1900,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "vegetarian",
+        "caprese"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-pinchos-pastrami-1",
+      "storeId": "cafediario",
+      "name": "Pinchos Pastrami",
+      "category": "finger_food",
+      "role": "brocheta",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2800,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "pastrami",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-sopaipillas-con-pebre-12",
+      "storeId": "cafediario",
+      "name": "Mini sopaipillas con pebre",
+      "category": "finger_food",
+      "role": "specialty",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 12
+      },
+      "price": {
+        "amount": 8900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "chilean",
+        "traditional"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "family_lunch_bbq_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-empanaditas-de-masa-filo-1",
+      "storeId": "cafediario",
+      "name": "Empanaditas de masa filo",
+      "category": "finger_food",
+      "role": "specialty",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2400,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "empanada",
+        "assorted"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-baguette-gourmet-1",
+      "storeId": "cafediario",
+      "name": "Mini Baguette gourmet",
+      "category": "finger_food",
+      "role": "specialty",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3500,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "salmon",
+        "caprese",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-tartaletas-surtidas-1",
+      "storeId": "cafediario",
+      "name": "Mini tartaletas surtidas",
+      "category": "dessert",
+      "role": "mini_tartaleta",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2400,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "pie",
+        "cheesecake",
+        "assorted"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-profiteroles-1",
+      "storeId": "cafediario",
+      "name": "Profiteroles",
+      "category": "dessert",
+      "role": "profiterol",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2200,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "french",
+        "chocolate"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-brochetas-brownie-frutilla-marshmallow-1",
+      "storeId": "cafediario",
+      "name": "Brochetas brownie, frutilla, marshmallow",
+      "category": "dessert",
+      "role": "brocheta_dulce",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2100,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "brownie",
+        "fruit",
+        "chocolate"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "family_lunch_bbq_home"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-caja-dulces-surtidos-24-uni-24",
+      "storeId": "cafediario",
+      "name": "Caja dulces surtidos 24 uni",
+      "category": "dessert",
+      "role": "box_unit",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "units",
+        "quantity": 24
+      },
+      "price": {
+        "amount": 39900,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "ferrero",
+        "macarons",
+        "brownie",
+        "assorted"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-dulces-chilenos-1",
+      "storeId": "cafediario",
+      "name": "Mini dulces chilenos",
+      "category": "dessert",
+      "role": "mini_dulce",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 1800,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "milhoja",
+        "alfajor",
+        "meringue",
+        "chilean"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-macarrones-surtidos-1",
+      "storeId": "cafediario",
+      "name": "Macarrones surtidos",
+      "category": "dessert",
+      "role": "specialty",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3200,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "macarons",
+        "french",
+        "gourmet"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mini-brownies-1",
+      "storeId": "cafediario",
+      "name": "Mini brownies",
+      "category": "dessert",
+      "role": "specialty",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2000,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "brownie",
+        "chocolate",
+        "cookie"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mesa-festín-7-salados-4-dulces-1",
+      "storeId": "cafediario",
+      "name": "Mesa Festín (7 salados + 4 dulces)",
+      "category": "catering_pack",
+      "role": "mesa_catering",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 14900,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "full_service",
+        "premium",
+        "quiches"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mesa-estrella-5-salados-3-dulces-1",
+      "storeId": "cafediario",
+      "name": "Mesa Estrella (5 salados + 3 dulces)",
+      "category": "catering_pack",
+      "role": "mesa_catering",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 11900,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "full_service",
+        "brochetas"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mesa-premium-3-salados-3-dulces-1",
+      "storeId": "cafediario",
+      "name": "Mesa Premium (3 salados + 3 dulces)",
+      "category": "catering_pack",
+      "role": "mesa_catering",
+      "qualityTier": "premium",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 9900,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "gourmet",
+        "mini_croissant"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mesa-clásica-3-salados-3-dulces-1",
+      "storeId": "cafediario",
+      "name": "Mesa Clásica (3 salados + 3 dulces)",
+      "category": "catering_pack",
+      "role": "mesa_catering",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 7900,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "brioche",
+        "mini_dulces"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mix-de-dulces-1",
+      "storeId": "cafediario",
+      "name": "Mix de dulces",
+      "category": "catering_pack",
+      "role": "mesa_catering",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 4800,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "tartaletas",
+        "profiteroles"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "office_farewell_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "cafediario-mix-brochetas-1",
+      "storeId": "cafediario",
+      "name": "Mix Brochetas",
+      "category": "catering_pack",
+      "role": "mesa_catering",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 8900,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "mixed",
+        "mediterranean"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "networking_venue"
+      ],
+      "source": "cafediario.cl"
+    },
+    {
+      "id": "manungo-pack-20-lomitos-20",
+      "storeId": "manungo",
+      "name": "Pack 20 lomitos",
+      "category": "main_delivery",
+      "role": "sandwich_pack",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 20
+      },
+      "price": {
+        "amount": 53000,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "beef",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-pack-40-lomitos-40",
+      "storeId": "manungo",
+      "name": "Pack 40 lomitos",
+      "category": "main_delivery",
+      "role": "sandwich_pack",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 40
+      },
+      "price": {
+        "amount": 93000,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "beef",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-pack-20-mechadas-20",
+      "storeId": "manungo",
+      "name": "Pack 20 mechadas",
+      "category": "main_delivery",
+      "role": "sandwich_pack",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 20
+      },
+      "price": {
+        "amount": 63000,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "beef",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-pack-40-mechadas-40",
+      "storeId": "manungo",
+      "name": "Pack 40 mechadas",
+      "category": "main_delivery",
+      "role": "sandwich_pack",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 40
+      },
+      "price": {
+        "amount": 115000,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "beef",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-pack-20-hot-dog-20",
+      "storeId": "manungo",
+      "name": "Pack 20 hot-dog",
+      "category": "main_delivery",
+      "role": "sandwich_pack",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 20
+      },
+      "price": {
+        "amount": 51000,
+        "currency": "CLP",
+        "basis": "per_box"
+      },
+      "tags": [
+        "sausage",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-sándwich-de-lomito-1",
+      "storeId": "manungo",
+      "name": "Sándwich de lomito",
+      "category": "main_delivery",
+      "role": "sandwich",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2650,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-sándwich-de-mechada-1",
+      "storeId": "manungo",
+      "name": "Sándwich de mechada",
+      "category": "main_delivery",
+      "role": "sandwich",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3150,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-sándwich-de-pollo-1",
+      "storeId": "manungo",
+      "name": "Sándwich de pollo",
+      "category": "main_delivery",
+      "role": "sandwich",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2890,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "chicken",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-hot-dog-completo-1",
+      "storeId": "manungo",
+      "name": "Hot-dog completo",
+      "category": "main_delivery",
+      "role": "hot_dog",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2550,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "sausage",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-tacos-de-asado-de-vacuno-18cm-1",
+      "storeId": "manungo",
+      "name": "Tacos de asado de vacuno (18cm)",
+      "category": "main_delivery",
+      "role": "taco",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3200,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "mexican",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-tacos-de-carne-1",
+      "storeId": "manungo",
+      "name": "Tacos de carne",
+      "category": "main_delivery",
+      "role": "taco",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "mexican",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-tacos-de-pollo-1",
+      "storeId": "manungo",
+      "name": "Tacos de pollo",
+      "category": "main_delivery",
+      "role": "taco",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2600,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "chicken",
+        "mexican",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-hamburguesa-11cm-básica-1",
+      "storeId": "manungo",
+      "name": "Hamburguesa 11cm básica",
+      "category": "main_delivery",
+      "role": "hamburger",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2790,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-hamburguesa-11cm-premium-1",
+      "storeId": "manungo",
+      "name": "Hamburguesa 11cm premium",
+      "category": "main_delivery",
+      "role": "hamburger",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3490,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "premium_toppings",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-hamburguesa-8cm-básica-1",
+      "storeId": "manungo",
+      "name": "Hamburguesa 8cm básica",
+      "category": "main_delivery",
+      "role": "hamburger",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2290,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-hamburguesa-8cm-premium-1",
+      "storeId": "manungo",
+      "name": "Hamburguesa 8cm premium",
+      "category": "main_delivery",
+      "role": "hamburger",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 2890,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "beef",
+        "premium_toppings",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-pollo-ganso-a-la-olla-1",
+      "storeId": "manungo",
+      "name": "Pollo ganso a la olla",
+      "category": "main_delivery",
+      "role": "main_dish",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 5900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "chicken",
+        "chilean",
+        "ready_to_heat"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-anticuchos-1",
+      "storeId": "manungo",
+      "name": "Anticuchos",
+      "category": "main_delivery",
+      "role": "main_dish",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3500,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "beef",
+        "chilean",
+        "skewers"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-ensaladas-1",
+      "storeId": "manungo",
+      "name": "Ensaladas",
+      "category": "side",
+      "role": "side_dish",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "person",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 1500,
+        "currency": "CLP",
+        "basis": "per_person"
+      },
+      "tags": [
+        "salad",
+        "vegetable"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-hummus-1",
+      "storeId": "manungo",
+      "name": "Hummus",
+      "category": "pantry",
+      "role": "dip",
+      "qualityTier": "standard",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 3900,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "dip",
+        "vegetarian",
+        "chickpea"
+      ],
+      "useCases": [
+        "adult_birthday_home",
+        "big_home_party"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-tapaditos-huevo-duro-1",
+      "storeId": "manungo",
+      "name": "Tapaditos huevo duro",
+      "category": "finger_food",
+      "role": "tapadito",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 890,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "egg",
+        "chilean"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-tapaditos-jamón-huevo-duro-1",
+      "storeId": "manungo",
+      "name": "Tapaditos jamón huevo duro",
+      "category": "finger_food",
+      "role": "tapadito",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 990,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "ham",
+        "egg",
+        "chilean"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    },
+    {
+      "id": "manungo-tapaditos-jamón-y-queso-1",
+      "storeId": "manungo",
+      "name": "Tapaditos jamón y queso",
+      "category": "finger_food",
+      "role": "tapadito",
+      "qualityTier": "budget",
+      "format": {
+        "unitType": "units",
+        "quantity": 1
+      },
+      "price": {
+        "amount": 990,
+        "currency": "CLP",
+        "basis": "per_unit"
+      },
+      "tags": [
+        "ham",
+        "cheese",
+        "chilean"
+      ],
+      "useCases": [
+        "big_home_party",
+        "family_lunch_bbq_home"
+      ],
+      "source": "manungo.cl"
+    }
+  ]
+}
