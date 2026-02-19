@@ -1,5 +1,14 @@
 {
   "version": "v4",
+  "currency": "CLP",
+  "stores": [],
+  "items": []
+}
+
+
+
+{
+  "version": "v4",
   "lastUpdated": "2026-02-19",
   "currency": "CLP",
   "stores": [
