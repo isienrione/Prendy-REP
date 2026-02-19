@@ -88,6 +88,32 @@
         .calendar-day.today{border-color:var(--rose);font-weight:700}
     </style>
 </head>
+<script>
+  async function loadCatalog() {
+    const res = await fetch('/data/party_planning_catalog_v4.json');
+    const catalog = await res.json();
+
+    console.log('Catalog version:', catalog.version);
+
+    // Example: get all Novoandina items
+    const novoItems = catalog.items.filter(i => i.storeId === 'novoandina');
+
+    // Example: get recommendations for an adult birthday at home
+    const birthdayItems = catalog.items.filter(i =>
+      i.useCases?.includes('adult_birthday_home')
+    );
+
+    // TODO: render this into the page instead of console.log
+    console.log('Novoandina items:', novoItems);
+    console.log('Adult birthday items:', birthdayItems);
+  }
+
+  // Call it when page loads
+  loadCatalog();
+</script>
+
+
+
 <body>
     <div id="root"></div>
     <script type="text/babel">
