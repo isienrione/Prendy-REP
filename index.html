@@ -88,32 +88,6 @@
         .calendar-day.today{border-color:var(--rose);font-weight:700}
     </style>
 </head>
-<script>
-  async function loadCatalog() {
-    const res = await fetch('/data/party_planning_catalog_v4.json');
-    const catalog = await res.json();
-
-    console.log('Catalog version:', catalog.version);
-
-    // Example: get all Novoandina items
-    const novoItems = catalog.items.filter(i => i.storeId === 'novoandina');
-
-    // Example: get recommendations for an adult birthday at home
-    const birthdayItems = catalog.items.filter(i =>
-      i.useCases?.includes('adult_birthday_home')
-    );
-
-    // TODO: render this into the page instead of console.log
-    console.log('Novoandina items:', novoItems);
-    console.log('Adult birthday items:', birthdayItems);
-  }
-
-  // Call it when page loads
-  loadCatalog();
-</script>
-
-
-
 <body>
     <div id="root"></div>
     <script type="text/babel">
@@ -2747,5 +2721,56 @@ Everything in one place. Just a few clicks. No stress.
 
         ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
     </script>
+    <div id="party-debug" style="white-space: pre-wrap; font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 13px; margin-top: 24px; padding: 12px 16px; border-top: 1px solid #eee;"></div>
+
+<script>
+  async function loadCatalog() {
+    const outputEl = document.getElementById('party-debug');
+
+    try {
+      const res = await fetch('/data/party_catalog_v4.json');
+      if (!res.ok) {
+        throw new Error('HTTP ' + res.status + ' ' + res.statusText);
+      }
+
+      const catalog = await res.json();
+
+      const lines = [];
+      lines.push('Party catalog loaded ✅');
+      lines.push('');
+      lines.push('Version: ' + catalog.version);
+      lines.push('Currency: ' + catalog.currency);
+      lines.push('');
+      lines.push('Stores:');
+      (catalog.stores || []).forEach(store => {
+        lines.push('- ' + store.name + ' (' + store.id + ')');
+      });
+
+      lines.push('');
+      lines.push('Sample items for adult birthday at home (up to 5):');
+
+      const birthdayItems = (catalog.items || [])
+        .filter(item => Array.isArray(item.useCases) && item.useCases.includes('adult_birthday_home'))
+        .slice(0, 5);
+
+      birthdayItems.forEach(item => {
+        const price = item.price && item.price.amount
+          ? '$' + item.price.amount.toLocaleString('es-CL')
+          : 'precio a cotizar';
+        lines.push('• [' + item.storeId + '] ' + item.name + ' — ' + price);
+      });
+
+      outputEl.textContent = lines.join('\n');
+    } catch (err) {
+      console.error('Error loading party catalog:', err);
+      if (outputEl) {
+        outputEl.textContent = 'Error loading /data/party_catalog_v4.json: ' + err.message;
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadCatalog);
+</script>
+
 </body>
 </html>
