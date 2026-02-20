@@ -6,8 +6,10 @@ import csv from "csv-parser";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Paths
+// Input CSV (400+ items)
 const csvPath = path.join(__dirname, "..", "data", "party_all_items_v4.csv");
+
+// Outputs
 const prendyOutPath = path.join(__dirname, "..", "data", "prendy_catalog_v4.json");
 const partyOutPath = path.join(__dirname, "..", "data", "party_catalog_v4.json");
 
@@ -45,17 +47,19 @@ async function main() {
     const rows = await loadCsvAsJson(csvPath);
     const items = rows.map((row, i) => rowToCatalogItem(row, i));
 
-    // 1) Flat Prendy catalog (good for AI / bulk processing)
+    // Flat Prendy catalog (for AI / bulk use)
     fs.writeFileSync(prendyOutPath, JSON.stringify(items, null, 2), "utf8");
 
-    // 2) Structured party catalog (what the frontend expects)
+    // Structured Party catalog (used by frontend)
     const partyCatalog = {
       version: "4.0",
-      currency: "USD",
+      currency: "CLP",
       stores: [
         {
           id: "global",
           name: "Global party catalog v4",
+          locations: ["Santiago"],
+          notes: "Unified catalog generated from party_all_items_v4.csv",
           items
         }
       ]
