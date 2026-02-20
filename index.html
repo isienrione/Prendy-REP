@@ -1987,10 +1987,25 @@ Everything in one place. Just a few clicks. No stress.
                         <div className="fade-up"><div className="card"><h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:24}}>Event Day Timeline</h3>{bp.timeline.map((e,i)=>(<div key={i} style={{display:"flex",gap:20,padding:"16px 0",borderBottom:i<bp.timeline.length-1?"1px solid var(--border)":"none",animation:`slideIn .3s ease ${i*.05}s forwards`,opacity:0}}><div style={{fontWeight:700,fontSize:14,color:"var(--violet)",minWidth:56,fontVariantNumeric:"tabular-nums"}}>{e.time}</div><div style={{flex:1}}><div style={{fontWeight:500,fontSize:14}}>{e.task}</div><div style={{fontSize:12,color:"var(--stone)",marginTop:2}}>{e.owner}</div></div></div>))}</div></div>
                     )}
 
-                    {/* Supplies */}
-                    {tab === 'supplies' && (
-                        <div className="fade-up">{Object.entries(bp.supplies).map(([cat,items])=>(<div key={cat} className="card" style={{marginBottom:16}}><h3 style={{fontFamily:"var(--serif)",fontSize:20,marginBottom:16,textTransform:"capitalize"}}>{cat==='food'?'🍽️':cat==='drinks'?'🥂':'🔧'} {cat}</h3>{items.map((item,i)=>(<div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"14px 16px",background:i%2===0?"var(--warm)":"transparent",borderRadius:12,marginBottom:4}}><div><div style={{fontWeight:500,fontSize:14}}>{item.item}</div>{item.note&&<div style={{fontSize:12,color:"var(--stone)",marginTop:2}}>{item.note}</div>}</div><div style={{fontWeight:700,fontSize:15,whiteSpace:"nowrap"}}>{item.quantity} {item.unit}</div></div>))}</div>))}</div>
-                    )}
+          {/* Supplies */}
+{tab === 'supplies' && (
+  <div className="fade-up">
+    <div
+      id="supplies-blueprint"
+      style={{
+        whiteSpace: "pre-wrap",
+        fontFamily:
+          "system-ui, -apple-system, BlinkMacSystemFont, sans-serif",
+        fontSize: 14,
+        lineHeight: 1.5,
+        marginTop: 16,
+      }}
+    >
+      (Generate a blueprint to see your detailed menu and shopping plan here.)
+    </div>
+  </div>
+)}
+
 
                     {/* Booking Modal */}
                     {bookingVendor && (
@@ -2692,19 +2707,35 @@ Everything in one place. Just a few clicks. No stress.
             const [genError, setGenError] = useState('');
 
             const handleGenerate = useCallback(async (data) => {
-                setFormData(data); setView('loading'); setGenError('');
-                const matched = matchVendors(data); setVendors(matched);
-                let bp;
-                try {
-                    bp = await generateBlueprint(data);
-                    if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
-                } catch(e) {
-                    setGenError(e.message || 'Blueprint generation failed — using fallback');
-                    bp = generateFallback(data);
-                }
-                setBlueprint(bp); setView('blueprint');
-            }, []);
+  setFormData(data);
+  setView('loading');
+  setGenError('');
 
+  const matched = matchVendors(data);
+  setVendors(matched);
+
+  let bp;
+  try {
+    bp = await generateBlueprint(data);
+    if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
+  } catch (e) {
+    setGenError(e.message || 'Blueprint generation failed — using fallback');
+    bp = generateFallback(data);
+  }
+
+  // NEW: write blueprint text into the Supplies tab area, if present
+  try {
+    const el = document.getElementById('supplies-blueprint');
+    if (el && bp && bp.blueprint) {
+      el.textContent = bp.blueprint;
+    }
+  } catch (_) {
+    // ignore DOM errors
+  }
+
+  setBlueprint(bp);
+  setView('blueprint');
+}, []);
             return (
                 <div>
                     <Nav view={view} setView={setView}/>
