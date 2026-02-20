@@ -1944,7 +1944,13 @@ Everything in one place. Just a few clicks. No stress.
                     )}
 
                     {/* Shop */}
-                    {tab === 'shop' && <ShopTab supplies={bp.supplies} />}
+                {tab === 'shop' && (
+  <ShopTab
+    supplies={bp.supplies}
+    shoppingList={bp.shopping_list}
+    blueprintText={bp.blueprint}
+  />
+)}
 
                     {/* Vendors (booking) */}
                     {tab === 'vendors' && (
