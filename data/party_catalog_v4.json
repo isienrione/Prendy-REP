@@ -26,21 +26,12 @@
       "type": "caterer",
       "locations": ["Santiago"],
       "notes": "Main meals and sandwich packs for big informal home parties."
-    },
-    {
-      "id": "aperitivo",
-      "name": "Aperitivo.cl",
-      "url": "https://aperitivo.cl",
-      "type": "gourmet_store",
-      "locations": ["Santiago"],
-      "notes": "Gourmet cheeses, charcuterie, wines, dips, and frozen party items."
     }
   ],
   "items": [
     {
       "id": "novoandina-mini-sandwich-miga-ave-palta-12",
       "storeId": "novoandina",
-      "section": "catering",
       "name": "Mini sándwich miga ave palta",
       "category": "finger_food",
       "role": "mini_sandwich",
@@ -54,7 +45,6 @@
     {
       "id": "cafediario-brunch-clasico-1",
       "storeId": "cafediario",
-      "section": "catering",
       "name": "Brunch clásico",
       "category": "brunch_box",
       "role": "brunch_individual",
@@ -68,7 +58,6 @@
     {
       "id": "manungo-pack-40-mechadas-40",
       "storeId": "manungo",
-      "section": "catering",
       "name": "Pack 40 mechadas",
       "category": "main_delivery",
       "role": "sandwich_pack",
@@ -78,21 +67,6 @@
       "tags": ["beef", "chilean", "ready_to_heat"],
       "useCases": ["big_home_party"],
       "source": "manungo.cl"
-    },
-    {
-      "id": "aperitivo-burrata-granarolo-150",
-      "storeId": "aperitivo",
-      "section": "grocery",
-      "name": "Burrata Granarolo 150 g",
-      "category": "cheese",
-      "role": "cheese_cow",
-      "qualityTier": "standard",
-      "format": { "unitType": "weight", "quantity": 150 },
-      "price": { "amount": 4990, "currency": "CLP", "basis": "per_unit" },
-      "tags": ["cheese", "fresh", "italian"],
-      "useCases": ["adult_birthday_home", "wine_and_cheese"],
-      "source": "aperitivo.cl"
     }
-    /* …continue adding the rest of the items here… */
   ]
 }
