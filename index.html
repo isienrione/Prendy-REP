@@ -2000,12 +2000,13 @@ Everything in one place. Just a few clicks. No stress.
         marginTop: 16,
       }}
     >
-      {bp && bp.blueprint
-        ? bp.blueprint
+      {bp && (bp.shopping_list || bp.blueprint)
+        ? (bp.shopping_list || bp.blueprint)
         : "(Generate a blueprint to see your detailed menu and shopping plan here.)"}
     </div>
   </div>
 )}
+
 
 
                     {/* Booking Modal */}
