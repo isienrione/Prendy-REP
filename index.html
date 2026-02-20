@@ -1991,7 +1991,6 @@ Everything in one place. Just a few clicks. No stress.
 {tab === 'supplies' && (
   <div className="fade-up">
     <div
-      id="supplies-blueprint"
       style={{
         whiteSpace: "pre-wrap",
         fontFamily:
@@ -2001,7 +2000,9 @@ Everything in one place. Just a few clicks. No stress.
         marginTop: 16,
       }}
     >
-      (Generate a blueprint to see your detailed menu and shopping plan here.)
+      {blueprint && blueprint.blueprint
+        ? blueprint.blueprint
+        : "(Generate a blueprint to see your detailed menu and shopping plan here.)"}
     </div>
   </div>
 )}
@@ -2697,57 +2698,53 @@ Everything in one place. Just a few clicks. No stress.
         };
 
         /* =========================================
-           APP
-           ========================================= */
-        function App() {
-            const [view, setView] = useState('landing');
-            const [formData, setFormData] = useState(null);
-            const [blueprint, setBlueprint] = useState(null);
-            const [vendors, setVendors] = useState(null);
-            const [genError, setGenError] = useState('');
+          /* =========================================
+   APP
+   ========================================= */
+function App() {
+  const [view, setView] = useState('landing');
+  const [formData, setFormData] = useState(null);
+  const [blueprint, setBlueprint] = useState(null);
+  const [vendors, setVendors] = useState(null);
+  const [genError, setGenError] = useState('');
 
-            const handleGenerate = useCallback(async (data) => {
-  setFormData(data);
-  setView('loading');
-  setGenError('');
+  const handleGenerate = useCallback(async (data) => {
+    setFormData(data);
+    setView('loading');
+    setGenError('');
 
-  const matched = matchVendors(data);
-  setVendors(matched);
+    const matched = matchVendors(data);
+    setVendors(matched);
 
-  let bp;
-  try {
-    bp = await generateBlueprint(data);
-    if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
-  } catch (e) {
-    setGenError(e.message || 'Blueprint generation failed — using fallback');
-    bp = generateFallback(data);
-  }
-
-  // NEW: write blueprint text into the Supplies tab area, if present
-  try {
-    const el = document.getElementById('supplies-blueprint');
-    if (el && bp && bp.blueprint) {
-      el.textContent = bp.blueprint;
+    let bp;
+    try {
+      bp = await generateBlueprint(data);
+      // Expect the server to return a full blueprint object with timeline, supplies, and blueprint text
+      if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
+    } catch (e) {
+      setGenError(e.message || 'Blueprint generation failed — using fallback');
+      bp = generateFallback(data);
     }
-  } catch (_) {
-    // ignore DOM errors
-  }
 
-  setBlueprint(bp);
-  setView('blueprint');
-}, []);
-            return (
-                <div>
-                    <Nav view={view} setView={setView}/>
-                    {view === 'landing' && <Landing onStart={() => setView('onboarding')}/>}
-                    {view === 'onboarding' && <Onboarding onFinish={handleGenerate}/>}
-                    {view === 'loading' && <Loading error={genError}/>}
-                    {view === 'blueprint' && blueprint && <Blueprint data={formData} blueprint={blueprint} vendors={vendors}/>}
-                    {view === 'vendor-dashboard' && <VendorDashboard/>}
-                    {view === 'venue-dashboard' && <VenueDashboard/>}
-                    {view === 'host-dashboard' && <HostDashboard/>}
-                </div>
-            );
+    // Store the entire object (including bp.blueprint) in state
+    setBlueprint(bp);
+    setView('blueprint');
+  }, []);
+
+  return (
+    <div>
+      <Nav view={view} setView={setView} />
+      {view === 'landing' && <Landing onStart={() => setView('onboarding')} />}
+      {view === 'onboarding' && <Onboarding onFinish={handleGenerate} />}
+      {view === 'loading' && <Loading error={genError} />}
+      {view === 'blueprint' && blueprint && (
+        <Blueprint data={formData} blueprint={blueprint} vendors={vendors} />
+      )}
+      {view === 'vendor-dashboard' && <VendorDashboard />}
+      {view === 'venue-dashboard' && <VenueDashboard />}
+      {view === 'host-dashboard' && <HostDashboard />}
+    </div>
+  );
         }
 
         ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
