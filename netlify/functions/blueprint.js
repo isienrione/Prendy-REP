@@ -4,12 +4,14 @@ import fs from "fs";
 import path from "path";
 import OpenAI from "openai";
 
-// ---------- Load full party catalog v4 ----------
+/**
+ * ============
+ * LOAD CATALOG
+ * ============
+ */
 
-// Resolve catalog path relative to the repo root
 const catalogPath = path.join(process.cwd(), "data", "party_catalog_v4.json");
 
-// Synchronously load catalog once at cold start
 let RAW_CATALOG;
 let PARTY_ITEMS = [];
 
@@ -17,62 +19,158 @@ try {
   RAW_CATALOG = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
   PARTY_ITEMS = RAW_CATALOG?.stores?.[0]?.items || [];
   console.log(
-    `[Prendy] Loaded party_catalog_v4.json with ${
-      PARTY_ITEMS.length
-    } items (version=${RAW_CATALOG.version}, currency=${
-      RAW_CATALOG.currency
-    })`
+    `[Prendy] Loaded party_catalog_v4.json: version=${RAW_CATALOG.version}, currency=${RAW_CATALOG.currency}, items=${PARTY_ITEMS.length}`
   );
 } catch (err) {
   console.error(
-    "[Prendy] Failed to load data/party_catalog_v4.json; using empty catalog:",
+    "[Prendy] Failed to load data/party_catalog_v4.json; falling back to empty catalog:",
     err
   );
   RAW_CATALOG = { version: "4.0", currency: "CLP", stores: [] };
   PARTY_ITEMS = [];
 }
 
-// ---------- Helper: summarize catalog for the model ----------
+/**
+ * ======================
+ * LIGHTWEIGHT CATALOG IQ
+ * ======================
+ *
+ * These helpers give the model a structured, pre‑filtered view instead
+ * of dumping the raw catalog. This keeps tokens down and pushes it to
+ * make specific, grounded choices.
+ */
 
-function buildCatalogSummary(maxItems = 80) {
-  if (!PARTY_ITEMS.length) {
-    return "Catalog is empty (PARTY_ITEMS.length === 0).";
+function normalizeTag(t) {
+  return (t || "").toString().trim().toLowerCase();
+}
+
+function hasTag(item, tag) {
+  const needle = normalizeTag(tag);
+  return (item.tags || []).map(normalizeTag).includes(needle);
+}
+
+function scoresForEventType(item, eventType) {
+  // Very simple scoring by tags and category.
+  const tags = (item.tags || []).map(normalizeTag);
+  const cat = normalizeTag(item.category);
+
+  let score = 0;
+
+  // Generic boosts
+  if (["finger_food", "brunch_box", "cheese", "charcuterie"].includes(cat)) {
+    score += 2;
+  }
+  if (["main_delivery", "main_prepared"].includes(cat)) {
+    score += 3;
+  }
+  if (["dessert"].includes(cat)) {
+    score += 2;
+  }
+  if (["wine", "beer", "spirits", "soft_drink", "coffee"].includes(cat)) {
+    score += 1;
   }
 
-  const total = PARTY_ITEMS.length;
-  const sample = PARTY_ITEMS.slice(0, maxItems);
+  // Event‑specific boosts via tags
+  if (eventType === "adult_birthday_home") {
+    if (tags.includes("chilean")) score += 2;
+    if (tags.includes("party")) score += 2;
+    if (tags.includes("ready_to_heat")) score += 1;
+    if (tags.includes("finger_food")) score += 1;
+  }
 
-  const lines = [];
-  lines.push(
-    `Catalog version: ${RAW_CATALOG.version}, currency: ${RAW_CATALOG.currency}`
-  );
-  lines.push(`Total items: ${total}`);
-  lines.push("");
-  lines.push(
-    "Each item has: id, name, description, category, subcategory, price (CLP), vendorName, venueName, serviceType, tags[]."
-  );
-  lines.push("");
-  lines.push(`Sample of up to ${maxItems} items:`);
-  sample.forEach((it) => {
-    lines.push(
-      `- id=${it.id || "?"}, name=${it.name || "?"}, category=${
-        it.category || "?"
-      }, subcategory=${it.subcategory || ""}, price=${
-        it.price != null ? it.price : "null"
-      }, vendor=${it.vendorName || ""}, tags=${(it.tags || []).join(", ")}`
-    );
+  return score;
+}
+
+function categorizeItemsForEvent(eventType) {
+  const buckets = {
+    fingerFoods: [],
+    mains: [],
+    desserts: [],
+    drinks: [],
+    other: [],
+  };
+
+  PARTY_ITEMS.forEach((item) => {
+    const cat = normalizeTag(item.category);
+    const score = scoresForEventType(item, eventType);
+
+    const enriched = { ...item, score };
+
+    if (["finger_food", "cheese", "charcuterie", "brunch_box"].includes(cat)) {
+      buckets.fingerFoods.push(enriched);
+    } else if (["main_delivery", "main_prepared"].includes(cat)) {
+      buckets.mains.push(enriched);
+    } else if (["dessert"].includes(cat)) {
+      buckets.desserts.push(enriched);
+    } else if (["wine", "beer", "spirits", "soft_drink", "coffee"].includes(cat)) {
+      buckets.drinks.push(enriched);
+    } else {
+      buckets.other.push(enriched);
+    }
   });
 
+  // Sort each bucket descending by score, then by name as tiebreaker.
+  for (const key of Object.keys(buckets)) {
+    buckets[key].sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return (a.name || "").localeCompare(b.name || "");
+    });
+  }
+
+  return buckets;
+}
+
+function summarizeBucket(label, items, max = 40) {
+  const lines = [];
+  lines.push(`=== ${label} (top ${Math.min(max, items.length)} of ${items.length}) ===`);
+  items.slice(0, max).forEach((it) => {
+    lines.push(
+      `- id=${it.id || "?"}, name=${it.name || "?"}, category=${it.category || "?"}, score=${it.score}, price=${it.price ?? "null"}, tags=${(it.tags || []).join(", ")}`
+    );
+  });
   return lines.join("\n");
 }
 
-// ---------- OpenAI client ----------
+function buildStructuredCatalogView(eventType) {
+  const buckets = categorizeItemsForEvent(eventType);
+
+  const lines = [];
+  lines.push(
+    `Catalog version=${RAW_CATALOG.version}, currency=${RAW_CATALOG.currency}, totalItems=${PARTY_ITEMS.length}`
+  );
+  lines.push("");
+
+  lines.push(summarizeBucket("Finger foods / brunch / cheese boards", buckets.fingerFoods));
+  lines.push("");
+  lines.push(summarizeBucket("Mains / main delivery / prepared mains", buckets.mains));
+  lines.push("");
+  lines.push(summarizeBucket("Desserts & sweets", buckets.desserts));
+  lines.push("");
+  lines.push(summarizeBucket("Drinks & coffee", buckets.drinks));
+  lines.push("");
+  lines.push(summarizeBucket("Other", buckets.other));
+
+  return {
+    text: lines.join("\n"),
+    buckets,
+  };
+}
+
+/**
+ * ============
+ * OPENAI CLIENT
+ * ============
+ */
 
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// ---------- Netlify Function handler ----------
+/**
+ * ==================
+ * NETLIFY ENTRYPOINT
+ * ==================
+ */
 
 export const handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -85,76 +183,92 @@ export const handler = async (event) => {
   let body;
   try {
     body = JSON.parse(event.body || "{}");
-  } catch (err) {
+  } catch (_err) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: "Invalid JSON body" }),
     };
   }
 
-  // User request payload from the frontend form
   const {
-    eventType, // e.g. "adult_birthday_home"
-    guestCount,
-    budgetCLP,
-    location, // e.g. "Santiago"
-    notes,
+    eventType = "adult_birthday_home",
+    guestCount = 20,
+    budgetCLP = 0,
+    location = "Santiago",
+    notes = "",
   } = body;
 
-  // Build a compact representation of the request
   const requestSummary = [
-    `Event type: ${eventType || "unspecified"}`,
-    `Guest count: ${guestCount || "unspecified"}`,
-    `Budget (CLP): ${budgetCLP || "unspecified"}`,
-    `Location: ${location || "unspecified"}`,
+    `Event type: ${eventType}`,
+    `Guest count: ${guestCount}`,
+    `Budget (CLP): ${budgetCLP}`,
+    `Location: ${location}`,
     `User notes: ${notes || "none"}`,
   ].join("\n");
 
-  // Catalog summary + instructions for how to use it
-  const catalogSummary = buildCatalogSummary(120);
+  const { text: catalogView, buckets } = buildStructuredCatalogView(eventType);
+
+  // Build a tiny “planning skeleton” the model can refine
+  const planningSkeleton = {
+    idealFingerFoodItems: buckets.fingerFoods.slice(0, 10).map((i) => i.id),
+    idealMainItems: buckets.mains.slice(0, 10).map((i) => i.id),
+    idealDessertItems: buckets.desserts.slice(0, 10).map((i) => i.id),
+    idealDrinkItems: buckets.drinks.slice(0, 10).map((i) => i.id),
+  };
 
   const systemPrompt = `
-You are Prendy, an AI party-planning assistant for Santiago, Chile.
-You MUST base your concrete product recommendations ONLY on the structured catalog data I provide.
+You are Prendy, an expert party-planning assistant for Santiago, Chile.
+You have access to a structured catalog of real products (food, drinks, equipment).
+Your job is to design concrete, shoppable party plans using ONLY catalog items.
 
-CATALOG FORMAT
---------------
-The catalog is JSON with:
-- version (string)
-- currency (string, CLP)
-- stores: array of stores; in this version we use a single synthetic "global" store.
-- stores[0].items: array of item objects.
+CATALOG STRUCTURE
+-----------------
+- You receive a catalog view with items grouped into buckets:
+  - fingerFoods
+  - mains
+  - desserts
+  - drinks
+  - other
+- There are also planning suggestions:
+  - idealFingerFoodItems: array of top item ids for starters
+  - idealMainItems: array of top item ids for mains
+  - idealDessertItems: array of top item ids for desserts
+  - idealDrinkItems: array of top item ids for drinks
 
-Each item object has:
+Each catalog item has:
 - id (string, unique)
-- name (string) - human friendly product or bundle name
-- description (string) - when available, a short description or use case
-- category (string) - high level type like "finger_food", "brunch_box", "main_delivery", "wine", etc.
-- subcategory (string) - optional sub-type
-- price (number | null) - price in CLP
-- vendorName (string) - store or brand name, when available
-- venueName (string) - optional, often empty
-- serviceType (string) - optional, e.g. "catering_pack", "coffee", etc.
-- tags (string[]) - tags like "chicken", "seafood", "gift", "premium", "ready_to_heat", etc.
+- name (string)
+- description (string)
+- category, subcategory
+- price (CLP) or null
+- vendorName
+- serviceType
+- tags (string[])
 
-RULES
------
-1. Only recommend items that exist in the catalog.
-2. Whenever you name a product, you MUST include its exact "id" field in parentheses so it can be looked up later. Example:
-   "Mini sándwich miga ave palta (id=novoandina-mini-sandwich-miga-ave-palta-12)".
-3. Respect the user's budget and guest count as much as possible. When prices are null, describe them but flag that pricing must be checked manually.
-4. Group recommendations into logical sections (e.g., Finger foods, Mains, Desserts, Drinks) using the category and tags.
-5. You are planning events in Santiago, Chile, so prefer items and tags that look local (e.g., "chilean", "asado", local caterers).
-6. Always explain briefly WHY each item is a good fit (based on tags/useCases/category), not just list names.
+HARD RULES
+----------
+1. You MUST ONLY recommend items that exist in the catalog and that appear in the catalog view I provide.
+2. Every product line MUST mention its exact id in parentheses: "Product name (id=...)"
+3. NEVER invent generic items like "main protein" or "dessert portions" without tying them to a specific catalog item.
+4. If price is null, you can still recommend the item, but clearly note "price TBD, check vendor".
+5. Respect the user's budget and guest count as much as possible:
+   - For 20–40 guests, ensure there is enough variety and quantity.
+   - Prefer ready-to-serve or ready-to-heat for home events.
+6. Prefer items whose tags or category match the event type (for example "adult_birthday_home", "party", "chilean", "finger_food", "ready_to_heat").
+7. Organize the answer into clear sections with headings:
+   - Event overview
+   - Food plan (starters, mains, sides, desserts)
+   - Drinks plan
+   - Equipment & serving
+   - Shopping list summary
+8. In each section, provide 2–5 SPECIFIC product recommendations with:
+   - item name
+   - id
+   - suggested quantity (scaled to the guest count)
+   - a short reason that ties back to tags or category.
+9. If the catalog is sparse in a category, say so explicitly and suggest where the host might need to improvise.
 
-You will receive:
-- A summary of the user's request.
-- A structured summary of the catalog and a large sample of items.
-
-Your task:
-- Propose a concrete party menu and shopping/catering plan for this specific user, referencing real catalog items by name and id.
-- Make at least 6–10 distinct item recommendations where possible, mixing categories (finger foods, mains, desserts, drinks, etc.).
-- If there are many similar items, choose a representative subset but note that similar variants exist.
+Your goal: use the catalog as if you are a local party planner assembling a real order to place with vendors, not writing abstract advice.
 `;
 
   const userPrompt = `
@@ -162,23 +276,36 @@ USER REQUEST
 ------------
 ${requestSummary}
 
-CATALOG SUMMARY
----------------
-${catalogSummary}
+CATALOG VIEW (GROUPED & SCORED)
+--------------------------------
+${catalogView}
 
-Now, using ONLY items from the catalog above, design a party food & drink plan tailored to the user.
-Return your answer in clear sections with bullet points and include item "id" for each referenced product.
+PLANNING SKELETON (IDS ONLY)
+----------------------------
+${JSON.stringify(planningSkeleton, null, 2)}
+
+TASK
+----
+Using ONLY items from the catalog view and IDs above, design a detailed party plan.
+Make it very concrete and grounded in products:
+- At least 3–5 different finger foods or appetizer items.
+- At least 2–3 different mains or substantial dishes.
+- At least 2 dessert/sweet options.
+- A well-balanced drinks lineup (wine/beer/soft drinks/water/coffee as appropriate).
+- Practical serving/equipment notes.
+
+Remember: Every product line MUST include the exact catalog id in parentheses.
 `;
 
   try {
     const completion = await client.chat.completions.create({
       model: "gpt-4.1-mini",
+      temperature: 0.7,
+      max_tokens: 1400,
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      temperature: 0.7,
-      max_tokens: 900,
     });
 
     const text = completion.choices?.[0]?.message?.content || "";
@@ -193,7 +320,7 @@ Return your answer in clear sections with bullet points and include item "id" fo
       }),
     };
   } catch (err) {
-    console.error("[Prendy] OpenAI error:", err);
+    console.error("[Prendy] OpenAI error generating blueprint:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({
