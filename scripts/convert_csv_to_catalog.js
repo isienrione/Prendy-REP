@@ -8,7 +8,8 @@ const __dirname = path.dirname(__filename);
 
 // Paths
 const csvPath = path.join(__dirname, "..", "data", "party_all_items_v4.csv");
-const outPath = path.join(__dirname, "..", "data", "prendy_catalog_v4.json");
+const prendyOutPath = path.join(__dirname, "..", "data", "prendy_catalog_v4.json");
+const partyOutPath = path.join(__dirname, "..", "data", "party_catalog_v4.json");
 
 function loadCsvAsJson(csvFilePath) {
   return new Promise((resolve, reject) => {
@@ -21,9 +22,9 @@ function loadCsvAsJson(csvFilePath) {
   });
 }
 
-function rowToCatalogItem(row) {
+function rowToCatalogItem(row, index) {
   return {
-    id: row.id || row.ID || "",
+    id: row.id || row.ID || `item-${index + 1}`,
     name: row.name || row.Name || "",
     description: row.description || row.Description || "",
     category: row.category || row.Category || "",
@@ -42,12 +43,30 @@ function rowToCatalogItem(row) {
 async function main() {
   try {
     const rows = await loadCsvAsJson(csvPath);
-    const items = rows.map(rowToCatalogItem);
+    const items = rows.map((row, i) => rowToCatalogItem(row, i));
 
-    fs.writeFileSync(outPath, JSON.stringify(items, null, 2), "utf8");
-    console.log(`✅ Saved ${outPath} with ${items.length} items`);
+    // 1) Flat Prendy catalog (good for AI / bulk processing)
+    fs.writeFileSync(prendyOutPath, JSON.stringify(items, null, 2), "utf8");
+
+    // 2) Structured party catalog (what the frontend expects)
+    const partyCatalog = {
+      version: "4.0",
+      currency: "USD",
+      stores: [
+        {
+          id: "global",
+          name: "Global party catalog v4",
+          items
+        }
+      ]
+    };
+
+    fs.writeFileSync(partyOutPath, JSON.stringify(partyCatalog, null, 2), "utf8");
+
+    console.log(`✅ Saved ${prendyOutPath} with ${items.length} items`);
+    console.log(`✅ Saved ${partyOutPath} with ${items.length} items in stores[0].items`);
   } catch (err) {
-    console.error("Error converting CSV to catalog JSON:", err);
+    console.error("Error converting CSV to catalogs:", err);
     process.exit(1);
   }
 }
