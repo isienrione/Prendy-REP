@@ -27,15 +27,16 @@ function loadCsvAsJson(csvFilePath) {
 function rowToCatalogItem(row, index) {
   return {
     id: row.id || row.ID || `item-${index + 1}`,
-    name: row.name || row.Name || "",
-    description: row.description || row.Description || "",
-    category: row.category || row.Category || "",
-    subcategory: row.subcategory || row.Subcategory || "",
-    price: row.price ? Number(row.price) : null,
-    vendorName: row.vendorName || row.VendorName || "",
-    venueName: row.venueName || row.VenueName || "",
-    serviceType: row.serviceType || row.ServiceType || "",
-    tags: (row.tags || row.Tags || "")
+    // Use your CSV headers
+    name: row["Product Name"] || "",
+    description: row["Use Cases"] || "",  // simple description from use cases
+    category: row["Category"] || row.category || "",
+    subcategory: row["Role"] || row.role || "",
+    price: row["Price (CLP)"] ? Number(row["Price (CLP)"]) : null,
+    vendorName: row["Store"] || row.store || "",
+    venueName: "",
+    serviceType: row["Section"] || "",
+    tags: (row["Tags"] || "")
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean),
