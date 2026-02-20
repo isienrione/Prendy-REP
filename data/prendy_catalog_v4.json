@@ -1,951 +1,534 @@
-{
-  "version": "v4",
-  "currency": "CLP",
-  "stores": [
-    {
-      "id": "novoandina",
-      "name": "novoandina.cl",
-      "url": "",
-      "type": "vendor",
-      "locations": [
-        "Santiago"
-      ],
-      "notes": ""
-    },
-    {
-      "id": "cafediario",
-      "name": "cafediario.cl",
-      "url": "",
-      "type": "vendor",
-      "locations": [
-        "Santiago"
-      ],
-      "notes": ""
-    },
-    {
-      "id": "manungo",
-      "name": "manungo.cl",
-      "url": "",
-      "type": "vendor",
-      "locations": [
-        "Santiago"
-      ],
-      "notes": ""
-    },
-    {
-      "id": "aperitivo",
-      "name": "aperitivo.cl",
-      "url": "",
-      "type": "vendor",
-      "locations": [
-        "Santiago"
-      ],
-      "notes": ""
-    }
-  ],
-  "items": [
-    {
-      "id": "novoandina-minisandwichmigaavepalta-12",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Mini sándwich miga ave palta",
-      "category": "finger_food",
-      "role": "mini_sandwich",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 12
-      },
-      "price": {
-        "amount": 14900,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "chicken",
-        "avocado"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "office_farewell_venue"
-      ]
-    },
-    {
-      "id": "novoandina-minisandwichmigaavemayo-12",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Mini sándwich miga ave mayo",
-      "category": "finger_food",
-      "role": "mini_sandwich",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 12
-      },
-      "price": {
-        "amount": 13900,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "chicken"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "office_farewell_venue"
-      ]
-    },
-    {
-      "id": "novoandina-minisandwichpalmitoricotta-12",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Mini sándwich Palmito Ricotta",
-      "category": "finger_food",
-      "role": "mini_sandwich",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 12
-      },
-      "price": {
-        "amount": 15900,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "vegetarian",
-        "gourmet"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "novoandina-minicroissantjamonyqueso-12",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Mini croissant jamón y queso",
-      "category": "finger_food",
-      "role": "mini_croissant",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 12
-      },
-      "price": {
-        "amount": 14700,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "ham",
-        "cheese"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "office_farewell_venue"
-      ]
-    },
-    {
-      "id": "novoandina-minicroissantsalmonquesocremaciboulette-12",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Mini Croissant Salmón Queso Crema Ciboulette",
-      "category": "finger_food",
-      "role": "mini_croissant",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 12
-      },
-      "price": {
-        "amount": 19900,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "seafood",
-        "gourmet"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "novoandina-mixminisandwichesmigax50-50",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Mix Mini sándwiches Miga x 50",
-      "category": "finger_food",
-      "role": "mix_pack",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 50
-      },
-      "price": {
-        "amount": 62900,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "assorted"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "big_home_party"
-      ]
-    },
-    {
-      "id": "novoandina-picoteocelebremospara15-15",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Picoteo Celebremos! (para 15)",
-      "category": "catering_pack",
-      "role": "cocktail_dinner",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 15
-      },
-      "price": {
-        "amount": 260900,
-        "currency": "CLP",
-        "basis": "per_pack"
-      },
-      "tags": [
-        "full_service",
-        "cocktail"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "big_home_party"
-      ]
-    },
-    {
-      "id": "novoandina-picoteolossibaritaspara15-15",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Picoteo Los Sibaritas (para 15)",
-      "category": "catering_pack",
-      "role": "cocktail_dinner",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 15
-      },
-      "price": {
-        "amount": 389900,
-        "currency": "CLP",
-        "basis": "per_pack"
-      },
-      "tags": [
-        "seafood",
-        "ceviche",
-        "premium"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "novoandina-milanesaderesconpurenatural-1",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Milanesa de res con puré natural",
-      "category": "main_prepared",
-      "role": "individual_meal",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 7900,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "beef",
-        "ready_to_heat"
-      ],
-      "useCases": [
-        "family_lunch_bbq_home"
-      ]
-    },
-    {
-      "id": "novoandina-cremadeverduras-1",
-      "storeId": "novoandina",
-      "section": "catering",
-      "name": "Crema de Verduras",
-      "category": "main_prepared",
-      "role": "soup",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 4900,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "soup",
-        "vegetarian",
-        "ready_to_heat"
-      ],
-      "useCases": [
-        "family_lunch_bbq_home"
-      ]
-    },
-    {
-      "id": "cafediario-brunchclasico-1",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Brunch clásico",
-      "category": "brunch_box",
-      "role": "brunch_individual",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 18900,
-        "currency": "CLP",
-        "basis": "per_person"
-      },
-      "tags": [
-        "coffee",
-        "breakfast",
-        "gift"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "cafediario-brunchgourmet-1",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Brunch gourmet",
-      "category": "brunch_box",
-      "role": "brunch_individual",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 24900,
-        "currency": "CLP",
-        "basis": "per_person"
-      },
-      "tags": [
-        "coffee",
-        "breakfast",
-        "gourmet"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "cafediario-brunchclasicoparacompartir-2",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Brunch clásico para compartir",
-      "category": "brunch_box",
-      "role": "brunch_sharing",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 2
-      },
-      "price": {
-        "amount": 34900,
-        "currency": "CLP",
-        "basis": "per_pack"
-      },
-      "tags": [
-        "coffee",
-        "breakfast",
-        "gift"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "cafediario-brunchdiadelamor-1",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Brunch día del amor",
-      "category": "brunch_box",
-      "role": "special_occasion",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 32900,
-        "currency": "CLP",
-        "basis": "per_person"
-      },
-      "tags": [
-        "gift",
-        "valentines",
-        "ferrero"
-      ],
-      "useCases": [
-        "adult_birthday_home"
-      ]
-    },
-    {
-      "id": "cafediario-brunchcumpleanos-1",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Brunch cumpleaños",
-      "category": "brunch_box",
-      "role": "special_occasion",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 26900,
-        "currency": "CLP",
-        "basis": "per_person"
-      },
-      "tags": [
-        "gift",
-        "birthday",
-        "cake"
-      ],
-      "useCases": [
-        "adult_birthday_home"
-      ]
-    },
-    {
-      "id": "cafediario-packacaibowl-1",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Pack Acaí bowl",
-      "category": "brunch_box",
-      "role": "daily_pack",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 15000,
-        "currency": "CLP",
-        "basis": "per_person"
-      },
-      "tags": [
-        "coffee",
-        "acai",
-        "healthy"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "cafediario-minicroissantclasico-1",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Mini croissant clásico",
-      "category": "finger_food",
-      "role": "mini_croissant",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "person",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 2800,
-        "currency": "CLP",
-        "basis": "per_person"
-      },
-      "tags": [
-        "chicken",
-        "ham",
-        "egg"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "office_farewell_venue",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "cafediario-caja12untapaditosbrioche-12",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Caja 12 un Tapaditos Brioche",
-      "category": "finger_food",
-      "role": "box_unit",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 12
-      },
-      "price": {
-        "amount": 16900,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "chicken",
-        "ham",
-        "egg"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "office_farewell_venue"
-      ]
-    },
-    {
-      "id": "cafediario-minitartaletassurtidas-1",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Mini tartaletas surtidas",
-      "category": "dessert",
-      "role": "mini_tartaleta",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "person",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 2400,
-        "currency": "CLP",
-        "basis": "per_person"
-      },
-      "tags": [
-        "pie",
-        "cheesecake",
-        "assorted"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "office_farewell_venue",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "cafediario-mesafestin7salados4dulces-1",
-      "storeId": "cafediario",
-      "section": "catering",
-      "name": "Mesa Festín (7 salados + 4 dulces)",
-      "category": "catering_pack",
-      "role": "mesa_catering",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "person",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 14900,
-        "currency": "CLP",
-        "basis": "per_person"
-      },
-      "tags": [
-        "full_service",
-        "premium",
-        "quiches"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "manungo-pack20lomitos-20",
-      "storeId": "manungo",
-      "section": "catering",
-      "name": "Pack 20 lomitos",
-      "category": "main_delivery",
-      "role": "sandwich_pack",
-      "qualityTier": "budget",
-      "format": {
-        "unitType": "units",
-        "quantity": 20
-      },
-      "price": {
-        "amount": 53000,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "beef",
-        "chilean",
-        "ready_to_heat"
-      ],
-      "useCases": [
-        "big_home_party",
-        "family_lunch_bbq_home"
-      ]
-    },
-    {
-      "id": "manungo-pack40mechadas-40",
-      "storeId": "manungo",
-      "section": "catering",
-      "name": "Pack 40 mechadas",
-      "category": "main_delivery",
-      "role": "sandwich_pack",
-      "qualityTier": "budget",
-      "format": {
-        "unitType": "units",
-        "quantity": 40
-      },
-      "price": {
-        "amount": 115000,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "beef",
-        "chilean",
-        "ready_to_heat"
-      ],
-      "useCases": [
-        "big_home_party"
-      ]
-    },
-    {
-      "id": "manungo-pack20hot-dog-20",
-      "storeId": "manungo",
-      "section": "catering",
-      "name": "Pack 20 hot-dog",
-      "category": "main_delivery",
-      "role": "sandwich_pack",
-      "qualityTier": "budget",
-      "format": {
-        "unitType": "units",
-        "quantity": 20
-      },
-      "price": {
-        "amount": 51000,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "sausage",
-        "chilean",
-        "ready_to_heat"
-      ],
-      "useCases": [
-        "big_home_party",
-        "family_lunch_bbq_home"
-      ]
-    },
-    {
-      "id": "manungo-pollogansoalaolla-1",
-      "storeId": "manungo",
-      "section": "catering",
-      "name": "Pollo ganso a la olla",
-      "category": "main_delivery",
-      "role": "main_dish",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 5900,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "chicken",
-        "chilean",
-        "ready_to_heat"
-      ],
-      "useCases": [
-        "big_home_party",
-        "family_lunch_bbq_home"
-      ]
-    },
-    {
-      "id": "manungo-anticuchos-1",
-      "storeId": "manungo",
-      "section": "catering",
-      "name": "Anticuchos",
-      "category": "main_delivery",
-      "role": "main_dish",
-      "qualityTier": "budget",
-      "format": {
-        "unitType": "person",
-        "quantity": 1
-      },
-      "price": {
-        "amount": 3500,
-        "currency": "CLP",
-        "basis": "per_person"
-      },
-      "tags": [
-        "beef",
-        "chilean",
-        "skewers"
-      ],
-      "useCases": [
-        "big_home_party",
-        "family_lunch_bbq_home"
-      ]
-    },
-    {
-      "id": "aperitivo-burratagranarolo150g-150",
-      "storeId": "aperitivo",
-      "section": "grocery",
-      "name": "Burrata Granarolo 150 g",
-      "category": "cheese",
-      "role": "cheese_cow",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 150
-      },
-      "price": {
-        "amount": 4990,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "cheese",
-        "fresh",
-        "italian"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "wine_and_cheese"
-      ]
-    },
-    {
-      "id": "aperitivo-quesomanchegoinboccaromero200g-200",
-      "storeId": "aperitivo",
-      "section": "grocery",
-      "name": "Queso Manchego In Bocca Romero 200 g",
-      "category": "cheese",
-      "role": "cheese_sheep",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 200
-      },
-      "price": {
-        "amount": 6990,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "cheese",
-        "sheep",
-        "spanish",
-        "gourmet"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "wine_and_cheese"
-      ]
-    },
-    {
-      "id": "aperitivo-jamonserranocostabrava500g-500",
-      "storeId": "aperitivo",
-      "section": "grocery",
-      "name": "Jamón Serrano Costa Brava 500 g",
-      "category": "charcuterie",
-      "role": "ham",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 500
-      },
-      "price": {
-        "amount": 9990,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "ham",
-        "spanish",
-        "charcuterie"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "wine_and_cheese"
-      ]
-    },
-    {
-      "id": "aperitivo-kimchilafermentista400g-400",
-      "storeId": "aperitivo",
-      "section": "grocery",
-      "name": "Kimchi La Fermentista 400 g",
-      "category": "fermented",
-      "role": "dip",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 400
-      },
-      "price": {
-        "amount": 6690,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "kimchi",
-        "fermented",
-        "spicy"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "big_home_party"
-      ]
-    },
-    {
-      "id": "aperitivo-gyozasdecamaronasiawok30un-30",
-      "storeId": "aperitivo",
-      "section": "grocery",
-      "name": "Gyozas de Camarón Asia Wok 30 un",
-      "category": "frozen",
-      "role": "finger_food",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 30
-      },
-      "price": {
-        "amount": 13990,
-        "currency": "CLP",
-        "basis": "per_box"
-      },
-      "tags": [
-        "gyoza",
-        "shrimp",
-        "finger_food"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "big_home_party"
-      ]
-    },
-    {
-      "id": "aperitivo-vinosauvignonblancjbouchon-750",
-      "storeId": "aperitivo",
-      "section": "drinks",
-      "name": "Vino Sauvignon Blanc J. Bouchon",
-      "category": "wine",
-      "role": "wine_white",
-      "qualityTier": "budget",
-      "format": {
-        "unitType": "units",
-        "quantity": 750
-      },
-      "price": {
-        "amount": 3500,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "wine",
-        "white"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "family_lunch_bbq_home"
-      ]
-    },
-    {
-      "id": "aperitivo-vinorosecalyptravivendo-750",
-      "storeId": "aperitivo",
-      "section": "drinks",
-      "name": "Vino Rosé Calyptra Vivendo",
-      "category": "wine",
-      "role": "wine_rose",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 750
-      },
-      "price": {
-        "amount": 8990,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "wine",
-        "rose"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "networking_venue"
-      ]
-    },
-    {
-      "id": "aperitivo-ginhendricks700ml-700",
-      "storeId": "aperitivo",
-      "section": "drinks",
-      "name": "Gin Hendrick's 700 ml",
-      "category": "spirits",
-      "role": "gin",
-      "qualityTier": "premium",
-      "format": {
-        "unitType": "units",
-        "quantity": 700
-      },
-      "price": {
-        "amount": 25990,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "gin",
-        "spirit"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "party_high_energy"
-      ]
-    },
-    {
-      "id": "aperitivo-cafekimbointenso1kg-1000",
-      "storeId": "aperitivo",
-      "section": "grocery",
-      "name": "Café Kimbo Intenso 1 kg",
-      "category": "coffee",
-      "role": "coffee_beans",
-      "qualityTier": "standard",
-      "format": {
-        "unitType": "units",
-        "quantity": 1000
-      },
-      "price": {
-        "amount": 14990,
-        "currency": "CLP",
-        "basis": "per_unit"
-      },
-      "tags": [
-        "coffee",
-        "beans",
-        "espresso"
-      ],
-      "useCases": [
-        "adult_birthday_home",
-        "brunch"
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": "item-1",
+    "name": "",
+    "description": "",
+    "category": "finger_food",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "chicken",
+      "avocado"
+    ]
+  },
+  {
+    "id": "item-2",
+    "name": "",
+    "description": "",
+    "category": "finger_food",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "chicken"
+    ]
+  },
+  {
+    "id": "item-3",
+    "name": "",
+    "description": "",
+    "category": "finger_food",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "vegetarian",
+      "gourmet"
+    ]
+  },
+  {
+    "id": "item-4",
+    "name": "",
+    "description": "",
+    "category": "finger_food",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "ham",
+      "cheese"
+    ]
+  },
+  {
+    "id": "item-5",
+    "name": "",
+    "description": "",
+    "category": "finger_food",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "seafood",
+      "gourmet"
+    ]
+  },
+  {
+    "id": "item-6",
+    "name": "",
+    "description": "",
+    "category": "finger_food",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "assorted"
+    ]
+  },
+  {
+    "id": "item-7",
+    "name": "",
+    "description": "",
+    "category": "catering_pack",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "full_service",
+      "cocktail"
+    ]
+  },
+  {
+    "id": "item-8",
+    "name": "",
+    "description": "",
+    "category": "catering_pack",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "seafood",
+      "ceviche",
+      "premium"
+    ]
+  },
+  {
+    "id": "item-9",
+    "name": "",
+    "description": "",
+    "category": "main_prepared",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "beef",
+      "ready_to_heat"
+    ]
+  },
+  {
+    "id": "item-10",
+    "name": "",
+    "description": "",
+    "category": "main_prepared",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "soup",
+      "vegetarian",
+      "ready_to_heat"
+    ]
+  },
+  {
+    "id": "item-11",
+    "name": "",
+    "description": "",
+    "category": "brunch_box",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "coffee",
+      "breakfast",
+      "gift"
+    ]
+  },
+  {
+    "id": "item-12",
+    "name": "",
+    "description": "",
+    "category": "brunch_box",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "coffee",
+      "breakfast",
+      "gourmet"
+    ]
+  },
+  {
+    "id": "item-13",
+    "name": "",
+    "description": "",
+    "category": "brunch_box",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "coffee",
+      "breakfast",
+      "gift"
+    ]
+  },
+  {
+    "id": "item-14",
+    "name": "",
+    "description": "",
+    "category": "brunch_box",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "gift",
+      "valentines",
+      "ferrero"
+    ]
+  },
+  {
+    "id": "item-15",
+    "name": "",
+    "description": "",
+    "category": "brunch_box",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "gift",
+      "birthday",
+      "cake"
+    ]
+  },
+  {
+    "id": "item-16",
+    "name": "",
+    "description": "",
+    "category": "brunch_box",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "coffee",
+      "acai",
+      "healthy"
+    ]
+  },
+  {
+    "id": "item-17",
+    "name": "",
+    "description": "",
+    "category": "finger_food",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "chicken",
+      "ham",
+      "egg"
+    ]
+  },
+  {
+    "id": "item-18",
+    "name": "",
+    "description": "",
+    "category": "finger_food",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "chicken",
+      "ham",
+      "egg"
+    ]
+  },
+  {
+    "id": "item-19",
+    "name": "",
+    "description": "",
+    "category": "dessert",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "pie",
+      "cheesecake",
+      "assorted"
+    ]
+  },
+  {
+    "id": "item-20",
+    "name": "",
+    "description": "",
+    "category": "catering_pack",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "full_service",
+      "premium",
+      "quiches"
+    ]
+  },
+  {
+    "id": "item-21",
+    "name": "",
+    "description": "",
+    "category": "main_delivery",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "beef",
+      "chilean",
+      "ready_to_heat"
+    ]
+  },
+  {
+    "id": "item-22",
+    "name": "",
+    "description": "",
+    "category": "main_delivery",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "beef",
+      "chilean",
+      "ready_to_heat"
+    ]
+  },
+  {
+    "id": "item-23",
+    "name": "",
+    "description": "",
+    "category": "main_delivery",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "sausage",
+      "chilean",
+      "ready_to_heat"
+    ]
+  },
+  {
+    "id": "item-24",
+    "name": "",
+    "description": "",
+    "category": "main_delivery",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "chicken",
+      "chilean",
+      "ready_to_heat"
+    ]
+  },
+  {
+    "id": "item-25",
+    "name": "",
+    "description": "",
+    "category": "main_delivery",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "beef",
+      "chilean",
+      "skewers"
+    ]
+  },
+  {
+    "id": "item-26",
+    "name": "",
+    "description": "",
+    "category": "cheese",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "cheese",
+      "fresh",
+      "italian"
+    ]
+  },
+  {
+    "id": "item-27",
+    "name": "",
+    "description": "",
+    "category": "cheese",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "cheese",
+      "sheep",
+      "spanish",
+      "gourmet"
+    ]
+  },
+  {
+    "id": "item-28",
+    "name": "",
+    "description": "",
+    "category": "charcuterie",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "ham",
+      "spanish",
+      "charcuterie"
+    ]
+  },
+  {
+    "id": "item-29",
+    "name": "",
+    "description": "",
+    "category": "fermented",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "kimchi",
+      "fermented",
+      "spicy"
+    ]
+  },
+  {
+    "id": "item-30",
+    "name": "",
+    "description": "",
+    "category": "frozen",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "gyoza",
+      "shrimp",
+      "finger_food"
+    ]
+  },
+  {
+    "id": "item-31",
+    "name": "",
+    "description": "",
+    "category": "wine",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "wine",
+      "white"
+    ]
+  },
+  {
+    "id": "item-32",
+    "name": "",
+    "description": "",
+    "category": "wine",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "wine",
+      "rose"
+    ]
+  },
+  {
+    "id": "item-33",
+    "name": "",
+    "description": "",
+    "category": "spirits",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "gin",
+      "spirit"
+    ]
+  },
+  {
+    "id": "item-34",
+    "name": "",
+    "description": "",
+    "category": "coffee",
+    "subcategory": "",
+    "price": null,
+    "vendorName": "",
+    "venueName": "",
+    "serviceType": "",
+    "tags": [
+      "coffee",
+      "beans",
+      "espresso"
+    ]
+  }
+]

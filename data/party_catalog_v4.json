@@ -1,72 +1,548 @@
-  {
-  "version": "v4",
-  "lastUpdated": "2026-02-19",
+{
+  "version": "4.0",
   "currency": "CLP",
   "stores": [
     {
-      "id": "novoandina",
-      "name": "Novoandina Catering",
-      "url": "https://www.novoandina.cl",
-      "type": "caterer",
-      "locations": ["Santiago"],
-      "notes": "Cocktail dinner replacement, mini sandwiches, gourmet prepared meals for events."
-    },
-    {
-      "id": "cafediario",
-      "name": "Café Diario",
-      "url": "https://www.cafediario.cl",
-      "type": "caterer",
-      "locations": ["Santiago"],
-      "notes": "Brunch boxes, coffee break catering, networking events, gift boxes."
-    },
-    {
-      "id": "manungo",
-      "name": "Mañungo",
-      "url": "https://manungo.cl",
-      "type": "caterer",
-      "locations": ["Santiago"],
-      "notes": "Main meals and sandwich packs for big informal home parties."
-    }
-  ],
-  "items": [
-    {
-      "id": "novoandina-mini-sandwich-miga-ave-palta-12",
-      "storeId": "novoandina",
-      "name": "Mini sándwich miga ave palta",
-      "category": "finger_food",
-      "role": "mini_sandwich",
-      "qualityTier": "standard",
-      "format": { "unitType": "units", "quantity": 12 },
-      "price": { "amount": 14900, "currency": "CLP", "basis": "per_box" },
-      "tags": ["chicken", "avocado"],
-      "useCases": ["adult_birthday_home", "office_farewell_venue"],
-      "source": "novoandina.cl"
-    },
-    {
-      "id": "cafediario-brunch-clasico-1",
-      "storeId": "cafediario",
-      "name": "Brunch clásico",
-      "category": "brunch_box",
-      "role": "brunch_individual",
-      "qualityTier": "standard",
-      "format": { "unitType": "person", "quantity": 1 },
-      "price": { "amount": 18900, "currency": "CLP", "basis": "per_person" },
-      "tags": ["coffee", "breakfast", "gift"],
-      "useCases": ["adult_birthday_home", "networking_venue"],
-      "source": "cafediario.cl"
-    },
-    {
-      "id": "manungo-pack-40-mechadas-40",
-      "storeId": "manungo",
-      "name": "Pack 40 mechadas",
-      "category": "main_delivery",
-      "role": "sandwich_pack",
-      "qualityTier": "budget",
-      "format": { "unitType": "units", "quantity": 40 },
-      "price": { "amount": 115000, "currency": "CLP", "basis": "per_box" },
-      "tags": ["beef", "chilean", "ready_to_heat"],
-      "useCases": ["big_home_party"],
-      "source": "manungo.cl"
+      "id": "global",
+      "name": "Global party catalog v4",
+      "locations": [
+        "Santiago"
+      ],
+      "notes": "Unified catalog generated from party_all_items_v4.csv",
+      "items": [
+        {
+          "id": "item-1",
+          "name": "",
+          "description": "",
+          "category": "finger_food",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "chicken",
+            "avocado"
+          ]
+        },
+        {
+          "id": "item-2",
+          "name": "",
+          "description": "",
+          "category": "finger_food",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "chicken"
+          ]
+        },
+        {
+          "id": "item-3",
+          "name": "",
+          "description": "",
+          "category": "finger_food",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "vegetarian",
+            "gourmet"
+          ]
+        },
+        {
+          "id": "item-4",
+          "name": "",
+          "description": "",
+          "category": "finger_food",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "ham",
+            "cheese"
+          ]
+        },
+        {
+          "id": "item-5",
+          "name": "",
+          "description": "",
+          "category": "finger_food",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "seafood",
+            "gourmet"
+          ]
+        },
+        {
+          "id": "item-6",
+          "name": "",
+          "description": "",
+          "category": "finger_food",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "assorted"
+          ]
+        },
+        {
+          "id": "item-7",
+          "name": "",
+          "description": "",
+          "category": "catering_pack",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "full_service",
+            "cocktail"
+          ]
+        },
+        {
+          "id": "item-8",
+          "name": "",
+          "description": "",
+          "category": "catering_pack",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "seafood",
+            "ceviche",
+            "premium"
+          ]
+        },
+        {
+          "id": "item-9",
+          "name": "",
+          "description": "",
+          "category": "main_prepared",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "beef",
+            "ready_to_heat"
+          ]
+        },
+        {
+          "id": "item-10",
+          "name": "",
+          "description": "",
+          "category": "main_prepared",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "soup",
+            "vegetarian",
+            "ready_to_heat"
+          ]
+        },
+        {
+          "id": "item-11",
+          "name": "",
+          "description": "",
+          "category": "brunch_box",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "coffee",
+            "breakfast",
+            "gift"
+          ]
+        },
+        {
+          "id": "item-12",
+          "name": "",
+          "description": "",
+          "category": "brunch_box",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "coffee",
+            "breakfast",
+            "gourmet"
+          ]
+        },
+        {
+          "id": "item-13",
+          "name": "",
+          "description": "",
+          "category": "brunch_box",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "coffee",
+            "breakfast",
+            "gift"
+          ]
+        },
+        {
+          "id": "item-14",
+          "name": "",
+          "description": "",
+          "category": "brunch_box",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "gift",
+            "valentines",
+            "ferrero"
+          ]
+        },
+        {
+          "id": "item-15",
+          "name": "",
+          "description": "",
+          "category": "brunch_box",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "gift",
+            "birthday",
+            "cake"
+          ]
+        },
+        {
+          "id": "item-16",
+          "name": "",
+          "description": "",
+          "category": "brunch_box",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "coffee",
+            "acai",
+            "healthy"
+          ]
+        },
+        {
+          "id": "item-17",
+          "name": "",
+          "description": "",
+          "category": "finger_food",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "chicken",
+            "ham",
+            "egg"
+          ]
+        },
+        {
+          "id": "item-18",
+          "name": "",
+          "description": "",
+          "category": "finger_food",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "chicken",
+            "ham",
+            "egg"
+          ]
+        },
+        {
+          "id": "item-19",
+          "name": "",
+          "description": "",
+          "category": "dessert",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "pie",
+            "cheesecake",
+            "assorted"
+          ]
+        },
+        {
+          "id": "item-20",
+          "name": "",
+          "description": "",
+          "category": "catering_pack",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "full_service",
+            "premium",
+            "quiches"
+          ]
+        },
+        {
+          "id": "item-21",
+          "name": "",
+          "description": "",
+          "category": "main_delivery",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "beef",
+            "chilean",
+            "ready_to_heat"
+          ]
+        },
+        {
+          "id": "item-22",
+          "name": "",
+          "description": "",
+          "category": "main_delivery",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "beef",
+            "chilean",
+            "ready_to_heat"
+          ]
+        },
+        {
+          "id": "item-23",
+          "name": "",
+          "description": "",
+          "category": "main_delivery",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "sausage",
+            "chilean",
+            "ready_to_heat"
+          ]
+        },
+        {
+          "id": "item-24",
+          "name": "",
+          "description": "",
+          "category": "main_delivery",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "chicken",
+            "chilean",
+            "ready_to_heat"
+          ]
+        },
+        {
+          "id": "item-25",
+          "name": "",
+          "description": "",
+          "category": "main_delivery",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "beef",
+            "chilean",
+            "skewers"
+          ]
+        },
+        {
+          "id": "item-26",
+          "name": "",
+          "description": "",
+          "category": "cheese",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "cheese",
+            "fresh",
+            "italian"
+          ]
+        },
+        {
+          "id": "item-27",
+          "name": "",
+          "description": "",
+          "category": "cheese",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "cheese",
+            "sheep",
+            "spanish",
+            "gourmet"
+          ]
+        },
+        {
+          "id": "item-28",
+          "name": "",
+          "description": "",
+          "category": "charcuterie",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "ham",
+            "spanish",
+            "charcuterie"
+          ]
+        },
+        {
+          "id": "item-29",
+          "name": "",
+          "description": "",
+          "category": "fermented",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "kimchi",
+            "fermented",
+            "spicy"
+          ]
+        },
+        {
+          "id": "item-30",
+          "name": "",
+          "description": "",
+          "category": "frozen",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "gyoza",
+            "shrimp",
+            "finger_food"
+          ]
+        },
+        {
+          "id": "item-31",
+          "name": "",
+          "description": "",
+          "category": "wine",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "wine",
+            "white"
+          ]
+        },
+        {
+          "id": "item-32",
+          "name": "",
+          "description": "",
+          "category": "wine",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "wine",
+            "rose"
+          ]
+        },
+        {
+          "id": "item-33",
+          "name": "",
+          "description": "",
+          "category": "spirits",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "gin",
+            "spirit"
+          ]
+        },
+        {
+          "id": "item-34",
+          "name": "",
+          "description": "",
+          "category": "coffee",
+          "subcategory": "",
+          "price": null,
+          "vendorName": "",
+          "venueName": "",
+          "serviceType": "",
+          "tags": [
+            "coffee",
+            "beans",
+            "espresso"
+          ]
+        }
+      ]
     }
   ]
 }
