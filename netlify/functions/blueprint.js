@@ -4,6 +4,9 @@ import fs from "fs";
 import path from "path";
 import OpenAI from "openai";
 
+<div style={{fontSize:12, opacity:0.7, marginBottom:8}}>
+  Source: {bp?.shopping_list || bp?.blueprint ? "AI function" : "FALLBACK"}
+</div>
 /**
  * ============
  * LOAD CATALOG
