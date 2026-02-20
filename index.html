@@ -378,19 +378,29 @@ function buildShoppingList(supplies){
         /* =========================================
            AI & FALLBACK GENERATORS
            ========================================= */
-        async function generateBlueprint(formData) {
-            try {
-                const r = await fetch("/.netlify/functions/blueprint", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(formData)
-                });
-                if (r.ok) return r.json();
-                return null;
-            } catch (e) {
-                return null;
-            }
-        }
+        async function generateBlueprint(data) {
+  const res = await fetch('/.netlify/functions/blueprint', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      eventType: 'adult_birthday_home',
+      guestCount: data.guests || 20,
+      budgetCLP: data.budget || 0,
+      location: data.location || 'Santiago',
+      notes: data.notes || '',
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error('Blueprint HTTP ' + res.status);
+  }
+
+  // IMPORTANT: the handler already returns the blueprint object as the body
+  const bp = await res.json();
+  return bp;  // <— not bp.blueprint
+}
+
+        
 
         function generateFallback(formData) {
             const g=parseInt(formData.guestCount)||30, b=parseInt(formData.budget)||2000000;
