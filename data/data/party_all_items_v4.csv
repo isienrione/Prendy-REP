@@ -1,0 +1,36 @@
+Store,Category,Role,Product Name,Format/Units,Price (CLP),Price Basis,Quality Tier,Tags,Use Cases,Section
+novoandina.cl,finger_food,mini_sandwich,Mini sándwich miga ave palta,12,14900,per_box,standard,"chicken,avocado","adult_birthday_home,office_farewell_venue",catering
+novoandina.cl,finger_food,mini_sandwich,Mini sándwich miga ave mayo,12,13900,per_box,standard,"chicken","adult_birthday_home,office_farewell_venue",catering
+novoandina.cl,finger_food,mini_sandwich,Mini sándwich Palmito Ricotta,12,15900,per_box,premium,"vegetarian,gourmet","adult_birthday_home,networking_venue",catering
+novoandina.cl,finger_food,mini_croissant,Mini croissant jamón y queso,12,14700,per_box,standard,"ham,cheese","adult_birthday_home,office_farewell_venue",catering
+novoandina.cl,finger_food,mini_croissant,Mini Croissant Salmón Queso Crema Ciboulette,12,19900,per_box,premium,"seafood,gourmet","adult_birthday_home,networking_venue",catering
+novoandina.cl,finger_food,mix_pack,Mix Mini sándwiches Miga x 50,50,62900,per_box,standard,"assorted","adult_birthday_home,big_home_party",catering
+novoandina.cl,catering_pack,cocktail_dinner,Picoteo Celebremos! (para 15),15,260900,per_pack,premium,"full_service,cocktail","adult_birthday_home,big_home_party",catering
+novoandina.cl,catering_pack,cocktail_dinner,Picoteo Los Sibaritas (para 15),15,389900,per_pack,premium,"seafood,ceviche,premium","adult_birthday_home,networking_venue",catering
+novoandina.cl,main_prepared,individual_meal,Milanesa de res con puré natural,1,7900,per_unit,standard,"beef,ready_to_heat","family_lunch_bbq_home",catering
+novoandina.cl,main_prepared,soup,Crema de Verduras,1,4900,per_unit,standard,"soup,vegetarian,ready_to_heat","family_lunch_bbq_home",catering
+cafediario.cl,brunch_box,brunch_individual,Brunch clásico,1,18900,per_person,standard,"coffee,breakfast,gift","adult_birthday_home,networking_venue",catering
+cafediario.cl,brunch_box,brunch_individual,Brunch gourmet,1,24900,per_person,premium,"coffee,breakfast,gourmet","adult_birthday_home,networking_venue",catering
+cafediario.cl,brunch_box,brunch_sharing,Brunch clásico para compartir,2,34900,per_pack,standard,"coffee,breakfast,gift","adult_birthday_home,networking_venue",catering
+cafediario.cl,brunch_box,special_occasion,Brunch día del amor,1,32900,per_person,premium,"gift,valentines,ferrero","adult_birthday_home",catering
+cafediario.cl,brunch_box,special_occasion,Brunch cumpleaños,1,26900,per_person,standard,"gift,birthday,cake","adult_birthday_home",catering
+cafediario.cl,brunch_box,daily_pack,Pack Acaí bowl,1,15000,per_person,standard,"coffee,acai,healthy","adult_birthday_home,networking_venue",catering
+cafediario.cl,finger_food,mini_croissant,Mini croissant clásico,per_person,2800,per_person,standard,"chicken,ham,egg","adult_birthday_home,office_farewell_venue,networking_venue",catering
+cafediario.cl,finger_food,box_unit,Caja 12 un Tapaditos Brioche,12,16900,per_box,standard,"chicken,ham,egg","adult_birthday_home,office_farewell_venue",catering
+cafediario.cl,dessert,mini_tartaleta,Mini tartaletas surtidas,per_person,2400,per_person,standard,"pie,cheesecake,assorted","adult_birthday_home,office_farewell_venue,networking_venue",catering
+cafediario.cl,catering_pack,mesa_catering,Mesa Festín (7 salados + 4 dulces),per_person,14900,per_person,premium,"full_service,premium,quiches","adult_birthday_home,networking_venue",catering
+manungo.cl,main_delivery,sandwich_pack,Pack 20 lomitos,20,53000,per_box,budget,"beef,chilean,ready_to_heat","big_home_party,family_lunch_bbq_home",catering
+manungo.cl,main_delivery,sandwich_pack,Pack 40 mechadas,40,115000,per_box,budget,"beef,chilean,ready_to_heat","big_home_party",catering
+manungo.cl,main_delivery,sandwich_pack,Pack 20 hot-dog,20,51000,per_box,budget,"sausage,chilean,ready_to_heat","big_home_party,family_lunch_bbq_home",catering
+manungo.cl,main_delivery,main_dish,Pollo ganso a la olla,1,5900,per_unit,standard,"chicken,chilean,ready_to_heat","big_home_party,family_lunch_bbq_home",catering
+manungo.cl,main_delivery,main_dish,Anticuchos,per_person,3500,per_person,budget,"beef,chilean,skewers","big_home_party,family_lunch_bbq_home",catering
+aperitivo.cl,cheese,cheese_cow,Burrata Granarolo 150 g,150,4990,per_unit,standard,"cheese,fresh,italian","adult_birthday_home,wine_and_cheese",grocery
+aperitivo.cl,cheese,cheese_sheep,Queso Manchego In Bocca Romero 200 g,200,6990,per_unit,premium,"cheese,sheep,spanish,gourmet","adult_birthday_home,wine_and_cheese",grocery
+aperitivo.cl,charcuterie,ham,Jamón Serrano Costa Brava 500 g,500,9990,per_unit,premium,"ham,spanish,charcuterie","adult_birthday_home,wine_and_cheese",grocery
+aperitivo.cl,fermented,dip,Kimchi La Fermentista 400 g,400,6690,per_unit,premium,"kimchi,fermented,spicy","adult_birthday_home,big_home_party",grocery
+aperitivo.cl,frozen,finger_food,Gyozas de Camarón Asia Wok 30 un,30,13990,per_box,standard,"gyoza,shrimp,finger_food","adult_birthday_home,big_home_party",grocery
+aperitivo.cl,wine,wine_white,Vino Sauvignon Blanc J. Bouchon,750,3500,per_unit,budget,"wine,white","adult_birthday_home,family_lunch_bbq_home",drinks
+aperitivo.cl,wine,wine_rose,Vino Rosé Calyptra Vivendo,750,8990,per_unit,premium,"wine,rose","adult_birthday_home,networking_venue",drinks
+aperitivo.cl,spirits,gin,Gin Hendrick's 700 ml,700,25990,per_unit,premium,"gin,spirit","adult_birthday_home,party_high_energy",drinks
+aperitivo.cl,coffee,coffee_beans,Café Kimbo Intenso 1 kg,1000,14990,per_unit,standard,"coffee,beans,espresso","adult_birthday_home,brunch",grocery
+=
