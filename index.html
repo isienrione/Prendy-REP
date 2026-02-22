@@ -2740,9 +2740,11 @@ function App() {
       bp = await generateBlueprint(data);
 
       alert(
-        "[AFTER FETCH] typeof=" + (typeof bp) +
-        " | keys=" + Object.keys(bp || {}).join(", ")
-      );
+  "[AFTER FETCH] typeof=" + (typeof bp) +
+  " | ctor=" + (bp?.constructor?.name || "none") +
+  " | hasStatus=" + (bp && "status" in bp) +
+  " | keys=" + Object.keys(bp || {}).join(", ")
+);
 
       if (!bp || !bp.timeline) throw new Error("no timeline");
     } catch (e) {
