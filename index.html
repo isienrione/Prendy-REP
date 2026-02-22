@@ -1,125 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prendy — The OS that makes social life Effortless</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=General+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --ink:#0f0f0f;--paper:#faf9f7;--warm:#f5f0eb;--stone:#8a8578;
-            --rose:#d4536a;--violet:#7c5ce0;--sage:#3d8b6e;--amber:#d4930a;
-            --border:#e8e4de;--card:#ffffff;
-            --serif:'Instrument Serif',Georgia,serif;
-            --sans:'General Sans',-apple-system,sans-serif;
-        }
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:var(--sans);background:var(--paper);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-        button{cursor:pointer;font-family:var(--sans);transition:all .15s ease}
-        button:active{transform:scale(.97)}
-        ::selection{background:rgba(124,92,224,.15)}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-        @keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-        @keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
-        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-        @keyframes confetti1{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(-40px,-80px) rotate(200deg) scale(0)}}
-        @keyframes confetti2{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(50px,-90px) rotate(-180deg) scale(0)}}
-        @keyframes confetti3{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(10px,-100px) rotate(150deg) scale(0)}}
-        @keyframes scrollLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-        .fade-up{animation:fadeUp .5s ease forwards}
-        .fade-up-d1{animation:fadeUp .5s ease .1s forwards;opacity:0}
-        .fade-up-d2{animation:fadeUp .5s ease .2s forwards;opacity:0}
-        .fade-up-d3{animation:fadeUp .5s ease .3s forwards;opacity:0}
-        .fade-up-d4{animation:fadeUp .5s ease .4s forwards;opacity:0}
-        .fade-up-d5{animation:fadeUp .5s ease .5s forwards;opacity:0}
-        .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .2s ease}
-        .card:hover{box-shadow:0 8px 30px rgba(0,0,0,.04)}
-        input,textarea,select{font-family:var(--sans);font-size:15px;padding:14px 18px;border:1.5px solid var(--border);border-radius:14px;background:var(--card);color:var(--ink);width:100%;outline:none;transition:border-color .2s}
-        input:focus,textarea:focus,select:focus{border-color:var(--violet)}
-        .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:13px;font-weight:600}
-        ::-webkit-scrollbar{width:6px;height:6px}
-        ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-        .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:14px 28px;border-radius:14px;font-weight:600;font-size:14px;z-index:300;animation:popIn .3s ease;display:flex;align-items:center;gap:10px;box-shadow:0 12px 40px rgba(0,0,0,.15)}
-        .checkbox-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;transition:all .15s}
-        .checkbox-row:hover{background:var(--warm)}
-        .custom-check{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0}
-        .custom-check.checked{background:var(--sage);border-color:var(--sage)}
-        .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:200;animation:fadeIn .2s ease;backdrop-filter:blur(4px)}
-        .modal-body{animation:popIn .25s ease;max-height:90vh;overflow-y:auto}
-        .booking-step{display:flex;align-items:center;gap:10px;padding:12px 0}
-        .booking-step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-        .time-slot{padding:10px 16px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);font-size:14px;font-weight:500;text-align:center;cursor:pointer;transition:all .15s}
-        .time-slot:hover{border-color:var(--violet)}
-        .time-slot.selected{border-color:var(--violet);background:rgba(124,92,224,.06);color:var(--violet);font-weight:600}
-        .carousel-track{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;scrollbar-width:none;padding:0 calc(50vw - 170px) 16px}
-        .carousel-track::-webkit-scrollbar{display:none}
-        .carousel-card{scroll-snap-align:center;flex-shrink:0;width:340px;border-radius:24px;overflow:hidden;position:relative;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease,opacity .3s ease}
-        .carousel-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.2)}
-        @media(max-width:700px){
-            .grid-2{grid-template-columns:1fr!important}
-            .carousel-card{width:290px}
-            .carousel-track{padding:0 calc(50vw - 145px) 16px}
-        }
-        /* About Section */
-        .about-section{position:relative;overflow:hidden}
-        .about-section::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,224,0.06) 0%,transparent 70%)}
-        .about-section::after{content:'';position:absolute;bottom:-200px;left:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(212,83,106,0.06) 0%,transparent 70%)}
-        /* Dashboard Styles */
-        .dash-grid{display:grid;gridTemplateColumns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-        .dash-metric{text-align:center;padding:24px 16px}
-        .dash-metric .value{font-family:var(--serif);font-size:32px;font-weight:700}
-        .dash-metric .label{font-size:13px;color:var(--stone);margin-top:4px}
-        .rsvp-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;transition:all .15s}
-        .rsvp-row:hover{background:var(--warm)}
-        .status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-        .split-input{width:80px;text-align:center;padding:8px;font-size:14px;border-radius:10px}
-        .role-menu{position:absolute;top:100%;right:0;margin-top:8px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.1);padding:8px;min-width:220px;z-index:150;animation:popIn .2s ease}
-        .role-option{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;border:none;background:transparent;width:100%;font-size:14px;font-weight:500;color:var(--ink);text-align:left;transition:all .15s}
-        .role-option:hover{background:var(--warm)}
-        .calendar-day{width:100%;aspect-ratio:1;border-radius:10px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:500;transition:all .15s;cursor:default}
-        .calendar-day.has-booking{background:rgba(124,92,224,.06);border-color:rgba(124,92,224,.2);color:var(--violet)}
-        .calendar-day.today{border-color:var(--rose);font-weight:700}
-    </style>
-</head>
-<body>
-    <div id="root"></div>
-<div id="js-errors" style="white-space:pre-wrap;font-family:ui-monospace, Menlo, monospace;font-size:12px;padding:10px 12px;border-top:1px solid #eee;background:#fff6f6;color:#7a0000;display:none"></div>
-<script>
-(function(){
-  const box=document.getElementById("js-errors");
-  function show(msg){
-    try{ box.style.display="block"; box.textContent += msg + "\n\n"; }catch(e){}
-  }
-  // JS runtime errors (now with CORS visibility because scripts include crossorigin="anonymous")
-  window.addEventListener("error",(e)=>{
-    show("[JS ERROR] "+(e.message||"unknown")+"\n"+(e.filename||"")+":"+(e.lineno||"")+":"+(e.colno||""));
-  });
-  // Unhandled promise rejections
-  window.addEventListener("unhandledrejection",(e)=>{
-    const r=e.reason;
-    show("[PROMISE REJECTION] "+(r && (r.stack||r.message) || String(r)));
-  });
-  // Script load failures (bad URL / blocked CDN)
-  document.addEventListener("error", function(e){
-    const t=e.target;
-    if(t && t.tagName==="SCRIPT"){
-      show("[SCRIPT LOAD FAILED] "+(t.src||"(inline)"));
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prendy — The OS that makes social life Effortless</title>
+
+  <!-- React (no crossorigin; defer for stability on Safari/iOS) -->
+  <script defer src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script defer src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <!-- Babel (temporary — remove later by bundling for production) -->
+  <script defer src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- On-page error logging -->
+  <script>
+    (function () {
+      function show(msg) {
+        try {
+          var box = document.getElementById("errorBox");
+          if (!box) return;
+          box.style.display = "block";
+          box.textContent += msg + "\n\n";
+        } catch (e) {}
+      }
+
+      // JS runtime errors
+      window.addEventListener("error", function (event) {
+        var err = event.error;
+        var msg =
+          "[JS ERROR] " +
+          (event.message || "unknown") +
+          "\n" +
+          (err && err.stack ? err.stack : (event.filename || "") + ":" + (event.lineno || "") + ":" + (event.colno || ""));
+        console.error("GLOBAL ERROR:", err || event.message);
+        show(msg);
+      });
+
+      // Unhandled promise rejections
+      window.addEventListener("unhandledrejection", function (event) {
+        var r = event.reason;
+        var msg =
+          "[PROMISE REJECTION] " +
+          (r && (r.stack || r.message) ? (r.stack || r.message) : String(r));
+        console.error("PROMISE ERROR:", r);
+        show(msg);
+      });
+
+      // Script load failures (bad URL / blocked CDN)
+      document.addEventListener(
+        "error",
+        function (e) {
+          var t = e.target;
+          if (t && t.tagName === "SCRIPT") {
+            show("[SCRIPT LOAD FAILED] " + (t.src || "(inline)"));
+          }
+        },
+        true
+      );
+    })();
+  </script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=General+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --ink:#0f0f0f;--paper:#faf9f7;--warm:#f5f0eb;--stone:#8a8578;
+      --rose:#d4536a;--violet:#7c5ce0;--sage:#3d8b6e;--amber:#d4930a;
+      --border:#e8e4de;--card:#ffffff;
+      --serif:'Instrument Serif',Georgia,serif;
+      --sans:'General Sans',-apple-system,sans-serif;
     }
-  }, true);
-})();
-</script>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--sans);background:var(--paper);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+    button{cursor:pointer;font-family:var(--sans);transition:all .15s ease}
+    button:active{transform:scale(.97)}
+    ::selection{background:rgba(124,92,224,.15)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes slideIn{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+    @keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    @keyframes confetti1{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(-40px,-80px) rotate(200deg) scale(0)}}
+    @keyframes confetti2{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(50px,-90px) rotate(-180deg) scale(0)}}
+    @keyframes confetti3{0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}100%{opacity:0;transform:translate(10px,-100px) rotate(150deg) scale(0)}}
+    @keyframes scrollLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .fade-up{animation:fadeUp .5s ease forwards}
+    .fade-up-d1{animation:fadeUp .5s ease .1s forwards;opacity:0}
+    .fade-up-d2{animation:fadeUp .5s ease .2s forwards;opacity:0}
+    .fade-up-d3{animation:fadeUp .5s ease .3s forwards;opacity:0}
+    .fade-up-d4{animation:fadeUp .5s ease .4s forwards;opacity:0}
+    .fade-up-d5{animation:fadeUp .5s ease .5s forwards;opacity:0}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;transition:all .2s ease}
+    .card:hover{box-shadow:0 8px 30px rgba(0,0,0,.04)}
+    input,textarea,select{font-family:var(--sans);font-size:15px;padding:14px 18px;border:1.5px solid var(--border);border-radius:14px;background:var(--card);color:var(--ink);width:100%;outline:none;transition:border-color .2s}
+    input:focus,textarea:focus,select:focus{border-color:var(--violet)}
+    .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:13px;font-weight:600}
+    ::-webkit-scrollbar{width:6px;height:6px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:14px 28px;border-radius:14px;font-weight:600;font-size:14px;z-index:300;animation:popIn .3s ease;display:flex;align-items:center;gap:10px;box-shadow:0 12px 40px rgba(0,0,0,.15)}
+    .checkbox-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;transition:all .15s}
+    .checkbox-row:hover{background:var(--warm)}
+    .custom-check{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0}
+    .custom-check.checked{background:var(--sage);border-color:var(--sage)}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:200;animation:fadeIn .2s ease;backdrop-filter:blur(4px)}
+    .modal-body{animation:popIn .25s ease;max-height:90vh;overflow-y:auto}
+    .booking-step{display:flex;align-items:center;gap:10px;padding:12px 0}
+    .booking-step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+    .time-slot{padding:10px 16px;border-radius:12px;border:1.5px solid var(--border);background:var(--card);font-size:14px;font-weight:500;text-align:center;cursor:pointer;transition:all .15s}
+    .time-slot:hover{border-color:var(--violet)}
+    .time-slot.selected{border-color:var(--violet);background:rgba(124,92,224,.06);color:var(--violet);font-weight:600}
+    .carousel-track{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scroll-behavior:smooth;scrollbar-width:none;padding:0 calc(50vw - 170px) 16px}
+    .carousel-track::-webkit-scrollbar{display:none}
+    .carousel-card{scroll-snap-align:center;flex-shrink:0;width:340px;border-radius:24px;overflow:hidden;position:relative;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease,opacity .3s ease}
+    .carousel-card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+    @media(max-width:700px){
+      .grid-2{grid-template-columns:1fr!important}
+      .carousel-card{width:290px}
+      .carousel-track{padding:0 calc(50vw - 145px) 16px}
+    }
+    /* About Section */
+    .about-section{position:relative;overflow:hidden}
+    .about-section::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(124,92,224,0.06) 0%,transparent 70%)}
+    .about-section::after{content:'';position:absolute;bottom:-200px;left:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(212,83,106,0.06) 0%,transparent 70%)}
+    /* Dashboard Styles */
+    .dash-grid{display:grid;gridTemplateColumns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+    .dash-metric{text-align:center;padding:24px 16px}
+    .dash-metric .value{font-family:var(--serif);font-size:32px;font-weight:700}
+    .dash-metric .label{font-size:13px;color:var(--stone);margin-top:4px}
+    .rsvp-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;transition:all .15s}
+    .rsvp-row:hover{background:var(--warm)}
+    .status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+    .split-input{width:80px;text-align:center;padding:8px;font-size:14px;border-radius:10px}
+    .role-menu{position:absolute;top:100%;right:0;margin-top:8px;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.1);padding:8px;min-width:220px;z-index:150;animation:popIn .2s ease}
+    .role-option{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;border:none;background:transparent;width:100%;font-size:14px;font-weight:500;color:var(--ink);text-align:left;transition:all .15s}
+    .role-option:hover{background:var(--warm)}
+    .calendar-day{width:100%;aspect-ratio:1;border-radius:10px;border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:500;transition:all .15s;cursor:default}
+    .calendar-day.has-booking{background:rgba(124,92,224,.06);border-color:rgba(124,92,224,.2);color:var(--violet)}
+    .calendar-day.today{border-color:var(--rose);font-weight:700}
+  </style>
+</head>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef, useCallback, useMemo } = React;
+<body>
+  <!-- This is the on-screen error box -->
+  <div id="errorBox" style="
+    white-space:pre-wrap;
+    font-family:ui-monospace, Menlo, monospace;
+    font-size:12px;
+    padding:10px 12px;
+    border-bottom:1px solid #eee;
+    background:#fff6f6;
+    color:#7a0000;
+    display:none
+  "></div>
 
-        /* =========================================
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+    /* =========================================
+       VENDOR DB
+       ========================================= */ /* =========================================
            VENDOR DB
            ========================================= */
         const VENDORS = {
