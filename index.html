@@ -2746,7 +2746,7 @@ function App() {
   " | keys=" + Object.keys(bp || {}).join(", ")
 );
 
-      if (!bp || !bp.timeline) throw new Error("no timeline");
+      if (!bp || bp.ok !== true || !bp.blueprint) throw new Error("invalid response");
     } catch (e) {
       alert("[IN CATCH] " + (e?.message || String(e)));
       bp = generateFallback(data);
