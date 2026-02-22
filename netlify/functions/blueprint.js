@@ -1,13 +1,10 @@
 // netlify/functions/blueprint.js
+
 import fs from "fs";
 import path from "path";
 import OpenAI from "openai";
 
-/**
- * ============
- * LOAD CATALOG
- * ============
- */
+// ---------- Load full party catalog v4 ----------
 const catalogPath = path.join(process.cwd(), "data", "party_catalog_v4.json");
 
 let RAW_CATALOG;
@@ -17,253 +14,281 @@ try {
   RAW_CATALOG = JSON.parse(fs.readFileSync(catalogPath, "utf8"));
   PARTY_ITEMS = RAW_CATALOG?.stores?.[0]?.items || [];
   console.log(
-    `[Prendy] Loaded party_catalog_v4.json: version=${RAW_CATALOG.version}, currency=${RAW_CATALOG.currency}, items=${PARTY_ITEMS.length}`
+    `[Prendy] Loaded party_catalog_v4.json with ${PARTY_ITEMS.length} items (version=${RAW_CATALOG.version}, currency=${RAW_CATALOG.currency})`
   );
 } catch (err) {
   console.error(
-    "[Prendy] Failed to load data/party_catalog_v4.json; falling back to empty catalog:",
+    "[Prendy] Failed to load data/party_catalog_v4.json; using empty catalog:",
     err
   );
   RAW_CATALOG = { version: "4.0", currency: "CLP", stores: [] };
   PARTY_ITEMS = [];
 }
 
-/**
- * ======================
- * LIGHTWEIGHT CATALOG IQ
- * ======================
- */
-function normalizeTag(t) {
-  return (t || "").toString().trim().toLowerCase();
-}
-
-function scoreForEvent(item, eventType) {
-  const tags = (item.tags || []).map(normalizeTag);
-  const cat = normalizeTag(item.category);
-
-  let score = 0;
-
-  // Base on category
-  if (["finger_food", "brunch_box", "cheese", "charcuterie"].includes(cat)) score += 3;
-  if (["main_delivery", "main_prepared"].includes(cat)) score += 4;
-  if (["dessert"].includes(cat)) score += 3;
-  if (["wine", "beer", "spirits", "soft_drink", "coffee"].includes(cat)) score += 2;
-
-  // Event-specific boosts
-  if (eventType === "adult_birthday_home") {
-    if (tags.includes("adult_birthday_home")) score += 3;
-    if (tags.includes("big_home_party")) score += 2;
-    if (tags.includes("party")) score += 2;
-    if (tags.includes("chilean")) score += 2;
-    if (tags.includes("ready_to_heat")) score += 1;
-    if (tags.includes("finger_food")) score += 1;
+// ---------- Helper: summarize catalog for the model ----------
+function buildCatalogSummary(maxItems = 120) {
+  if (!PARTY_ITEMS.length) {
+    return "Catalog is empty (PARTY_ITEMS.length === 0).";
   }
 
-  return score;
-}
-
-function categorizeItemsForEvent(eventType) {
-  const buckets = { fingerFoods: [], mains: [], desserts: [], drinks: [], other: [] };
-
-  PARTY_ITEMS.forEach((item) => {
-    const cat = normalizeTag(item.category);
-    const scored = { ...item, score: scoreForEvent(item, eventType) };
-
-    if (["finger_food", "cheese", "charcuterie", "brunch_box"].includes(cat)) buckets.fingerFoods.push(scored);
-    else if (["main_delivery", "main_prepared"].includes(cat)) buckets.mains.push(scored);
-    else if (["dessert"].includes(cat)) buckets.desserts.push(scored);
-    else if (["wine", "beer", "spirits", "soft_drink", "coffee"].includes(cat)) buckets.drinks.push(scored);
-    else buckets.other.push(scored);
-  });
-
-  for (const key of Object.keys(buckets)) {
-    buckets[key].sort((a, b) => (b.score !== a.score ? b.score - a.score : (a.name || "").localeCompare(b.name || "")));
-  }
-
-  return buckets;
-}
-
-function summarizeBucket(label, items, max = 40) {
+  const total = PARTY_ITEMS.length;
+  const sample = PARTY_ITEMS.slice(0, maxItems);
   const lines = [];
-  lines.push(`=== ${label} (top ${Math.min(max, items.length)} of ${items.length}) ===`);
-  items.slice(0, max).forEach((it) => {
+  lines.push(
+    `Catalog version: ${RAW_CATALOG.version}, currency: ${RAW_CATALOG.currency}`
+  );
+  lines.push(`Total items: ${total}`);
+  lines.push("");
+  lines.push(
+    "Each item has: id, name, description, category, subcategory, price (CLP), vendorName, venueName, serviceType, tags[]."
+  );
+  lines.push("");
+  lines.push(`Sample of up to ${maxItems} items:`);
+  sample.forEach((it) => {
     lines.push(
-      `- id=${it.id || "?"}, name=${it.name || "?"}, category=${it.category || "?"}, score=${it.score}, price=${it.price ?? "null"}, tags=${(it.tags || []).join(", ")}`
+      `- id=${it.id || "?"}, name=${it.name || "?"}, category=${
+        it.category || "?"
+      }, subcategory=${it.subcategory || ""}, price=${
+        it.price != null ? it.price : "null"
+      }, vendor=${it.vendorName || ""}, tags=${(it.tags || []).join(", ")}`
     );
   });
   return lines.join("\n");
 }
 
-function buildStructuredCatalogView(eventType) {
-  const buckets = categorizeItemsForEvent(eventType);
-  const lines = [];
-  lines.push(`Catalog version=${RAW_CATALOG.version}, currency=${RAW_CATALOG.currency}, totalItems=${PARTY_ITEMS.length}`);
-  lines.push("");
-  lines.push(summarizeBucket("Finger foods / brunch / cheese boards", buckets.fingerFoods));
-  lines.push("");
-  lines.push(summarizeBucket("Mains / main delivery / prepared mains", buckets.mains));
-  lines.push("");
-  lines.push(summarizeBucket("Desserts & sweets", buckets.desserts));
-  lines.push("");
-  lines.push(summarizeBucket("Drinks & coffee", buckets.drinks));
-  lines.push("");
-  lines.push(summarizeBucket("Other", buckets.other));
-  return { text: lines.join("\n"), buckets };
-}
+// ---------- Fallback generator ----------
+function generateFallback(formData) {
+  const g = parseInt(formData.guestCount) || 30;
+  const b = parseInt(formData.budget) || 2000000;
 
-/**
- * ============
- * OPENAI CLIENT
- * ============
- */
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-/**
- * ================
- * HELPERS
- * ================
- */
-function clamp(n, lo, hi) {
-  const x = Number.isFinite(n) ? n : lo;
-  return Math.max(lo, Math.min(hi, x));
-}
-
-function safeString(x, fallback = "") {
-  return typeof x === "string" ? x : fallback;
-}
-
-// Ensure the response always has the shape the front-end can render
-function normalizePlanShape(plan, guestCount) {
-  const g = clamp(parseInt(guestCount, 10) || 20, 1, 500);
-
-  const out = {
-    ok: true,
-    overview: plan?.overview && typeof plan.overview === "object"
-      ? {
-          title: safeString(plan.overview.title, "Event Blueprint"),
-          summary: safeString(plan.overview.summary, ""),
-        }
-      : { title: "Event Blueprint", summary: "" },
-
-    // Frontend expects timeline array (or will show text fallback)
-    timeline: Array.isArray(plan?.timeline)
-      ? plan.timeline
-          .map((t) => ({
-            time: safeString(t?.time, ""),
-            task: safeString(t?.task, ""),
-            owner: safeString(t?.owner, ""),
-          }))
-          .filter((t) => t.time || t.task)
-      : [],
-
-    // Frontend card UI expects supplies.{food|drinks|equipment} arrays of {item,quantity,unit,note}
+  return {
+    summary: `A ${(formData.vibe || "casual").toLowerCase()} ${(formData.type || "gathering").toLowerCase()} for ${g} guests in ${
+      formData.setting === "outdoor"
+        ? "an outdoor Santiago setting"
+        : "a stylish indoor venue"
+    }.`,
     supplies: {
-      food: Array.isArray(plan?.supplies?.food) ? plan.supplies.food : [],
-      drinks: Array.isArray(plan?.supplies?.drinks) ? plan.supplies.drinks : [],
-      equipment: Array.isArray(plan?.supplies?.equipment) ? plan.supplies.equipment : [],
+      food: [
+        {
+          item: "Empanadas (assorted)",
+          catalogId: "fallback-empanadas",
+          quantity: g * 2,
+          unit: "pcs",
+          note: "Classic Chilean appetizer",
+          preferred_vendor: "lider",
+          estimatedPrice: g * 2 * 800,
+        },
+        {
+          item: "Main protein",
+          catalogId: "fallback-protein",
+          quantity: Math.ceil(g * 0.3),
+          unit: "kg",
+          note: "300g per person",
+          preferred_vendor: "jumbo",
+          estimatedPrice: Math.ceil(g * 0.3) * 8000,
+        },
+      ],
+      drinks: [
+        {
+          item: "Soft drinks",
+          catalogId: "fallback-sodas",
+          quantity: Math.ceil(g * 0.5),
+          unit: "liters",
+          note: "500ml per person",
+          preferred_vendor: "lider",
+          estimatedPrice: Math.ceil(g * 0.5) * 1200,
+        },
+      ],
+      misc: [],
     },
-
-    // Keep a text blueprint too (useful for the Supplies tab pre-wrap view / debugging)
-    blueprint: safeString(plan?.blueprint, ""),
+    timeline: [
+      { time: "14:00", task: "Vendor arrival & venue setup", owner: "Setup crew" },
+      { time: "16:00", task: "Sound check & table dressing", owner: "Entertainment + Staff" },
+      { time: "17:00", task: "Catering arrives, kitchen prep", owner: "Caterer" },
+      { time: "18:30", task: "Final walkthrough & lighting", owner: "You" },
+      { time: "19:00", task: "Guests arrive — welcome drinks", owner: "Bartender" },
+      { time: "19:45", task: "Dinner service begins", owner: "Waitstaff" },
+      { time: "21:00", task: "Dessert & toasts", owner: "You + Staff" },
+      { time: "22:00", task: "Music & dancing", owner: "DJ / Band" },
+      { time: "00:00", task: "Wind down, guest departure", owner: "You" },
+      { time: "00:30", task: "Cleanup & teardown", owner: "Setup crew" },
+    ],
+    budget: {
+      food: { pct: 40, amount: Math.round(b * 0.4) },
+      drinks: { pct: 25, amount: Math.round(b * 0.25) },
+      venue: { pct: 20, amount: Math.round(b * 0.2) },
+      entertainment: { pct: 10, amount: Math.round(b * 0.1) },
+      staff: { pct: 5, amount: Math.round(b * 0.05) },
+    },
+    staffing: {
+      servers: Math.ceil(g / 20),
+      bartenders: Math.ceil(g / 30),
+      setup_crew: 2,
+    },
+    tips: [
+      "Order groceries 2–3 days in advance.",
+      "Confirm vendor bookings 48 hours before the event.",
+    ],
+    risks: [
+      "Have a weather backup plan if outdoor.",
+      "Confirm guest count 3 days prior.",
+    ],
   };
-
-  // Normalize items
-  for (const k of ["food", "drinks", "equipment"]) {
-    out.supplies[k] = out.supplies[k]
-      .map((it) => ({
-        item: safeString(it?.item, safeString(it?.name, "")),
-        quantity: Number.isFinite(it?.quantity) ? it.quantity : (parseFloat(it?.qty) || 0),
-        unit: safeString(it?.unit, ""),
-        note: safeString(it?.note, safeString(it?.detail, "")),
-        preferred_store: safeString(it?.preferred_store, safeString(it?.store, "")) || undefined,
-      }))
-      .filter((it) => it.item);
-  }
-
-  // If model returned nothing structured, keep it safe
-  if (!out.blueprint && out.supplies.food.length === 0 && out.supplies.drinks.length === 0) {
-    out.blueprint = "No structured blueprint returned.";
-  }
-
-  // If no overview summary, add a generic one
-  if (!out.overview.summary) {
-    out.overview.summary = `Plan for ~${g} guests in Santiago.`;
-  }
-
-  return out;
 }
 
-/**
- * ==================
- * NETLIFY ENTRYPOINT
- * ==================
- */
+// ---------- OpenAI client ----------
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
+// ---------- Netlify Function handler ----------
 export const handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: JSON.stringify({ ok: false, error: "Method not allowed" }) };
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Method not allowed" }),
+    };
   }
 
   let body;
   try {
     body = JSON.parse(event.body || "{}");
-  } catch {
-    return { statusCode: 400, body: JSON.stringify({ ok: false, error: "Invalid JSON body" }) };
+  } catch (err) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Invalid JSON body" }),
+    };
   }
 
+  // Payload from frontend (Onboarding form)
   const {
-    eventType = "adult_birthday_home",
-    guestCount = 20,
-    budgetCLP = 0,
-    location = "Santiago",
-    notes = "",
+    type,
+    scenarioKey,
+    hostingMode,
+    tier,
+    guestCount,
+    budget,
+    date,
+    setting,
+    vibe,
+    dietary,
+    notes,
   } = body;
 
+  // Compact summary for the model
   const requestSummary = [
-    `Event type: ${eventType}`,
-    `Guest count: ${guestCount}`,
-    `Budget (CLP): ${budgetCLP}`,
-    `Location: ${location}`,
+    `Event type: ${type || "unspecified"}`,
+    `Scenario: ${scenarioKey || "unspecified"}`,
+    `Hosting mode: ${hostingMode || "unspecified"}`,
+    `Recommendation tier: ${tier || "unspecified"}`,
+    `Guest count: ${guestCount || "unspecified"}`,
+    `Budget (CLP): ${budget || "unspecified"}`,
+    `Date: ${date || "unspecified"}`,
+    `Setting: ${setting || "unspecified"}`,
+    `Vibe: ${vibe || "unspecified"}`,
+    `Dietary requirements: ${dietary || "none"}`,
     `User notes: ${notes || "none"}`,
   ].join("\n");
 
-  const { text: catalogView, buckets } = buildStructuredCatalogView(eventType);
-
-  const planningSkeleton = {
-    fingerFoodIds: buckets.fingerFoods.slice(0, 12).map((i) => i.id),
-    mainIds: buckets.mains.slice(0, 12).map((i) => i.id),
-    dessertIds: buckets.desserts.slice(0, 12).map((i) => i.id),
-    drinkIds: buckets.drinks.slice(0, 12).map((i) => i.id),
-  };
+  const catalogSummary = buildCatalogSummary(150);
 
   const systemPrompt = `
-You are Prendy, an expert party-planning assistant in Santiago, Chile.
-You have a structured catalog of real products (food, drinks, equipment).
+You are Prendy, an AI party-planning assistant for Santiago, Chile.
+You MUST base your concrete product recommendations ONLY on the structured catalog data I provide.
 
-Hard rules:
-- ONLY recommend items that exist in the catalog view and include their id.
-- Never invent generic items (e.g. "main protein") without a catalog id.
-- Quantities must scale to guest count.
+CATALOG FORMAT
+--------------
+The catalog is JSON with:
+- version (string)
+- currency (string, CLP)
+- stores: array of stores; in this version we use a single synthetic "global" store.
+- stores[0].items: array of item objects.
 
-OUTPUT FORMAT (STRICT):
-Return ONLY valid JSON (no markdown, no backticks). The JSON MUST match this schema:
+Each item object has:
+- id (string, unique) - USE THIS IN YOUR RECOMMENDATIONS
+- name (string) - human friendly product or bundle name
+- description (string) - scenarios/use cases encoded as comma-separated labels
+- category (string) - high level type like "finger_food", "brunch_box", "main_delivery", "wine", etc.
+- subcategory (string) - optional sub-type
+- price (number | null) - price in CLP
+- vendorName (string) - store or brand name, e.g. "novoandina.cl", "cafediario.cl"
+- venueName (string) - optional, often empty
+- serviceType (string) - e.g. "catering", "grocery", "drinks"
+- tags (string[]) - tags like "chicken", "seafood", "gift", "premium", "ready_to_heat", etc.
+
+OUTPUT FORMAT (CRITICAL!)
+-------------------------
+You MUST return a valid JSON object with this EXACT structure:
 
 {
-  "overview": { "title": string, "summary": string },
-  "timeline": [{ "time": string, "task": string, "owner": string }],
+  "summary": "A brief 1–2 sentence summary of the event plan",
   "supplies": {
-    "food": [{ "item": string, "quantity": number, "unit": string, "note": string, "preferred_store"?: string }],
-    "drinks": [{ "item": string, "quantity": number, "unit": string, "note": string, "preferred_store"?: string }],
-    "equipment": [{ "item": string, "quantity": number, "unit": string, "note": string, "preferred_store"?: string }]
+    "food": [
+      {
+        "item": "Product name from catalog",
+        "catalogId": "exact-catalog-id-here",
+        "quantity": 30,
+        "unit": "pcs",
+        "note": "Why this item fits (1 sentence, based on tags/description)",
+        "preferred_vendor": "novoandina.cl",
+        "estimatedPrice": 45000
+      }
+    ],
+    "drinks": [
+      {
+        "item": "Product name from catalog",
+        "catalogId": "exact-catalog-id-here",
+        "quantity": 10,
+        "unit": "bottles",
+        "note": "Why this item fits",
+        "preferred_vendor": "aperitivo.cl",
+        "estimatedPrice": 25000
+      }
+    ],
+    "misc": []
   },
-  "blueprint": string
+  "timeline": [
+    { "time": "14:00", "task": "Vendor arrival & setup", "owner": "Setup crew" },
+    { "time": "19:00", "task": "Guests arrive", "owner": "Host" }
+  ],
+  "budget": {
+    "food": { "pct": 40, "amount": 800000 },
+    "drinks": { "pct": 25, "amount": 500000 },
+    "venue": { "pct": 20, "amount": 400000 },
+    "entertainment": { "pct": 10, "amount": 200000 },
+    "staff": { "pct": 5, "amount": 100000 }
+  },
+  "staffing": {
+    "servers": 2,
+    "bartenders": 1,
+    "setup_crew": 2
+  },
+  "tips": [
+    "Short practical tip 1",
+    "Short practical tip 2"
+  ],
+  "risks": [
+    "Short risk/mitigation note 1"
+  ]
 }
 
-Rules inside supplies:
-- item must include the exact catalog id in parentheses: "Name (id=...)".
-- unit should be one of: "pcs", "kg", "bottles", "cans", "packs", "trays", "liters".
-- quantity must be a number (not a string).
+RULES
+-----
+1. Only recommend items that exist in the catalog (use exact "id" as "catalogId").
+2. Recommend AT LEAST 8–12 distinct items across food/drinks/misc categories when possible.
+3. For every item, include:
+   - item (name)
+   - catalogId (exact catalog id)
+   - quantity and unit (scaled to the guest count)
+   - preferred_vendor (from vendorName)
+   - estimatedPrice (price * quantity; if price null, estimate reasonably and say so in note).
+4. Respect the user's budget and guest count.
+5. Prefer items whose description/use cases match the scenario and vibe (e.g., "adult_birthday_home").
+6. Prefer Chilean/local items when appropriate (tags like "chilean", "asado").
+7. Explain WHY each item fits in the "note" field.
+8. Return ONLY the JSON object, no markdown, no extra commentary.
 
-Make the plan operational and realistic.
+CRITICAL: Your entire response must be valid JSON that can be parsed with JSON.parse().
 `;
 
   const userPrompt = `
@@ -271,71 +296,59 @@ USER REQUEST
 ------------
 ${requestSummary}
 
-CATALOG VIEW (GROUPED & SCORED)
---------------------------------
-${catalogView}
+CATALOG SUMMARY
+---------------
+${catalogSummary}
 
-PLANNING SKELETON (TOP IDS)
----------------------------
-${JSON.stringify(planningSkeleton, null, 2)}
-
-TASK
-----
-1) Build a concrete menu and shopping plan using ONLY catalog items.
-2) Fill supplies.food, supplies.drinks, supplies.equipment with quantities for ${guestCount} guests.
-3) Provide a timeline with at least 6 steps, including setup, food service, and cleanup.
-4) Also provide a readable "blueprint" string summarizing the plan.
+Now, using ONLY items from the catalog above, design a complete party blueprint as a JSON object.
+Include specific catalog items with their exact IDs, quantities, vendors, and prices.
+Return ONLY the JSON object, nothing else.
 `;
 
   try {
     const completion = await client.chat.completions.create({
       model: "gpt-4.1-mini",
-      temperature: 0.4,
-      max_tokens: 1800,
       messages: [
-        { role: "system", content: systemPrompt.trim() },
-        { role: "user", content: userPrompt.trim() },
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
       ],
-      // This asks the model to respond as a JSON object (no markdown).
-      response_format: { type: "json_object" },
+      temperature: 0.7,
+      max_tokens: 2000,
     });
 
-    const raw = completion.choices?.[0]?.message?.content || "{}";
+    const text = completion.choices?.[0]?.message?.content || "{}";
 
-    let parsed;
+    let blueprintObj;
     try {
-      parsed = JSON.parse(raw);
-    } catch (e) {
-      // If parsing fails, return the raw text as blueprint so the UI at least shows something.
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          ok: true,
-          blueprint: raw,
-          catalogVersion: RAW_CATALOG.version,
-          catalogItemCount: PARTY_ITEMS.length,
-        }),
-      };
+      blueprintObj = JSON.parse(text);
+    } catch (parseErr) {
+      console.error("[Prendy] Failed to parse AI JSON response:", parseErr);
+      console.error("[Prendy] Raw response:", text);
+      blueprintObj = generateFallback(body);
     }
 
-    const plan = normalizePlanShape(parsed, guestCount);
+    if (!blueprintObj.supplies || !blueprintObj.timeline) {
+      console.warn("[Prendy] AI response missing required fields, using fallback");
+      blueprintObj = generateFallback(body);
+    }
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        ...plan,
+        ok: true,
+        ...blueprintObj,
         catalogVersion: RAW_CATALOG.version,
         catalogItemCount: PARTY_ITEMS.length,
       }),
     };
   } catch (err) {
-    console.error("[Prendy] OpenAI error generating blueprint:", err);
+    console.error("[Prendy] OpenAI error:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({
         ok: false,
         error: "Failed to generate blueprint",
-        details: err?.message || String(err),
+        details: err.message || String(err),
       }),
     };
   }
