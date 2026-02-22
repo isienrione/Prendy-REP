@@ -2735,30 +2735,25 @@ function App() {
     const matched = matchVendors(data);
     setVendors(matched);
 
-let bp;
+    let bp;
+    try {
+      bp = await generateBlueprint(data);
 
-try {
-  bp = await generateBlueprint(data);
+      alert(
+        "[AFTER FETCH] typeof=" + (typeof bp) +
+        " | keys=" + Object.keys(bp || {}).join(", ")
+      );
 
-  alert(
-    "[TRY] type=" + (typeof bp) +
-    " | isArray=" + Array.isArray(bp) +
-    " | keys=" + Object.keys(bp || {}).join(", ")
-  );
+      if (!bp || !bp.timeline) throw new Error("no timeline");
+    } catch (e) {
+      alert("[IN CATCH] " + (e?.message || String(e)));
+      bp = generateFallback(data);
+      alert("[FALLBACK BUILT] keys=" + Object.keys(bp || {}).join(", "));
+    }
 
-  if (!bp || !bp.timeline) throw new Error("no timeline");
-
-} catch (e) {
-  alert("[CATCH] " + (e?.message || String(e)));
-
-  bp = generateFallback(data);
-
-  alert("[FALLBACK] keys=" + Object.keys(bp || {}).join(", "));
-}
-
-setBlueprint(bp);
-setView("blueprint");
-}, []);
+    setBlueprint(bp);
+    setView('blueprint');
+  }, []);
 
   return (
     <div>
