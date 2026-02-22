@@ -87,25 +87,6 @@
         .calendar-day.has-booking{background:rgba(124,92,224,.06);border-color:rgba(124,92,224,.2);color:var(--violet)}
         .calendar-day.today{border-color:var(--rose);font-weight:700}
     </style>
-<script>
-  window.onerror = function (message, source, lineno, colno, error) {
-    var el = document.createElement('pre');
-    el.style.whiteSpace = 'pre-wrap';
-    el.style.fontFamily = 'monospace';
-    el.style.color = 'red';
-    el.style.padding = '12px';
-    el.textContent =
-      '[JS ERROR]\\n' +
-      'message: ' + message + '\\n' +
-      'source: ' + source + '\\n' +
-      'line: ' + lineno + ', col: ' + colno;
-    document.body.innerHTML = '';
-    document.body.appendChild(el);
-    return false;
-  };
-</script>
-
-    
 </head>
 <body>
     <div id="root"></div>
