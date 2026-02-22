@@ -419,7 +419,8 @@ function buildShoppingList(supplies){
         }
 
         function generateFallback(formData) {
-            const g=parseInt(formData.guestCount)||30, b=parseInt(formData.budget)||2000000;
+    const g=parseInt(formData.guestCount)||20,
+          b=parseInt(formData.budget)||300000;  // more realistic default
             return {
                 summary:`A ${formData.vibe.toLowerCase()} ${formData.type.toLowerCase()} for ${g} guests in ${formData.setting==='outdoor'?'an outdoor Santiago setting':'a stylish indoor venue'}.`,
                 timeline:[{time:"14:00",task:"Vendor arrival & venue setup",owner:"Setup crew"},{time:"16:00",task:"Sound check & table dressing",owner:"Entertainment + Staff"},{time:"17:00",task:"Catering arrives, kitchen prep",owner:"Caterer"},{time:"18:30",task:"Final walkthrough & lighting",owner:"You"},{time:"19:00",task:"Guests arrive — welcome drinks",owner:"Bartender"},{time:"19:45",task:"Dinner service begins",owner:"Waitstaff"},{time:"21:00",task:"Dessert & toasts",owner:"You + Staff"},{time:"22:00",task:"Music & dancing",owner:"DJ / Band"},{time:"00:00",task:"Wind down, guest departure",owner:"You"},{time:"00:30",task:"Cleanup & teardown",owner:"Setup crew"}],
