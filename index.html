@@ -2735,26 +2735,30 @@ function App() {
     const matched = matchVendors(data);
     setVendors(matched);
 
-  let bp;
+let bp;
+
 try {
   bp = await generateBlueprint(data);
-  // Expect the server to return a full blueprint object with timeline, supplies, and blueprint text
-  if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
+
+  alert(
+    "[TRY] type=" + (typeof bp) +
+    " | isArray=" + Array.isArray(bp) +
+    " | keys=" + Object.keys(bp || {}).join(", ")
+  );
+
+  if (!bp || !bp.timeline) throw new Error("no timeline");
+
 } catch (e) {
-  setGenError(e.message || 'Blueprint generation failed — using fallback');
+  alert("[CATCH] " + (e?.message || String(e)));
+
   bp = generateFallback(data);
+
+  alert("[FALLBACK] keys=" + Object.keys(bp || {}).join(", "));
 }
 
-// 🔎 TEMP DEBUG
-console.log("Blueprint object:", bp);
-console.log("Blueprint keys:", Object.keys(bp));
-window.__bp = bp;
-
-// Store the entire object (including bp.blueprint) in state
 setBlueprint(bp);
-alert("BP keys: " + Object.keys(bp || {}).join(", "));
-setView('blueprint');
-  }, []);
+setView("blueprint");
+}, []);
 
   return (
     <div>
