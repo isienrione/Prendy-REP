@@ -58,8 +58,8 @@ function buildCatalogSummary(maxItems = 120) {
 
 // ---------- Fallback generator ----------
 function generateFallback(formData) {
-  const g = parseInt(formData.guestCount) || 30;
-  const b = parseInt(formData.budget) || 2000000;
+  const g = parseInt(formData.guestCount) || 20;
+  const b = parseInt(formData.budget) || 300000; // LOWER, more realistic default
 
   return {
     summary: `A ${(formData.vibe || "casual").toLowerCase()} ${(formData.type || "gathering").toLowerCase()} for ${g} guests in ${
@@ -74,64 +74,59 @@ function generateFallback(formData) {
           catalogId: "fallback-empanadas",
           quantity: g * 2,
           unit: "pcs",
-          note: "Classic Chilean appetizer",
+          note: "Classic Chilean appetizer for standing hangouts.",
           preferred_vendor: "lider",
           estimatedPrice: g * 2 * 800,
         },
         {
           item: "Main protein",
           catalogId: "fallback-protein",
-          quantity: Math.ceil(g * 0.3),
+          quantity: Math.ceil(g * 0.25),
           unit: "kg",
-          note: "300g per person",
+          note: "Approx. 250g per person for a casual hangout.",
           preferred_vendor: "jumbo",
-          estimatedPrice: Math.ceil(g * 0.3) * 8000,
+          estimatedPrice: Math.ceil(g * 0.25) * 7000,
         },
       ],
       drinks: [
         {
           item: "Soft drinks",
           catalogId: "fallback-sodas",
-          quantity: Math.ceil(g * 0.5),
+          quantity: Math.ceil(g * 0.4),
           unit: "liters",
-          note: "500ml per person",
+          note: "Roughly 400ml per person; mix regular and zero.",
           preferred_vendor: "lider",
-          estimatedPrice: Math.ceil(g * 0.5) * 1200,
+          estimatedPrice: Math.ceil(g * 0.4) * 1200,
         },
       ],
       misc: [],
     },
     timeline: [
-      { time: "14:00", task: "Vendor arrival & venue setup", owner: "Setup crew" },
-      { time: "16:00", task: "Sound check & table dressing", owner: "Entertainment + Staff" },
-      { time: "17:00", task: "Catering arrives, kitchen prep", owner: "Caterer" },
-      { time: "18:30", task: "Final walkthrough & lighting", owner: "You" },
-      { time: "19:00", task: "Guests arrive — welcome drinks", owner: "Bartender" },
-      { time: "19:45", task: "Dinner service begins", owner: "Waitstaff" },
-      { time: "21:00", task: "Dessert & toasts", owner: "You + Staff" },
-      { time: "22:00", task: "Music & dancing", owner: "DJ / Band" },
-      { time: "00:00", task: "Wind down, guest departure", owner: "You" },
-      { time: "00:30", task: "Cleanup & teardown", owner: "Setup crew" },
+      { time: "18:00", task: "Host prep & basic setup", owner: "You" },
+      { time: "19:00", task: "Guests arrive — welcome drinks", owner: "You" },
+      { time: "20:00", task: "Main food served", owner: "You" },
+      { time: "22:00", task: "Dessert & coffee", owner: "You" },
+      { time: "23:30", task: "Wind down, music low", owner: "You" },
+      { time: "00:00", task: "Cleanup & trash out", owner: "You" },
     ],
     budget: {
-      food: { pct: 40, amount: Math.round(b * 0.4) },
-      drinks: { pct: 25, amount: Math.round(b * 0.25) },
-      venue: { pct: 20, amount: Math.round(b * 0.2) },
+      food: { pct: 50, amount: Math.round(b * 0.5) },
+      drinks: { pct: 30, amount: Math.round(b * 0.3) },
+      venue: { pct: 0, amount: 0 },
       entertainment: { pct: 10, amount: Math.round(b * 0.1) },
-      staff: { pct: 5, amount: Math.round(b * 0.05) },
+      staff: { pct: 10, amount: Math.round(b * 0.1) },
     },
     staffing: {
-      servers: Math.ceil(g / 20),
-      bartenders: Math.ceil(g / 30),
-      setup_crew: 2,
+      servers: 0,
+      bartenders: 0,
+      setup_crew: 0,
     },
     tips: [
-      "Order groceries 2–3 days in advance.",
-      "Confirm vendor bookings 48 hours before the event.",
+      "For small home hangouts, keep most of the budget on food and drinks.",
+      "Confirm headcount in WhatsApp groups 1–2 days before.",
     ],
     risks: [
-      "Have a weather backup plan if outdoor.",
-      "Confirm guest count 3 days prior.",
+      "If people arrive late, keep some food back so it doesn’t run out early.",
     ],
   };
 }
@@ -160,7 +155,6 @@ export const handler = async (event) => {
     };
   }
 
-  // Payload from frontend (Onboarding form)
   const {
     type,
     scenarioKey,
@@ -175,7 +169,6 @@ export const handler = async (event) => {
     notes,
   } = body;
 
-  // Compact summary for the model
   const requestSummary = [
     `Event type: ${type || "unspecified"}`,
     `Scenario: ${scenarioKey || "unspecified"}`,
@@ -248,8 +241,7 @@ You MUST return a valid JSON object with this EXACT structure:
     "misc": []
   },
   "timeline": [
-    { "time": "14:00", "task": "Vendor arrival & setup", "owner": "Setup crew" },
-    { "time": "19:00", "task": "Guests arrive", "owner": "Host" }
+    { "time": "18:00", "task": "Guests arrive", "owner": "Host" }
   ],
   "budget": {
     "food": { "pct": 40, "amount": 800000 },
@@ -282,7 +274,7 @@ RULES
    - quantity and unit (scaled to the guest count)
    - preferred_vendor (from vendorName)
    - estimatedPrice (price * quantity; if price null, estimate reasonably and say so in note).
-4. Respect the user's budget and guest count.
+4. Respect the user's budget and guest count. Make the sum of budget.amounts roughly match the user's total budget (smaller budgets for 10–20 person hangouts).
 5. Prefer items whose description/use cases match the scenario and vibe (e.g., "adult_birthday_home").
 6. Prefer Chilean/local items when appropriate (tags like "chilean", "asado").
 7. Explain WHY each item fits in the "note" field.
