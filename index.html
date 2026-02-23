@@ -1882,7 +1882,7 @@ Everything in one place. Just a few clicks. No stress.
                         <div className="fade-up">
                             <div className="card" style={{marginBottom:20}}>
                                 <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:24}}>Budget Allocation</h3>
-                                <BudgetDonut budget={bp.budget} total={totalBudget}/>
+                               {bp.budget && <BudgetDonut budget={bp.budget} total={totalBudget}/>}
                             </div>
                             <div className="card" style={{marginBottom:20}}>
                                 <h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:16}}>Staffing</h3>
