@@ -1,8 +1,8 @@
 // netlify/functions/blueprint.js
-import fs from "fs";
-import path from "path";
-import OpenAI from "openai";
 
+const fs = require("fs");
+const path = require("path");
+const OpenAI = require("openai");
 /**
  * ==========================================================
  * Catalog loader that supports BOTH schemas (your rename swap)
