@@ -52,8 +52,7 @@ function normalizeStoresFromCatalog(rawCatalog) {
   return [];
 }
 
-const CATALOG_PATH = path.join(process.cwd(), "data", "party_catalog_v4.json");
-
+const CATALOG_PATH = path.join(__dirname, "../../data", "party_catalog_v4.json");
 const RAW = readJsonSafe(CATALOG_PATH) || { version: "unknown", currency: "CLP", items: [], stores: [] };
 const STORES = normalizeStoresFromCatalog(RAW);
 const STORE_NAME_BY_ID = new Map(STORES.map((s) => [s.id, s.name]));
