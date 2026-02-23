@@ -2771,7 +2771,18 @@ if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
     }
   }
 
-  document.addEventListener('DOMContentLoaded', loadCatalog);
+  document.addEventListener('DOMContentLoaded', () => {
+  const DEBUG = new URLSearchParams(window.location.search).has('debug');
+
+  const debugEl = document.getElementById('party-debug');
+
+  if (!DEBUG && debugEl) {
+    debugEl.style.display = 'none';
+    return; // don't load catalog debug in production view
+  }
+
+  loadCatalog();
+});
 </script>
 
 </body>
