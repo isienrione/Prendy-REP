@@ -469,7 +469,7 @@ Do not change any supplies items, IDs, quantities, or prices. Return JSON with {
  * Netlify handler
  * ==================================
  */
-export const handler = async (event) => {
+exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: JSON.stringify({ ok: false, error: "Method not allowed" }) };
   }
