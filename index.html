@@ -1985,7 +1985,7 @@ Everything in one place. Just a few clicks. No stress.
 
                     {/* Timeline */}
                     {tab === 'timeline' && (
-                        <div className="fade-up"><div className="card"><h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:24}}>Event Day Timeline</h3>{bp.timeline.map((e,i)=>(<div key={i} style={{display:"flex",gap:20,padding:"16px 0",borderBottom:i<bp.timeline.length-1?"1px solid var(--border)":"none",animation:`slideIn .3s ease ${i*.05}s forwards`,opacity:0}}><div style={{fontWeight:700,fontSize:14,color:"var(--violet)",minWidth:56,fontVariantNumeric:"tabular-nums"}}>{e.time}</div><div style={{flex:1}}><div style={{fontWeight:500,fontSize:14}}>{e.task}</div><div style={{fontSize:12,color:"var(--stone)",marginTop:2}}>{e.owner}</div></div></div>))}</div></div>
+                        <div className="fade-up"><div className="card"><h3 style={{fontFamily:"var(--serif)",fontSize:22,marginBottom:24}}>Event Day Timeline</h3>{bp.timeline.map((e,i)=>(<div key={i} style={{display:"flex",gap:20,padding:"16px 0",borderBottom:i<bp.timeline.length-1?"1px solid var(--border)":"none",animation:`slideIn .3s ease ${i*.05}s forwards`,opacity:0}}><div style={{fontWeight:700,fontSize:14,color:"var(--violet)",minWidth:56,fontVariantNumeric:"tabular-nums"}}>{e.time}</div><div style={{flex:1}}><div style={{fontWeight:500,fontSize:14}}>{e.title}</div><div style={{fontSize:12,color:"var(--stone)",marginTop:2}}>{e.detail}</div></div></div>))}</div></div>
                     )}
 
                     {/* Supplies */}
