@@ -3,6 +3,7 @@ headers = []
 redirects = []
 
 [functions]
+  included_files = ["data/**"]
 
   [functions."*"]
 
