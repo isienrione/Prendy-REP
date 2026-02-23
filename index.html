@@ -386,9 +386,11 @@ function buildShoppingList(supplies){
             body: JSON.stringify(formData)
         });
         if (!r.ok) return null;
-const json = await r.json();
-return json.blueprint ?? null;
-  }
+        const json = await r.json();
+        return json.blueprint ?? null;
+    } catch (e) {
+        return null;
+    }
 }
 
         function generateFallback(formData) {
