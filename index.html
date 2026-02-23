@@ -1859,7 +1859,7 @@ Everything in one place. Just a few clicks. No stress.
                     <div className="fade-up-d1" style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))", gap:12, margin:"28px 0 36px" }}>
                         <StatCard label="Guests" value={data.guestCount}/>
                         <StatCard label="Budget" value={fmtCLP(totalBudget)} sub="CLP"/>
-                        <StatCard label="Staff" value={bp.staffing.servers+bp.staffing.bartenders+bp.staffing.setup_crew} sub="needed"/>
+                   <StatCard label="Staff" value={(bp.staffing?.servers || 0) + (bp.staffing?.bartenders || 0) + (bp.staffing?.setup_crew || 0)} sub="needed"/>
                         <StatCard label="Booked" value={bookings.length} sub="vendors" color={bookings.length>0?"var(--sage)":undefined}/>
                     </div>
 
