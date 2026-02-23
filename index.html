@@ -2698,8 +2698,8 @@ Everything in one place. Just a few clicks. No stress.
                 let bp;
                 try {
                     bp = await generateBlueprint(data);
-                    console.log('BP RESULT:', JSON.stringify(bp));
-                    if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
+alert('BP: ' + (bp ? JSON.stringify(bp).slice(0, 200) : 'NULL')); // ← temporary
+if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
                 } catch(e) {
                     setGenError(e.message || 'Blueprint generation failed — using fallback');
                     bp = generateFallback(data);
