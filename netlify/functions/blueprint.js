@@ -510,3 +510,4 @@ exports.handler = async (event) => {
       blueprint, // IMPORTANT: structured object with timeline + supplies
     }),
   };
+  }; 
