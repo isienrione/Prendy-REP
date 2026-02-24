@@ -2693,19 +2693,35 @@ Everything in one place. Just a few clicks. No stress.
             const [genError, setGenError] = useState('');
 
             const handleGenerate = useCallback(async (data) => {
-                setFormData(data); setView('loading'); setGenError('');
-                const matched = matchVendors(data); setVendors(matched);
-                let bp;
-                try {
-                    bp = await generateBlueprint(data);
-alert('BP: ' + (bp ? JSON.stringify(bp).slice(0, 200) : 'NULL')); // ← temporary
-if (!bp || !bp.timeline) throw new Error('Invalid blueprint response');
-                } catch(e) {
-                    setGenError(e.message || 'Blueprint generation failed — using fallback');
-                    bp = generateFallback(data);
-                }
-                setBlueprint(bp); setView('blueprint');
-            }, []);
+  setFormData(data);
+  setView('loading');
+  setGenError('');
+
+  const matched = matchVendors(data);
+  setVendors(matched);
+
+  let bp;
+  try {
+    const resp = await generateBlueprint(data);
+
+    // supports both: resp = blueprint OR resp = { ok: true, blueprint }
+    bp = resp?.blueprint ?? resp;
+
+    // supports rare case: blueprint returned as a JSON string
+    if (typeof bp === 'string') bp = JSON.parse(bp);
+
+    if (!bp || !Array.isArray(bp.timeline)) {
+      throw new Error('Invalid blueprint response');
+    }
+  } catch (e) {
+    console.error('Blueprint generation failed:', e);
+    setGenError(e?.message || 'Blueprint generation failed — using fallback');
+    bp = generateFallback(data);
+  }
+
+  setBlueprint(bp);
+  setView('blueprint');
+}, []);
 
             return (
                 <div>
